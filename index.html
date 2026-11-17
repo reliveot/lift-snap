@@ -1,0 +1,1174 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>《舉高手機自拍》互動式復健訓練</title>
+    <!-- 引入 Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 引入 Google Fonts: Noto Sans TC 確保長輩閱讀清晰 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+    
+    <style>
+        /* 自訂溫暖日系雜誌風格變數與基礎設定 */
+        :root {
+            --bg-warm: #FAF6F0;
+            --card-bg: #FFFFFF;
+            --accent-orange: #E67E22;
+            --accent-orange-light: #FDF2E9;
+            --accent-green: #27AE60;
+            --accent-green-light: #EAFAF1;
+            --text-dark: #2C3E50;
+            --text-muted: #5D6D7E;
+        }
+
+        body {
+            font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: #EFEAE1; /* 桌面端外圍襯底色 */
+            color: var(--text-dark);
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* 模擬手機容器（在桌面瀏覽器置中顯示，手機端全螢幕） */
+        .app-shell {
+            background-color: var(--bg-warm);
+            min-height: 100dvh;
+            width: 100%;
+            max-width: 480px;
+            margin: 0 auto;
+            position: relative;
+            box-shadow: 0 20px 50px rgba(44, 62, 80, 0.12);
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        /* 柔和手繪質感邊框 */
+        .warm-card {
+            background-color: var(--card-bg);
+            border: 2px solid #EFE6D8;
+            border-radius: 24px;
+            box-shadow: 0 6px 18px rgba(230, 126, 34, 0.06);
+        }
+
+        /* 大型友善按鈕動效 */
+        .btn-press {
+            transition: transform 0.15s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.15s ease;
+        }
+        .btn-press:active {
+            transform: scale(0.96);
+        }
+
+        /* 拍照閃光特效 */
+        @keyframes shutterFlash {
+            0% { opacity: 0.95; }
+            100% { opacity: 0; }
+        }
+        .flash-active {
+            animation: shutterFlash 0.45s ease-out forwards;
+        }
+
+        /* 鏡頭左右鏡像翻轉（符合自拍直覺） */
+        .mirror-view {
+            transform: scaleX(-1);
+        }
+
+        /* 自訂捲軸隱藏 */
+        ::-webkit-scrollbar {
+            width: 0px;
+            background: transparent;
+        }
+    </style>
+</head>
+<body>
+
+<div class="app-shell" id="app">
+    
+    <!-- ==========================================
+         畫面一：開始畫面 (Start Screen)
+    =========================================== -->
+    <section id="screen-start" class="flex-1 flex flex-col justify-between p-5 sm:p-6 transition-opacity duration-300">
+        <!-- 頂部標題區 -->
+        <header class="text-center mt-2">
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#FDF2E9] border border-[#F5CBA7] text-[#D35400] text-sm font-bold mb-3">
+                <span>🌿 日常上肢復健練習</span>
+            </div>
+            <h1 class="text-3xl sm:text-4xl font-black tracking-tight text-[#2C3E50] leading-tight">
+                《舉高手機自拍》
+            </h1>
+            <p class="text-lg font-bold text-[#E67E22] mt-1">上肢抬舉與穩定控制訓練</p>
+        </header>
+
+        <!-- 暖心說明與簡易插圖卡片 -->
+        <div class="warm-card p-5 my-4">
+            <div class="flex items-center gap-4 mb-3">
+                <!-- 內嵌簡約手繪風雙手舉手機 SVG 圖示 -->
+                <div class="w-16 h-16 rounded-2xl bg-[#FDF2E9] flex items-center justify-center shrink-0 border border-[#F5CBA7]">
+                    <svg class="w-11 h-11 text-[#E67E22]" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="20" y="8" width="24" height="40" rx="5" fill="#FFF" stroke="#E67E22"/>
+                        <circle cx="32" cy="24" r="5" fill="#FAD7A0" stroke="#E67E22"/>
+                        <path d="M25 36c2-3 12-3 14 0" stroke="#E67E22"/>
+                        <!-- 雙手扶握 -->
+                        <path d="M12 38c3-4 8-3 8 2v12c0 3-3 5-6 5" stroke="#27AE60" stroke-width="3.5"/>
+                        <path d="M52 38c-3-4-8-3-8 2v12c0 3 3 5 6 5" stroke="#27AE60" stroke-width="3.5"/>
+                    </svg>
+                </div>
+                <p class="text-base sm:text-lg leading-relaxed text-[#2C3E50] font-medium">
+                    雙手握穩手機，慢慢舉高對準自己，保持穩定數秒後<span class="text-[#27AE60] font-bold">自動拍照</span>。連續練習 3 次，看看自己的動作表現！
+                </p>
+            </div>
+
+            <!-- 簡易設定區 -->
+            <div class="space-y-4 pt-3 border-t-2 border-dashed border-[#EFE6D8]">
+                <!-- 1. 練習次數（固定三連拍對比） -->
+                <div class="flex items-center justify-between">
+                    <span class="text-base font-bold text-[#5D6D7E]">練習模式</span>
+                    <span class="px-4 py-1.5 rounded-xl bg-[#EAFAF1] text-[#27AE60] font-bold text-base border border-[#A9DFBF]">
+                        連續 3 次（三連拍對比）
+                    </span>
+                </div>
+
+                <!-- 2. 穩定秒數選擇 -->
+                <div>
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-base font-bold text-[#5D6D7E]">每次穩定維持時間</span>
+                        <span class="text-sm text-[#E67E22] font-bold" id="duration-hint">標準推薦</span>
+                    </div>
+                    <div class="grid grid-cols-3 gap-2.5" id="duration-selector">
+                        <button type="button" data-sec="2" class="sec-btn btn-press py-3 rounded-2xl border-2 border-[#E5E7EB] bg-white text-lg font-bold text-[#5D6D7E]">
+                            2 秒
+                        </button>
+                        <button type="button" data-sec="3" class="sec-btn btn-press py-3 rounded-2xl border-2 border-[#E67E22] bg-[#FDF2E9] text-lg font-black text-[#D35400]">
+                            3 秒
+                        </button>
+                        <button type="button" data-sec="5" class="sec-btn btn-press py-3 rounded-2xl border-2 border-[#E5E7EB] bg-white text-lg font-bold text-[#5D6D7E]">
+                            5 秒
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 3. 語音提示開關 -->
+                <div class="flex items-center justify-between pt-1">
+                    <div>
+                        <span class="text-base font-bold text-[#5D6D7E] block">繁體中文語音引導</span>
+                        <span class="text-xs text-[#7F8C8D]">雙手舉手機時聽聲音更輕鬆</span>
+                    </div>
+                    <button type="button" id="toggle-voice" class="btn-press px-5 py-2.5 rounded-2xl bg-[#27AE60] text-white font-bold text-base flex items-center gap-2 shadow-sm">
+                        <span id="voice-icon">🔊</span>
+                        <span id="voice-label">已開啟</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 安全小提醒與開始按鈕 -->
+        <div class="space-y-3 mb-2">
+            <div class="p-3.5 rounded-2xl bg-[#FEF9E7] border border-[#F9E79F] flex items-start gap-3">
+                <span class="text-xl leading-none mt-0.5">💛</span>
+                <p class="text-sm text-[#7D6608] leading-snug font-medium">
+                    <strong>安全小提醒：</strong>請在坐姿穩定或安全環境下進行，不需追求舉得太高，若肩膀痠痛或不適請隨時休息。
+                </p>
+            </div>
+
+            <button type="button" id="btn-start-training" class="btn-press w-full py-4 sm:py-5 rounded-3xl bg-gradient-to-r from-[#E67E22] to-[#F39C12] text-white text-2xl font-black tracking-wider shadow-lg shadow-[#E67E22]/30 flex items-center justify-center gap-3">
+                <span>開始練習</span>
+                <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+                </svg>
+            </button>
+        </div>
+    </section>
+
+
+    <!-- ==========================================
+         畫面二：訓練進行中模擬畫面 (Training Screen)
+    =========================================== -->
+    <section id="screen-training" class="hidden flex-1 flex flex-col justify-between bg-[#1C2833] text-white relative overflow-hidden">
+        
+        <!-- 頂部狀態列：次數進度 + 結束按鈕 -->
+        <div class="relative z-20 p-4 flex items-center justify-between bg-gradient-to-b from-black/70 to-transparent">
+            <div class="flex items-center gap-2.5">
+                <div class="px-4 py-1.5 rounded-full bg-[#E67E22] text-white font-black text-lg shadow">
+                    第 <span id="round-current">1</span> / 3 次
+                </div>
+                <span id="camera-mode-badge" class="px-3 py-1 rounded-full bg-white/20 backdrop-blur-sm text-xs font-medium text-white/90">
+                    準備鏡頭中...
+                </span>
+            </div>
+            <button type="button" id="btn-abort-training" class="btn-press px-4 py-2 rounded-2xl bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white font-bold text-base">
+                結束練習
+            </button>
+        </div>
+
+        <!-- 中央自拍視窗與動態對準框 -->
+        <div class="relative flex-1 flex flex-col items-center justify-center px-4 my-1">
+            
+            <!-- 相機畫面容器 -->
+            <div class="relative w-full max-w-[360px] aspect-[3/4] rounded-[32px] overflow-hidden bg-[#2C3E50] border-4 border-white/20 shadow-2xl">
+                <!-- 真實前鏡頭 Video -->
+                <video id="webcam-video" autoplay playsinline muted class="w-full h-full object-cover mirror-view hidden"></video>
+                
+                <!-- 虛擬溫暖插畫自拍 Canvas（當無相機或權限拒絕時自動啟用，也可手動切換） -->
+                <canvas id="sim-camera-canvas" class="w-full h-full object-cover"></canvas>
+
+                <!-- 拍照閃光白幕 -->
+                <div id="shutter-flash" class="absolute inset-0 bg-white opacity-0 pointer-events-none z-30"></div>
+
+                <!-- 疊加層：人臉目標框與動態圓形/圓角進度條 -->
+                <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none z-10 p-6">
+                    <!-- 動態對準框 -->
+                    <div id="face-target-box" class="w-52 h-64 sm:w-56 sm:h-72 rounded-[44px] border-[5px] border-dashed border-white/75 transition-all duration-300 flex flex-col items-center justify-between p-4 relative">
+                        <span id="target-badge" class="px-3 py-1 rounded-full bg-black/50 backdrop-blur-sm text-sm font-bold text-white">
+                            請把臉對準框框內
+                        </span>
+
+                        <!-- 穩定倒數大數字顯示（僅在穩定倒數時出現） -->
+                        <div id="hold-timer-display" class="hidden flex-col items-center justify-center bg-black/45 backdrop-blur-md px-5 py-3 rounded-3xl border border-white/20">
+                            <span class="text-sm font-bold text-[#A9DFBF]">穩住喔！保持不動</span>
+                            <div class="text-4xl font-black text-white tabular-nums mt-0.5">
+                                <span id="hold-elapsed">0.0</span><span class="text-xl text-white/80"> / <span id="hold-target">3.0</span>秒</span>
+                            </div>
+                        </div>
+
+                        <div class="h-4"></div>
+                    </div>
+                </div>
+
+                <!-- 已拍照片縮圖預覽角標（讓使用者看到剛剛拍到的成果） -->
+                <div id="captured-thumbs-bar" class="absolute top-3 right-3 z-20 flex flex-col gap-2">
+                    <!-- 動態插入縮圖 -->
+                </div>
+            </div>
+
+            <!-- 底部大型語音文字提示氣泡 -->
+            <div class="w-full max-w-[360px] mt-3 bg-[#FAF6F0] text-[#2C3E50] rounded-2xl p-3.5 shadow-lg border-2 border-[#F5CBA7] flex items-center gap-3">
+                <div id="status-icon" class="w-11 h-11 rounded-xl bg-[#FDF2E9] text-2xl flex items-center justify-center shrink-0">
+                    🙌
+                </div>
+                <div class="flex-1 min-w-0">
+                    <div id="phase-title" class="text-xs font-bold text-[#E67E22] uppercase tracking-wider">階段：準備舉起</div>
+                    <p id="phase-instruction" class="text-lg font-black text-[#2C3E50] leading-snug truncate">
+                        雙手握穩手機，慢慢舉高！
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 底部：開發者/體驗者模擬互動控制列（方便無需實際舉起也能體驗完整三輪流程） -->
+        <div class="relative z-20 bg-[#243342] border-t border-white/15 p-3.5 rounded-t-3xl">
+            <div class="flex items-center justify-between mb-2 px-1">
+                <span class="text-xs font-bold text-[#F39C12] flex items-center gap-1">
+                    <span>🎮 體驗模式快速操作（無需真實舉手也能測試）</span>
+                </span>
+                <button type="button" id="btn-toggle-cam-source" class="text-xs underline text-white/80 hover:text-white">
+                    切換模擬畫面
+                </button>
+            </div>
+            
+            <div class="grid grid-cols-2 gap-2.5">
+                <button type="button" id="btn-sim-action" class="btn-press col-span-1 py-3 px-3 rounded-2xl bg-[#27AE60] hover:bg-[#2ECC71] text-white font-black text-base shadow flex items-center justify-center gap-1.5">
+                    <span id="sim-action-icon">⬆️</span>
+                    <span id="sim-action-text">模擬舉高並穩定</span>
+                </button>
+                <button type="button" id="btn-auto-demo" class="btn-press col-span-1 py-3 px-3 rounded-2xl bg-[#E67E22] hover:bg-[#F39C12] text-white font-black text-base shadow flex items-center justify-center gap-1.5">
+                    <span>▶️</span>
+                    <span id="auto-demo-text">自動連續演示 3 輪</span>
+                </button>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ==========================================
+         畫面三：結束與三連拍對比畫面 (Summary Screen)
+    =========================================== -->
+    <section id="screen-summary" class="hidden flex-1 flex flex-col justify-between p-5 sm:p-6 overflow-y-auto">
+        <div>
+            <!-- 頂部慶祝標題 -->
+            <header class="text-center mt-1 mb-5">
+                <div class="inline-flex items-center gap-1.5 px-4 py-1 rounded-full bg-[#EAFAF1] border border-[#A9DFBF] text-[#27AE60] text-sm font-bold mb-2">
+                    <span>✨ 今日訓練完成</span>
+                </div>
+                <h2 class="text-2xl sm:text-3xl font-black text-[#2C3E50]">
+                    太棒了！完成 3 次自拍挑戰 🎉
+                </h2>
+                <p class="text-base text-[#5D6D7E] mt-1 font-medium">
+                    看看這三次的照片，觀察自己的動作穩定度吧！
+                </p>
+            </header>
+
+            <!-- 核心亮點：三連拍照片並排對比區 -->
+            <div class="grid grid-cols-3 gap-2.5 sm:gap-3 mb-5" id="comparison-grid">
+                <!-- 由 JS 動態生成 3 張照片卡片 -->
+            </div>
+
+            <!-- 自我觀察小提示卡片（不打分數、不評判好壞） -->
+            <div class="warm-card p-4 sm:p-5 mb-5">
+                <h3 class="text-lg font-black text-[#2C3E50] flex items-center gap-2 mb-3">
+                    <span class="w-8 h-8 rounded-xl bg-[#FDF2E9] text-[#E67E22] flex items-center justify-center text-base">🔍</span>
+                    <span>自我觀察小提示（不打分數，純觀察）</span>
+                </h3>
+                <ul class="space-y-2.5 text-base text-[#2C3E50]">
+                    <li class="flex items-start gap-2.5">
+                        <span class="w-6 h-6 rounded-full bg-[#E67E22] text-white text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">1</span>
+                        <span><strong>高度一致嗎？</strong>看看三張照片裡，臉在畫面的位置是不是一樣高？</span>
+                    </li>
+                    <li class="flex items-start gap-2.5">
+                        <span class="w-6 h-6 rounded-full bg-[#E67E22] text-white text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">2</span>
+                        <span><strong>肩膀放鬆嗎？</strong>看看第 3 張的肩膀有沒有比第 1 張聳起來？</span>
+                    </li>
+                    <li class="flex items-start gap-2.5">
+                        <span class="w-6 h-6 rounded-full bg-[#E67E22] text-white text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">3</span>
+                        <span><strong>表情自然嗎？</strong>最後一次是不是憋氣或太用力了？</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- 底部功能按鈕區 -->
+        <div class="space-y-3 pb-2">
+            <!-- 合成並下載成果圖 -->
+            <button type="button" id="btn-download-collage" class="btn-press w-full py-4 rounded-3xl bg-[#27AE60] hover:bg-[#219150] text-white text-xl font-black shadow-lg shadow-[#27AE60]/25 flex items-center justify-center gap-2.5">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+                </svg>
+                <span>合成並下載 3 張對比成果圖</span>
+            </button>
+
+            <!-- 再練習一組 -->
+            <button type="button" id="btn-restart" class="btn-press w-full py-3.5 rounded-3xl bg-white border-2 border-[#E67E22] text-[#D35400] text-lg font-black flex items-center justify-center gap-2">
+                <span>🔄 再練習一組</span>
+            </button>
+        </div>
+    </section>
+
+    <!-- 全域提示訊息 Toast（取代 alert） -->
+    <div id="toast-msg" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-[#2C3E50] text-white px-5 py-3 rounded-2xl shadow-xl font-bold text-base opacity-0 pointer-events-none transition-opacity duration-300 text-center max-w-[90vw]">
+        提示訊息
+    </div>
+
+</div>
+
+<!-- 隱藏的離屏 Canvas，用於合成最終的三連拍分享長輩圖 -->
+<canvas id="export-canvas" class="hidden"></canvas>
+
+<script>
+/**
+ * 《舉高手機自拍》互動式復健訓練網頁 Prototype
+ * 核心功能：
+ * 1. 設定管理（穩定秒數 2s/3s/5s、語音開關）
+ * 2. 雙模相機系統（優先啟動真實前鏡頭 getUserMedia，若無相機則無縫使用溫暖手繪風動態模擬自拍預覽）
+ * 3. 三輪完整狀態機（LIFTING 舉起 -> HOLDING 穩定倒數 -> CAPTURED 自動拍照 -> RESTING 放下休息 -> 下一輪）
+ * 4. 支援開發者/治療師「單步模擬測試」與「全自動連續三輪演示」
+ * 5. 結算三連拍並列對比 + HTML5 Canvas 前端合成成果圖下載
+ */
+
+(function() {
+    // ==========================================
+    // 1. 應用程式全域狀態
+    // ==========================================
+    const state = {
+        targetHoldSec: 3,        // 預設穩定時間 3 秒
+        voiceEnabled: true,      // 語音提示開關
+        totalRounds: 3,          // 固定三連拍對比
+        currentRound: 1,         // 目前第幾輪 (1 ~ 3)
+        phase: 'IDLE',           // IDLE | LIFTING | HOLDING | RESTING | DONE
+        holdElapsed: 0,          // 本輪已累積穩定秒數
+        roundStartTime: 0,       // 本輪開始舉起時間（計算實際達標耗時）
+        photos: [],              // 儲存拍下的 3 張照片物件 { round, dataUrl, timeTaken, fatigueLevel }
+        
+        // 相機與模擬狀態
+        useRealCamera: false,
+        mediaStream: null,
+        simState: 'LOWERED',     // LOWERED (在胸前) | LIFTED_SHAKY (剛舉起微晃) | LIFTED_STEADY (舉高穩定)
+        autoDemoActive: false,   // 是否正在自動連續演示 3 輪
+        
+        // 計時器與動畫控制
+        lastFrameTime: 0,
+        animFrameId: null,
+        restTimerId: null,
+        demoStepTimeout: null
+    };
+
+    // ==========================================
+    // 2. DOM 元素快取
+    // ==========================================
+    const els = {
+        screenStart: document.getElementById('screen-start'),
+        screenTraining: document.getElementById('screen-training'),
+        screenSummary: document.getElementById('screen-summary'),
+        
+        secBtns: document.querySelectorAll('.sec-btn'),
+        durationHint: document.getElementById('duration-hint'),
+        toggleVoiceBtn: document.getElementById('toggle-voice'),
+        voiceIcon: document.getElementById('voice-icon'),
+        voiceLabel: document.getElementById('voice-label'),
+        btnStart: document.getElementById('btn-start-training'),
+        
+        roundCurrent: document.getElementById('round-current'),
+        cameraModeBadge: document.getElementById('camera-mode-badge'),
+        btnAbort: document.getElementById('btn-abort-training'),
+        
+        video: document.getElementById('webcam-video'),
+        simCanvas: document.getElementById('sim-camera-canvas'),
+        shutterFlash: document.getElementById('shutter-flash'),
+        faceTargetBox: document.getElementById('face-target-box'),
+        targetBadge: document.getElementById('target-badge'),
+        holdTimerDisplay: document.getElementById('hold-timer-display'),
+        holdElapsed: document.getElementById('hold-elapsed'),
+        holdTarget: document.getElementById('hold-target'),
+        capturedThumbsBar: document.getElementById('captured-thumbs-bar'),
+        
+        statusIcon: document.getElementById('status-icon'),
+        phaseTitle: document.getElementById('phase-title'),
+        phaseInstruction: document.getElementById('phase-instruction'),
+        
+        btnToggleCamSource: document.getElementById('btn-toggle-cam-source'),
+        btnSimAction: document.getElementById('btn-sim-action'),
+        simActionIcon: document.getElementById('sim-action-icon'),
+        simActionText: document.getElementById('sim-action-text'),
+        btnAutoDemo: document.getElementById('btn-auto-demo'),
+        autoDemoText: document.getElementById('auto-demo-text'),
+        
+        comparisonGrid: document.getElementById('comparison-grid'),
+        btnDownloadCollage: document.getElementById('btn-download-collage'),
+        btnRestart: document.getElementById('btn-restart'),
+        
+        toast: document.getElementById('toast-msg'),
+        exportCanvas: document.getElementById('export-canvas')
+    };
+
+    // ==========================================
+    // 3. 語音合成 (TTS) 與快門音效工具
+    // ==========================================
+    function speak(text) {
+        if (!state.voiceEnabled) return;
+        if (!('speechSynthesis' in window)) return;
+        try {
+            window.speechSynthesis.cancel(); // 避免語音堆積排隊
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'zh-TW';
+            utterance.rate = 0.95; // 稍慢語速，適合長輩聆聽
+            utterance.pitch = 1.05;
+            window.speechSynthesis.speak(utterance);
+        } catch (e) {
+            console.warn('語音播報受限:', e);
+        }
+    }
+
+    // 使用 Web Audio API 合成清脆相機快門音效（無需外部音檔）
+    function playShutterSound() {
+        try {
+            const AudioCtx = window.AudioContext || window.webkitAudioContext;
+            if (!AudioCtx) return;
+            const ctx = new AudioCtx();
+            
+            // 第一聲喀嚓
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(900, ctx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(120, ctx.currentTime + 0.08);
+            
+            gain.gain.setValueAtTime(0.4, ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.08);
+            
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.start();
+            osc.stop(ctx.currentTime + 0.09);
+
+            // 提示成功和弦音
+            setTimeout(() => {
+                const osc2 = ctx.createOscillator();
+                const gain2 = ctx.createGain();
+                osc2.type = 'sine';
+                osc2.frequency.setValueAtTime(523.25, ctx.currentTime); // C5
+                osc2.frequency.setValueAtTime(659.25, ctx.currentTime + 0.1); // E5
+                gain2.gain.setValueAtTime(0.25, ctx.currentTime);
+                gain2.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.35);
+                osc2.connect(gain2);
+                gain2.connect(ctx.destination);
+                osc2.start();
+                osc2.stop(ctx.currentTime + 0.36);
+            }, 100);
+        } catch (e) {
+            console.warn('音效播放受限:', e);
+        }
+    }
+
+    function showToast(msg) {
+        els.toast.textContent = msg;
+        els.toast.classList.remove('opacity-0');
+        clearTimeout(els.toast._timer);
+        els.toast._timer = setTimeout(() => {
+            els.toast.classList.add('opacity-0');
+        }, 2800);
+    }
+
+    // ==========================================
+    // 4. 畫面切換控制
+    // ==========================================
+    function switchScreen(screenName) {
+        els.screenStart.classList.add('hidden');
+        els.screenTraining.classList.add('hidden');
+        els.screenSummary.classList.add('hidden');
+        
+        if (screenName === 'start') els.screenStart.classList.remove('hidden');
+        if (screenName === 'training') els.screenTraining.classList.remove('hidden');
+        if (screenName === 'summary') els.screenSummary.classList.remove('hidden');
+    }
+
+    // ==========================================
+    // 5. 開始畫面互動設定
+    // ==========================================
+    const durationHints = {
+        2: '輕鬆入門',
+        3: '標準推薦',
+        5: '進階耐力'
+    };
+
+    els.secBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const sec = parseInt(btn.dataset.sec, 10);
+            state.targetHoldSec = sec;
+            els.durationHint.textContent = durationHints[sec] || '';
+            
+            els.secBtns.forEach(b => {
+                b.className = 'sec-btn btn-press py-3 rounded-2xl border-2 border-[#E5E7EB] bg-white text-lg font-bold text-[#5D6D7E]';
+            });
+            btn.className = 'sec-btn btn-press py-3 rounded-2xl border-2 border-[#E67E22] bg-[#FDF2E9] text-lg font-black text-[#D35400]';
+        });
+    });
+
+    els.toggleVoiceBtn.addEventListener('click', () => {
+        state.voiceEnabled = !state.voiceEnabled;
+        if (state.voiceEnabled) {
+            els.toggleVoiceBtn.className = 'btn-press px-5 py-2.5 rounded-2xl bg-[#27AE60] text-white font-bold text-base flex items-center gap-2 shadow-sm';
+            els.voiceIcon.textContent = '🔊';
+            els.voiceLabel.textContent = '已開啟';
+            speak('語音提示已開啟');
+        } else {
+            els.toggleVoiceBtn.className = 'btn-press px-5 py-2.5 rounded-2xl bg-[#BDC3C7] text-[#2C3E50] font-bold text-base flex items-center gap-2';
+            els.voiceIcon.textContent = '🔇';
+            els.voiceLabel.textContent = '已關閉';
+            if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+        }
+    });
+
+    // ==========================================
+    // 6. 相機開啟與虛擬自拍插畫渲染引擎
+    // ==========================================
+    async function initCamera() {
+        // 嘗試開啟真實前鏡頭
+        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({
+                    video: { facingMode: 'user', width: { ideal: 640 }, height: { ideal: 480 } },
+                    audio: false
+                });
+                state.mediaStream = stream;
+                els.video.srcObject = stream;
+                await els.video.play();
+                
+                state.useRealCamera = true;
+                els.video.classList.remove('hidden');
+                els.simCanvas.classList.add('hidden');
+                els.cameraModeBadge.textContent = '📷 真實前鏡頭已連線';
+                return;
+            } catch (err) {
+                console.info('無法開啟真實鏡頭，自動切換為溫暖模擬自拍模式:', err.message);
+            }
+        }
+        
+        // 若無鏡頭或拒絕權限，無縫切換至溫暖插畫模擬預覽
+        enableSimulatedCamera();
+    }
+
+    function enableSimulatedCamera() {
+        state.useRealCamera = false;
+        els.video.classList.add('hidden');
+        els.simCanvas.classList.remove('hidden');
+        els.cameraModeBadge.textContent = '🎨 互動模擬鏡頭模式';
+    }
+
+    function stopCamera() {
+        if (state.mediaStream) {
+            state.mediaStream.getTracks().forEach(t => t.stop());
+            state.mediaStream = null;
+        }
+        state.useRealCamera = false;
+    }
+
+    // 繪製溫暖日系手繪風格的虛擬自拍畫面（會根據模擬狀態與輪次展現微幅變化）
+    function renderSimulatedCameraFrame(timestamp) {
+        const canvas = els.simCanvas;
+        const ctx = canvas.getContext('2d');
+        const w = canvas.width = 480;
+        const h = canvas.height = 640;
+
+        // 1. 溫暖客廳背景漸層
+        const bgGrad = ctx.createLinearGradient(0, 0, 0, h);
+        bgGrad.addColorStop(0, '#FDF2E9');
+        bgGrad.addColorStop(1, '#F5CBA7');
+        ctx.fillStyle = bgGrad;
+        ctx.fillRect(0, 0, w, h);
+
+        // 背景柔和窗戶光影裝飾
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.45)';
+        ctx.beginPath();
+        ctx.roundRect(40, 50, 150, 220, 20);
+        ctx.fill();
+
+        // 綠植盆栽剪影
+        ctx.fillStyle = '#A9DFBF';
+        ctx.beginPath();
+        ctx.arc(410, 480, 65, 0, Math.PI * 2);
+        ctx.fill();
+
+        // 2. 計算人物位置（根據「在胸前未舉起」、「剛舉起微晃」、「舉高穩定」動態變化）
+        const t = timestamp * 0.003;
+        let offsetX = 0;
+        let offsetY = 0;
+        let shoulderRaise = (state.currentRound - 1) * 6; // 模擬第3輪時輕微疲勞微幅變化，讓三張照片有真實觀察差異！
+
+        if (state.simState === 'LOWERED') {
+            // 手機還在下方，人物只露出額頭或不在框內
+            offsetY = 230 + Math.sin(t * 2) * 5;
+            offsetX = Math.cos(t * 1.5) * 6;
+        } else if (state.simState === 'LIFTED_SHAKY') {
+            // 剛舉起來，手部還在微晃調整
+            offsetX = Math.sin(t * 7) * 14;
+            offsetY = Math.cos(t * 6) * 10 + (state.currentRound - 1) * 8;
+        } else if (state.simState === 'LIFTED_STEADY') {
+            // 穩定維持中（僅極微幅呼吸起伏）
+            offsetX = Math.sin(t * 1.2) * 1.5;
+            offsetY = Math.cos(t * 1.2) * 1.5 + (state.currentRound - 1) * 10;
+        }
+
+        const cx = w / 2 + offsetX;
+        const cy = h / 2 - 10 + offsetY;
+
+        ctx.save();
+        // 3. 繪製人物肩膀與溫暖毛衣
+        ctx.fillStyle = '#E67E22';
+        ctx.beginPath();
+        ctx.ellipse(cx, cy + 195 - shoulderRaise, 145, 95, 0, Math.PI, Math.PI * 2);
+        ctx.fill();
+
+        // 衣領
+        ctx.fillStyle = '#FAF6F0';
+        ctx.beginPath();
+        ctx.arc(cx, cy + 115 - shoulderRaise * 0.5, 38, 0, Math.PI);
+        ctx.fill();
+
+        // 4. 繪製頭部與親切微笑臉龐
+        // 頭髮後層
+        ctx.fillStyle = '#5D6D7E';
+        ctx.beginPath();
+        ctx.arc(cx, cy - 10, 86, Math.PI * 0.85, Math.PI * 2.15);
+        ctx.fill();
+
+        // 臉型
+        ctx.fillStyle = '#FDEBD0';
+        ctx.beginPath();
+        ctx.ellipse(cx, cy, 72, 88, 0, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.lineWidth = 3;
+        ctx.strokeStyle = '#E59866';
+        ctx.stroke();
+
+        // 瀏海
+        ctx.fillStyle = '#5D6D7E';
+        ctx.beginPath();
+        ctx.arc(cx, cy - 28, 74, Math.PI * 1.05, Math.PI * 1.95);
+        ctx.fill();
+
+        // 親切彎彎笑眼
+        ctx.strokeStyle = '#2C3E50';
+        ctx.lineWidth = 4;
+        ctx.lineCap = 'round';
+        // 左眼
+        ctx.beginPath();
+        ctx.arc(cx - 26, cy - 10, 10, Math.PI * 1.15, Math.PI * 1.85);
+        ctx.stroke();
+        // 右眼
+        ctx.beginPath();
+        ctx.arc(cx + 26, cy - 10, 10, Math.PI * 1.15, Math.PI * 1.85);
+        ctx.stroke();
+
+        // 溫暖腮紅
+        ctx.fillStyle = 'rgba(231, 76, 60, 0.22)';
+        ctx.beginPath();
+        ctx.arc(cx - 42, cy + 12, 14, 0, Math.PI * 2);
+        ctx.arc(cx + 42, cy + 12, 14, 0, Math.PI * 2);
+        ctx.fill();
+
+        // 微笑嘴巴
+        ctx.strokeStyle = '#C0392B';
+        ctx.lineWidth = 4;
+        ctx.beginPath();
+        ctx.arc(cx, cy + 22, 20, Math.PI * 0.15, Math.PI * 0.85);
+        ctx.stroke();
+
+        ctx.restore();
+
+        // 左下角標註模擬提示水印
+        ctx.fillStyle = 'rgba(44, 62, 80, 0.65)';
+        ctx.beginPath();
+        ctx.roundRect(16, h - 46, 175, 30, 10);
+        ctx.fill();
+        ctx.fillStyle = '#FFFFFF';
+        ctx.font = 'bold 14px "Noto Sans TC", sans-serif';
+        ctx.fillText(`模擬練習畫面 • 第 ${state.currentRound} 次`, 28, h - 26);
+    }
+
+    // ==========================================
+    // 7. 訓練主迴圈與狀態機 (LIFTING -> HOLDING -> RESTING)
+    // ==========================================
+    function startTrainingSession() {
+        state.currentRound = 1;
+        state.photos = [];
+        state.autoDemoActive = false;
+        els.capturedThumbsBar.innerHTML = '';
+        els.holdTarget.textContent = state.targetHoldSec.toFixed(1);
+        
+        switchScreen('training');
+        initCamera().then(() => {
+            enterLiftingPhase();
+            state.lastFrameTime = performance.now();
+            if (state.animFrameId) cancelAnimationFrame(state.animFrameId);
+            state.animFrameId = requestAnimationFrame(trainingLoop);
+        });
+    }
+
+    // 階段 A：準備舉起手機
+    function enterLiftingPhase() {
+        state.phase = 'LIFTING';
+        state.holdElapsed = 0;
+        state.roundStartTime = performance.now();
+        state.simState = 'LOWERED';
+
+        els.roundCurrent.textContent = state.currentRound;
+        els.faceTargetBox.className = 'w-52 h-64 sm:w-56 sm:h-72 rounded-[44px] border-[5px] border-dashed border-white/80 transition-all duration-300 flex flex-col items-center justify-between p-4 relative';
+        els.targetBadge.textContent = '請把臉對準框框內';
+        els.targetBadge.className = 'px-3 py-1 rounded-full bg-black/55 backdrop-blur-sm text-sm font-bold text-white';
+        els.holdTimerDisplay.classList.add('hidden');
+        els.holdTimerDisplay.classList.remove('flex');
+
+        els.statusIcon.textContent = '🙌';
+        els.phaseTitle.textContent = `第 ${state.currentRound} 次 • 舉高對準`;
+        
+        const promptText = state.currentRound === 1 
+            ? '雙手握穩手機，慢慢舉高對準臉部！' 
+            : `準備好囉！第 ${state.currentRound} 次，再慢慢舉起來！`;
+        els.phaseInstruction.textContent = promptText;
+        speak(promptText);
+
+        updateSimControlButton();
+    }
+
+    // 階段 B：找到臉部，開始穩定倒數
+    function enterHoldingPhase() {
+        if (state.phase === 'HOLDING') return;
+        state.phase = 'HOLDING';
+        state.simState = 'LIFTED_STEADY';
+
+        els.faceTargetBox.className = 'w-52 h-64 sm:w-56 sm:h-72 rounded-[44px] border-[6px] border-solid border-[#2ECC71] bg-[#2ECC71]/10 transition-all duration-300 flex flex-col items-center justify-between p-4 relative shadow-[0_0_30px_rgba(46,204,113,0.4)]';
+        els.targetBadge.textContent = '✓ 已對準！保持穩定';
+        els.targetBadge.className = 'px-3.5 py-1 rounded-full bg-[#27AE60] text-sm font-black text-white shadow';
+        
+        els.holdTimerDisplay.classList.remove('hidden');
+        els.holdTimerDisplay.classList.add('flex');
+
+        els.statusIcon.textContent = '🎯';
+        els.phaseTitle.textContent = `第 ${state.currentRound} 次 • 穩定控制中`;
+        els.phaseInstruction.textContent = `找到臉了！請穩住保持 ${state.targetHoldSec} 秒`;
+        speak('找到臉了，保持穩定！');
+
+        updateSimControlButton();
+    }
+
+    // 階段 C：自動拍照並進入放下休息緩衝（防止連拍）
+    function captureAndEnterRestingPhase() {
+        state.phase = 'RESTING';
+        
+        // 1. 閃光與快門音效
+        els.shutterFlash.classList.remove('flash-active');
+        void els.shutterFlash.offsetWidth; // 觸發重繪
+        els.shutterFlash.classList.add('flash-active');
+        playShutterSound();
+
+        // 2. 擷取當前畫面（真實鏡頭或模擬 Canvas）
+        const actualDuration = ((performance.now() - state.roundStartTime) / 1000).toFixed(1);
+        const photoDataUrl = captureCurrentFrameAsDataURL();
+        
+        state.photos.push({
+            round: state.currentRound,
+            dataUrl: photoDataUrl,
+            timeTaken: actualDuration
+        });
+
+        // 在預覽畫面右上角加入小縮圖回饋
+        const thumb = document.createElement('div');
+        thumb.className = 'w-14 h-18 rounded-xl overflow-hidden border-2 border-[#2ECC71] shadow-lg bg-black relative';
+        thumb.innerHTML = `
+            <img src="${photoDataUrl}" class="w-full h-full object-cover" />
+            <span class="absolute bottom-0 inset-x-0 bg-[#27AE60] text-white text-[10px] font-black text-center">第${state.currentRound}次</span>
+        `;
+        els.capturedThumbsBar.appendChild(thumb);
+
+        // 3. 判斷是否已完成全部 3 次
+        if (state.currentRound >= state.totalRounds) {
+            els.statusIcon.textContent = '🎉';
+            els.phaseTitle.textContent = '全部完成！';
+            els.phaseInstruction.textContent = '太棒了！完成 3 次自拍，正在整理對比結果...';
+            speak('拍照成功！太棒了，你已經完成三次練習！');
+            
+            setTimeout(() => {
+                finishTrainingSession();
+            }, 1600);
+            return;
+        }
+
+        // 4. 若尚未滿 3 次，進入「放下手機休息緩衝」
+        els.faceTargetBox.className = 'w-52 h-64 sm:w-56 sm:h-72 rounded-[44px] border-[4px] border-dashed border-[#F39C12]/70 transition-all duration-300 flex flex-col items-center justify-between p-4 relative';
+        els.targetBadge.textContent = '拍照成功！請放下手機休息';
+        els.targetBadge.className = 'px-3 py-1 rounded-full bg-[#E67E22] text-sm font-bold text-white';
+        els.holdTimerDisplay.classList.add('hidden');
+        els.holdTimerDisplay.classList.remove('flex');
+
+        els.statusIcon.textContent = '😮‍💨';
+        els.phaseTitle.textContent = `第 ${state.currentRound} 次完成 • 休息緩衝`;
+        els.phaseInstruction.textContent = '很好！請慢慢把手機放下來休息一下';
+        speak(`拍照成功！完成第 ${state.currentRound} 次，慢慢把手機放下來休息。`);
+
+        updateSimControlButton();
+
+        // 若處於「自動連續演示」模式，3 秒後自動模擬放下並進入下一輪
+        if (state.autoDemoActive) {
+            state.demoStepTimeout = setTimeout(() => {
+                simulateLowerAndNextRound();
+            }, 2600);
+        }
+    }
+
+    function simulateLowerAndNextRound() {
+        if (state.phase !== 'RESTING') return;
+        state.simState = 'LOWERED';
+        state.currentRound += 1;
+        enterLiftingPhase();
+
+        // 若正在自動連續演示，1.5 秒後自動模擬舉高並穩定
+        if (state.autoDemoActive) {
+            state.demoStepTimeout = setTimeout(() => {
+                if (state.phase === 'LIFTING') enterHoldingPhase();
+            }, 1500);
+        }
+    }
+
+    // 擷取當前畫面為 Base64 JPEG
+    function captureCurrentFrameAsDataURL() {
+        const tempCanvas = document.createElement('canvas');
+        tempCanvas.width = 480;
+        tempCanvas.height = 640;
+        const ctx = tempCanvas.getContext('2d');
+
+        if (state.useRealCamera && els.video.readyState >= 2) {
+            // 真實鏡頭需水平翻轉以符合自拍鏡像
+            ctx.save();
+            ctx.translate(tempCanvas.width, 0);
+            ctx.scale(-1, 1);
+            
+            // 等比例置中裁切填滿 3:4
+            const vRatio = els.video.videoWidth / els.video.videoHeight;
+            const cRatio = tempCanvas.width / tempCanvas.height;
+            let sx = 0, sy = 0, sw = els.video.videoWidth, sh = els.video.videoHeight;
+            if (vRatio > cRatio) {
+                sw = els.video.videoHeight * cRatio;
+                sx = (els.video.videoWidth - sw) / 2;
+            } else {
+                sh = els.video.videoWidth / cRatio;
+                sy = (els.video.videoHeight - sh) / 2;
+            }
+            ctx.drawImage(els.video, sx, sy, sw, sh, 0, 0, tempCanvas.width, tempCanvas.height);
+            ctx.restore();
+        } else {
+            // 繪製模擬 Canvas 畫面
+            ctx.drawImage(els.simCanvas, 0, 0, tempCanvas.width, tempCanvas.height);
+        }
+
+        return tempCanvas.toDataURL('image/jpeg', 0.9);
+    }
+
+    // 動畫與計時主迴圈
+    function trainingLoop(timestamp) {
+        const dt = (timestamp - state.lastFrameTime) / 1000;
+        state.lastFrameTime = timestamp;
+
+        // 若使用模擬鏡頭，持續繪製動態角色
+        if (!state.useRealCamera) {
+            renderSimulatedCameraFrame(timestamp);
+        }
+
+        // 若處於 HOLDING 穩定倒數階段，累積秒數
+        if (state.phase === 'HOLDING') {
+            state.holdElapsed += dt;
+            if (state.holdElapsed >= state.targetHoldSec) {
+                state.holdElapsed = state.targetHoldSec;
+                els.holdElapsed.textContent = state.holdElapsed.toFixed(1);
+                captureAndEnterRestingPhase();
+            } else {
+                els.holdElapsed.textContent = state.holdElapsed.toFixed(1);
+            }
+        }
+
+        if (state.phase !== 'IDLE' && state.phase !== 'DONE') {
+            state.animFrameId = requestAnimationFrame(trainingLoop);
+        }
+    }
+
+    // 更新底部模擬測試按鈕的文字與狀態
+    function updateSimControlButton() {
+        if (state.phase === 'LIFTING') {
+            els.simActionIcon.textContent = '⬆️';
+            els.simActionText.textContent = '模擬舉高並穩定';
+            els.btnSimAction.className = 'btn-press col-span-1 py-3 px-3 rounded-2xl bg-[#27AE60] hover:bg-[#2ECC71] text-white font-black text-base shadow flex items-center justify-center gap-1.5';
+        } else if (state.phase === 'HOLDING') {
+            els.simActionIcon.textContent = '⏳';
+            els.simActionText.textContent = '穩定計時中...';
+            els.btnSimAction.className = 'col-span-1 py-3 px-3 rounded-2xl bg-[#1E8449] text-white/90 font-bold text-base flex items-center justify-center gap-1.5 cursor-default';
+        } else if (state.phase === 'RESTING') {
+            els.simActionIcon.textContent = '⬇️';
+            els.simActionText.textContent = '模擬放下進入下一輪';
+            els.btnSimAction.className = 'btn-press col-span-1 py-3 px-3 rounded-2xl bg-[#3498DB] hover:bg-[#2980B9] text-white font-black text-base shadow flex items-center justify-center gap-1.5';
+        }
+    }
+
+    // ==========================================
+    // 8. 訓練畫面控制事件綁定
+    // ==========================================
+    els.btnStart.addEventListener('click', startTrainingSession);
+
+    // 單步模擬操作按鈕
+    els.btnSimAction.addEventListener('click', () => {
+        if (state.phase === 'LIFTING') {
+            enterHoldingPhase();
+        } else if (state.phase === 'RESTING') {
+            simulateLowerAndNextRound();
+        }
+    });
+
+    // 全自動連續演示 3 輪按鈕（讓體驗者雙手完全不碰也能看完 3 輪流程）
+    els.btnAutoDemo.addEventListener('click', () => {
+        state.autoDemoActive = !state.autoDemoActive;
+        if (state.autoDemoActive) {
+            els.autoDemoText.textContent = '停止自動演示';
+            els.btnAutoDemo.classList.replace('bg-[#E67E22]', 'bg-[#C0392B]');
+            showToast('已啟動全自動三輪演示，請輕鬆觀看！');
+            
+            if (state.phase === 'LIFTING') {
+                setTimeout(() => { if (state.autoDemoActive && state.phase === 'LIFTING') enterHoldingPhase(); }, 1000);
+            } else if (state.phase === 'RESTING') {
+                setTimeout(() => { if (state.autoDemoActive && state.phase === 'RESTING') simulateLowerAndNextRound(); }, 1000);
+            }
+        } else {
+            els.autoDemoText.textContent = '自動連續演示 3 輪';
+            els.btnAutoDemo.classList.replace('bg-[#C0392B]', 'bg-[#E67E22]');
+            clearTimeout(state.demoStepTimeout);
+            showToast('已切換回手動單步體驗');
+        }
+    });
+
+    // 切換真實鏡頭 / 插畫模擬畫面
+    els.btnToggleCamSource.addEventListener('click', () => {
+        if (state.useRealCamera) {
+            stopCamera();
+            enableSimulatedCamera();
+            showToast('已切換為插畫模擬預覽');
+        } else {
+            initCamera();
+        }
+    });
+
+    // 中途結束練習
+    els.btnAbort.addEventListener('click', () => {
+        cleanupTraining();
+        switchScreen('start');
+    });
+
+    function cleanupTraining() {
+        state.phase = 'IDLE';
+        state.autoDemoActive = false;
+        els.autoDemoText.textContent = '自動連續演示 3 輪';
+        els.btnAutoDemo.className = 'btn-press col-span-1 py-3 px-3 rounded-2xl bg-[#E67E22] hover:bg-[#F39C12] text-white font-black text-base shadow flex items-center justify-center gap-1.5';
+        clearTimeout(state.demoStepTimeout);
+        if (state.animFrameId) cancelAnimationFrame(state.animFrameId);
+        stopCamera();
+    }
+
+    // ==========================================
+    // 9. 結束與三連拍對比畫面渲染
+    // ==========================================
+    function finishTrainingSession() {
+        cleanupTraining();
+        state.phase = 'DONE';
+        renderComparisonCards();
+        switchScreen('summary');
+    }
+
+    function renderComparisonCards() {
+        els.comparisonGrid.innerHTML = '';
+        
+        state.photos.forEach((photo, idx) => {
+            const card = document.createElement('div');
+            card.className = 'warm-card overflow-hidden flex flex-col bg-white';
+            card.innerHTML = `
+                <div class="bg-[#FDF2E9] py-1.5 px-2 text-center border-b border-[#EFE6D8]">
+                    <span class="text-sm sm:text-base font-black text-[#D35400]">第 ${photo.round} 次</span>
+                </div>
+                <div class="relative aspect-[3/4] bg-[#2C3E50] overflow-hidden">
+                    <img src="${photo.dataUrl}" alt="第${photo.round}次自拍" class="w-full h-full object-cover" />
+                </div>
+                <div class="p-2 text-center bg-white">
+                    <span class="inline-block px-2 py-0.5 rounded-lg bg-[#EAFAF1] text-[#27AE60] text-xs font-bold">
+                        穩定 ${state.targetHoldSec} 秒達標
+                    </span>
+                </div>
+            `;
+            els.comparisonGrid.appendChild(card);
+        });
+    }
+
+    // ==========================================
+    // 10. 前端 Canvas 合成「三連拍長輩友善分享圖」並下載
+    // ==========================================
+    els.btnDownloadCollage.addEventListener('click', async () => {
+        if (state.photos.length < 3) return;
+        showToast('正在為您合成三連拍成果圖...');
+
+        const canvas = els.exportCanvas;
+        const ctx = canvas.getContext('2d');
+        
+        // 設定輸出高畫質分享圖尺寸 (1080 x 1350 適合手機相簿與 LINE 傳送)
+        const W = canvas.width = 1080;
+        const H = canvas.height = 1350;
+
+        // 1. 溫暖米白底色
+        ctx.fillStyle = '#FAF6F0';
+        ctx.fillRect(0, 0, W, H);
+
+        // 外框裝飾
+        ctx.strokeStyle = '#E67E22';
+        ctx.lineWidth = 12;
+        ctx.strokeRect(24, 24, W - 48, H - 48);
+
+        // 2. 標題與日期
+        const today = new Date();
+        const dateStr = `${today.getFullYear()} 年 ${today.getMonth() + 1} 月 ${today.getDate()} 日`;
+
+        ctx.fillStyle = '#E67E22';
+        ctx.font = 'bold 34px "Noto Sans TC", sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText(`🌿 ${dateStr} • 日常上肢復健紀錄`, W / 2, 105);
+
+        ctx.fillStyle = '#2C3E50';
+        ctx.font = '900 54px "Noto Sans TC", sans-serif';
+        ctx.fillText('《舉高手機自拍》三連拍挑戰成功！', W / 2, 180);
+
+        // 3. 載入並並排繪製 3 張照片
+        const loadImg = (src) => new Promise((resolve) => {
+            const img = new Image();
+            img.onload = () => resolve(img);
+            img.src = src;
+        });
+
+        const imgs = await Promise.all(state.photos.map(p => loadImg(p.dataUrl)));
+        
+        const cardW = 310;
+        const photoH = 413; // 3:4 比例
+        const gap = 25;
+        const startX = (W - (cardW * 3 + gap * 2)) / 2;
+        const startY = 240;
+
+        imgs.forEach((img, i) => {
+            const x = startX + i * (cardW + gap);
+            const y = startY;
+
+            // 白色卡片底
+            ctx.fillStyle = '#FFFFFF';
+            ctx.beginPath();
+            ctx.roundRect(x - 8, y - 8, cardW + 16, photoH + 110, 24);
+            ctx.fill();
+            ctx.lineWidth = 4;
+            ctx.strokeStyle = '#EFE6D8';
+            ctx.stroke();
+
+            // 繪製照片
+            ctx.save();
+            ctx.beginPath();
+            ctx.roundRect(x, y, cardW, photoH, 16);
+            ctx.clip();
+            ctx.drawImage(img, x, y, cardW, photoH);
+            ctx.restore();
+
+            // 照片下方文字標示
+            ctx.fillStyle = '#D35400';
+            ctx.font = '900 32px "Noto Sans TC", sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText(`第 ${i + 1} 次`, x + cardW / 2, y + photoH + 46);
+
+            ctx.fillStyle = '#27AE60';
+            ctx.font = 'bold 24px "Noto Sans TC", sans-serif';
+            ctx.fillText(`穩定維持 ${state.targetHoldSec} 秒`, x + cardW / 2, y + photoH + 82);
+        });
+
+        // 4. 底部自我觀察小語與鼓勵區塊
+        const boxY = 810;
+        ctx.fillStyle = '#FFFFFF';
+        ctx.beginPath();
+        ctx.roundRect(65, boxY, W - 130, 390, 30);
+        ctx.fill();
+        ctx.lineWidth = 4;
+        ctx.strokeStyle = '#A9DFBF';
+        ctx.stroke();
+
+        ctx.fillStyle = '#27AE60';
+        ctx.font = '900 36px "Noto Sans TC", sans-serif';
+        ctx.textAlign = 'left';
+        ctx.fillText('🔍 今天的動作自我觀察：', 110, boxY + 65);
+
+        ctx.fillStyle = '#2C3E50';
+        ctx.font = 'bold 30px "Noto Sans TC", sans-serif';
+        ctx.fillText('1. 三張照片裡，臉在畫面的高度是不是一樣穩？', 110, boxY + 135);
+        ctx.fillText('2. 做到第 3 次時，肩膀依然保持放鬆不聳肩嗎？', 110, boxY + 195);
+        ctx.fillText('3. 保持自然呼吸與微笑，每次練習都是進步！', 110, boxY + 255);
+
+        ctx.fillStyle = '#E67E22';
+        ctx.font = '900 32px "Noto Sans TC", sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('每天穩穩舉起雙手，為自己拍一張最棒的鼓勵照 💛', W / 2, boxY + 340);
+
+        // 5. 觸發圖片下載
+        const link = document.createElement('a');
+        link.download = `舉高手機自拍_三連拍成果_${today.getMonth() + 1}月${today.getDate()}日.png`;
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+
+        showToast('✅ 已成功下載三連拍對比成果圖！');
+    });
+
+    // 再練習一組按鈕
+    els.btnRestart.addEventListener('click', () => {
+        switchScreen('start');
+    });
+
+})();
+</script>
+</body>
+</html>

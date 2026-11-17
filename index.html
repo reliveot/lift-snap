@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>《舉高手機自拍》AI 上肢穩定復健訓練</title>
-    <!-- 引入 Tailwind CSS -->
+    <title>《舉高手機自拍》V1.2 雙引擎上肢復健訓練</title>
+    <!-- 載入 Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- 引入 Noto Sans TC 字體 -->
+    <!-- 載入繁體中文無襯線字體 -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
@@ -16,8 +16,8 @@
             --bg-cream: #FAF6F0;
             --terracotta: #E07A3D;
             --terracotta-dark: #C86428;
-            --sage: #4A8B6F;
-            --sky: #4B7B9D;
+            --rehab-green: #3B8C6E;
+            --calm-blue: #3A6B88;
             --espresso: #2D2926;
         }
 
@@ -34,12 +34,12 @@
             height: 100dvh;
             overflow-x: hidden;
             font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, sans-serif;
-            background-color: #EAE3D9;
+            background-color: #E7DFD3;
             color: var(--espresso);
         }
 
-        /* 手機與桌面自適應主容器 */
-        .app-container {
+        /* 響應式主容器：手機全螢幕、桌面置中精緻比例 */
+        .app-shell {
             width: 100%;
             max-width: 500px;
             min-height: 100dvh;
@@ -48,18 +48,18 @@
             position: relative;
             display: flex;
             flex-direction: column;
-            box-shadow: 0 20px 60px rgba(45, 41, 38, 0.15);
+            box-shadow: 0 20px 60px rgba(45, 41, 38, 0.16);
         }
 
-        /* 溫暖日系卡片 */
-        .mag-card {
+        /* 暖日系圓角卡片 */
+        .warm-card {
             background: #FFFFFF;
             border: 2px solid #EDE4D7;
             border-radius: 24px;
             box-shadow: 0 8px 20px rgba(224, 122, 61, 0.06);
         }
 
-        /* 按鈕按壓回饋 */
+        /* 按鈕觸控回饋 */
         .tap-btn {
             transition: transform 0.14s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.2s, border-color 0.2s;
         }
@@ -72,100 +72,91 @@
             transform: scaleX(-1);
         }
 
-        /* 快門白光閃爍動畫 */
-        @keyframes cameraFlash {
+        /* 快門白光閃爍 */
+        @keyframes shutterFlash {
             0% { opacity: 0.95; }
             100% { opacity: 0; }
         }
         .animate-flash {
-            animation: cameraFlash 0.45s ease-out forwards;
-        }
-
-        /* 脈衝呼吸光暈 */
-        @keyframes pulseRing {
-            0%, 100% { transform: scale(1); opacity: 0.85; }
-            50% { transform: scale(1.03); opacity: 1; }
-        }
-        .pulse-guide {
-            animation: pulseRing 2.2s infinite ease-in-out;
+            animation: shutterFlash 0.45s ease-out forwards;
         }
     </style>
 </head>
 <body>
 
-<div class="app-container" id="app-root">
+<div class="app-shell" id="app-root">
 
     <!-- =================================================================
-         防呆遮罩：偵測 LINE / FB / IG 內建瀏覽器（避免無法開啟相機與語音）
+         防呆遮罩：偵測 LINE / FB / IG 內建瀏覽器
     ================================================================== -->
-    <div id="inapp-browser-guard" class="hidden fixed inset-0 z-50 bg-[#FAF6F0] flex flex-col items-center justify-center p-6 text-center">
-        <div class="mag-card p-6 max-w-sm w-full space-y-4">
+    <div id="inapp-guard" class="hidden fixed inset-0 z-50 bg-[#FAF6F0] flex flex-col items-center justify-center p-6 text-center">
+        <div class="warm-card p-6 max-w-sm w-full space-y-4">
             <div class="w-16 h-16 mx-auto rounded-2xl bg-[#FDF0E6] text-[#E07A3D] flex items-center justify-center text-3xl">
                 🧭
             </div>
             <h2 class="text-2xl font-black text-[#2D2926]">請改用手機預設瀏覽器開啟</h2>
             <p class="text-base text-[#5A534E] leading-relaxed">
-                偵測到您目前正在使用 <strong>LINE / Facebook / IG</strong> 內建瀏覽器，這會導致手機前鏡頭與語音功能無法正常啟動。
+                偵測到您正在使用 <strong>LINE / Facebook / IG</strong> 內建瀏覽器，這會限制手機前鏡頭與感測器正常運作。
             </p>
             <div class="p-4 rounded-2xl bg-[#FAF6F0] border border-[#EDE4D7] text-left text-sm space-y-2 text-[#2D2926]">
-                <p class="font-bold text-[#E07A3D]">請依照以下步驟操作：</p>
-                <p>1. 點擊畫面右上角或右下角的 <strong>「⋮」</strong> 或 <strong>「⋯」</strong> 選單按鈕。</p>
+                <p class="font-bold text-[#E07A3D]">請依照以下步驟切換：</p>
+                <p>1. 點擊畫面右上角或右下角的 <strong>「⋮」</strong> 或 <strong>「⋯」</strong> 按鈕。</p>
                 <p>2. 選擇 <strong>「在 Safari 中開啟」</strong> 或 <strong>「以預設瀏覽器開啟」</strong>。</p>
             </div>
             <button type="button" id="btn-dismiss-guard" class="tap-btn w-full py-3 rounded-2xl bg-[#EDE4D7] text-[#2D2926] font-bold text-sm">
-                我了解，仍要嘗試繼續
+                我知道了，仍要嘗試繼續
             </button>
         </div>
     </div>
 
     <!-- =================================================================
-         畫面 1：開始與設定畫面 (Start Screen)
+         畫面 1：開始與訓練設定畫面
     ================================================================== -->
     <main id="view-start" class="flex-1 flex flex-col justify-between p-5 sm:p-6 overflow-y-auto">
         <div>
             <!-- 標題區 -->
             <header class="text-center mt-1 mb-4">
                 <span class="inline-block px-3.5 py-1 rounded-full bg-[#FDF0E6] border border-[#F3CBB2] text-[#C86428] text-sm font-bold mb-2">
-                    🌿 雙手免觸控・AI 自動追蹤版
+                    🌿 V1.2 雙引擎穩定版・免觸控自動追蹤
                 </span>
                 <h1 class="text-3xl font-black tracking-tight text-[#2D2926]">
                     《舉高手機自拍》
                 </h1>
-                <p class="text-base font-bold text-[#4A8B6F] mt-1">
-                    上肢抬舉與穩定控制復健訓練
+                <p class="text-base font-bold text-[#3B8C6E] mt-1">
+                    上肢抬舉與姿勢穩定復健訓練
                 </p>
             </header>
 
             <!-- 三步驟圖解卡片 -->
-            <div class="mag-card p-4 mb-4">
+            <div class="warm-card p-4 mb-4">
                 <div class="grid grid-cols-3 gap-2 text-center">
-                    <div class="p-2 rounded-2xl bg-[#FAF6F0]">
+                    <div class="p-2.5 rounded-2xl bg-[#FAF6F0]">
                         <div class="text-2xl mb-1">🙌</div>
                         <div class="text-xs font-black text-[#E07A3D]">步驟 1</div>
                         <div class="text-xs font-bold text-[#2D2926] mt-0.5 leading-tight">雙手握手機<br>慢慢舉高</div>
                     </div>
-                    <div class="p-2 rounded-2xl bg-[#FAF6F0]">
+                    <div class="p-2.5 rounded-2xl bg-[#FAF6F0]">
                         <div class="text-2xl mb-1">🎯</div>
-                        <div class="text-xs font-black text-[#4A8B6F]">步驟 2</div>
+                        <div class="text-xs font-black text-[#3B8C6E]">步驟 2</div>
                         <div class="text-xs font-bold text-[#2D2926] mt-0.5 leading-tight">臉對準框框<br>穩住不晃動</div>
                     </div>
-                    <div class="p-2 rounded-2xl bg-[#FAF6F0]">
+                    <div class="p-2.5 rounded-2xl bg-[#FAF6F0]">
                         <div class="text-2xl mb-1">📸</div>
-                        <div class="text-xs font-black text-[#4B7B9D]">步驟 3</div>
+                        <div class="text-xs font-black text-[#3A6B88]">步驟 3</div>
                         <div class="text-xs font-bold text-[#2D2926] mt-0.5 leading-tight">自動拍 3 次<br>並列比一比</div>
                     </div>
                 </div>
             </div>
 
             <!-- 訓練參數設定 -->
-            <div class="mag-card p-4 sm:p-5 space-y-4 mb-4">
+            <div class="warm-card p-4 sm:p-5 space-y-4 mb-4">
                 <!-- 1. 穩定維持秒數 -->
                 <div>
                     <div class="flex justify-between items-center mb-2">
                         <label class="text-base font-black text-[#2D2926]">每次穩定維持時間</label>
                         <span class="text-xs font-bold text-[#E07A3D]" id="label-sec-desc">標準推薦</span>
                     </div>
-                    <div class="grid grid-cols-3 gap-2" id="group-duration">
+                    <div class="grid grid-cols-3 gap-2">
                         <button type="button" data-val="2" class="opt-sec tap-btn py-2.5 rounded-2xl border-2 border-[#EDE4D7] bg-white font-bold text-base text-[#5A534E]">
                             2 秒
                         </button>
@@ -178,17 +169,17 @@
                     </div>
                 </div>
 
-                <!-- 2. 穩定度要求 -->
+                <!-- 2. 穩定度寬容度 -->
                 <div>
                     <div class="flex justify-between items-center mb-2">
                         <label class="text-base font-black text-[#2D2926]">晃動容許範圍</label>
-                        <span class="text-xs font-bold text-[#4A8B6F]" id="label-diff-desc">適合多數練習者</span>
+                        <span class="text-xs font-bold text-[#3B8C6E]" id="label-diff-desc">適合多數練習者</span>
                     </div>
-                    <div class="grid grid-cols-3 gap-2" id="group-difficulty">
+                    <div class="grid grid-cols-3 gap-2">
                         <button type="button" data-val="relaxed" class="opt-diff tap-btn py-2.5 rounded-2xl border-2 border-[#EDE4D7] bg-white font-bold text-base text-[#5A534E]">
                             寬鬆
                         </button>
-                        <button type="button" data-val="normal" class="opt-diff tap-btn py-2.5 rounded-2xl border-2 border-[#4A8B6F] bg-[#EBF5F0] font-black text-base text-[#366B54]">
+                        <button type="button" data-val="normal" class="opt-diff tap-btn py-2.5 rounded-2xl border-2 border-[#3B8C6E] bg-[#EBF5F0] font-black text-base text-[#2E6F57]">
                             一般 (預設)
                         </button>
                         <button type="button" data-val="strict" class="opt-diff tap-btn py-2.5 rounded-2xl border-2 border-[#EDE4D7] bg-white font-bold text-base text-[#5A534E]">
@@ -203,8 +194,8 @@
                         <span class="text-base font-black text-[#2D2926] block">繁體中文語音引導</span>
                         <span class="text-xs text-[#6E6761]">全程用語音提示舉起、穩住與休息</span>
                     </div>
-                    <div class="flex rounded-2xl bg-[#FAF6F0] p-1 border border-[#EDE4D7]" id="group-voice">
-                        <button type="button" data-val="on" class="opt-voice tap-btn px-4 py-1.5 rounded-xl bg-[#4A8B6F] text-white font-bold text-sm shadow-sm">
+                    <div class="flex rounded-2xl bg-[#FAF6F0] p-1 border border-[#EDE4D7]">
+                        <button type="button" data-val="on" class="opt-voice tap-btn px-4 py-1.5 rounded-xl bg-[#3B8C6E] text-white font-bold text-sm shadow-sm">
                             開啟
                         </button>
                         <button type="button" data-val="off" class="opt-voice tap-btn px-4 py-1.5 rounded-xl text-[#6E6761] font-bold text-sm">
@@ -215,87 +206,94 @@
             </div>
         </div>
 
-        <!-- 底部啟動區：AI 狀態指示 + 安全提醒 + 開始按鈕 -->
+        <!-- 底部啟動區：雙引擎就緒狀態 + 安全提醒 + 立即開始按鈕 -->
         <div class="space-y-3">
-            <!-- AI 模型載入狀態列 -->
-            <div id="ai-status-banner" class="px-4 py-2.5 rounded-2xl bg-[#FDF0E6] border border-[#F3CBB2] flex items-center justify-center gap-2.5 text-sm font-bold text-[#C86428]">
-                <svg class="animate-spin h-4 w-4 text-[#E07A3D]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                </svg>
-                <span id="ai-status-text">正在載入 AI 臉部偵測引擎...</span>
+            <!-- 偵測引擎狀態指示條（即時視覺引擎隨時就緒，無需空等） -->
+            <div id="engine-status-pill" class="px-4 py-2.5 rounded-2xl bg-[#EBF5F0] border border-[#A9DFBF] flex items-center justify-center gap-2 text-sm font-black text-[#2E6F57]">
+                <span>⚡</span>
+                <span id="engine-status-text">即時視覺引擎已就緒（背景同步載入 AI 模型）</span>
             </div>
 
             <!-- 安全提醒 -->
             <p class="text-xs text-center text-[#6E6761] leading-relaxed px-2">
-                💛 請在坐姿穩定或安全環境下進行；若肩膀疼痛或不適請隨時停止。影像僅在手機本機分析，絕不上傳。
+                💛 請在坐姿穩定或安全環境下練習；若肩膀疼痛或不適請隨時停止。所有影像僅在手機本機運算，絕不上傳。
             </p>
 
-            <!-- 主要開始按鈕 -->
-            <button type="button" id="btn-start-app" disabled class="tap-btn w-full py-4 rounded-3xl bg-[#BDC3C7] text-white text-xl font-black tracking-wide shadow-lg flex items-center justify-center gap-2 cursor-not-allowed">
-                <span id="btn-start-label">AI 準備中，請稍候...</span>
+            <!-- 立即開始按鈕（無需等待 CDN 下載即可點擊） -->
+            <button type="button" id="btn-start-app" class="tap-btn w-full py-4 rounded-3xl bg-gradient-to-r from-[#E07A3D] to-[#E89158] text-white text-xl font-black tracking-wide shadow-lg shadow-[#E07A3D]/30 flex items-center justify-center gap-2 cursor-pointer">
+                <span>📸 開始 3 輪練習</span>
             </button>
         </div>
     </main>
 
     <!-- =================================================================
-         畫面 2：全自動前鏡頭即時追蹤訓練畫面 (Active Training Screen)
+         畫面 2：全自動前鏡頭即時追蹤訓練畫面
     ================================================================== -->
     <section id="view-training" class="hidden fixed inset-0 z-30 bg-[#1A1817] text-white flex flex-col justify-between max-w-[500px] mx-auto">
         
         <!-- 1. 全螢幕前鏡頭即時影像 -->
         <video id="camera-video" autoplay playsinline muted class="absolute inset-0 w-full h-full object-cover mirror-video"></video>
         
-        <!-- 疊加繪圖層（顯示偵測到的臉部框框與鼻尖追蹤點） -->
+        <!-- 疊加繪圖層（繪製臉部追蹤十字準心、綠點與追蹤框） -->
         <canvas id="overlay-canvas" class="absolute inset-0 w-full h-full pointer-events-none z-10"></canvas>
 
         <!-- 快門白光特效層 -->
         <div id="flash-overlay" class="absolute inset-0 bg-white opacity-0 pointer-events-none z-40"></div>
 
-        <!-- 2. 頂部高對比狀態列（給使用者看進度，也方便家屬隨時按結束） -->
-        <header class="relative z-20 p-4 pt-safe flex items-center justify-between bg-gradient-to-b from-black/75 via-black/40 to-transparent">
-            <div class="flex flex-col gap-1.5">
-                <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#E07A3D] text-white font-black text-lg shadow-md">
+        <!-- 2. 頂部高對比狀態列 -->
+        <header class="relative z-20 p-4 pt-safe flex items-start justify-between bg-gradient-to-b from-black/80 via-black/45 to-transparent">
+            <div class="flex flex-col gap-2">
+                <!-- 第幾次徽章 -->
+                <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#E07A3D] text-white font-black text-lg shadow-md w-fit">
                     <span>第 <span id="ui-round-num">1</span> 次 / 共 3 次</span>
                 </div>
-                <!-- 即時穩定度條 -->
-                <div class="flex items-center gap-2 px-1">
+                
+                <!-- 即時穩定度動態能量條 -->
+                <div class="flex items-center gap-2 px-2.5 py-1 rounded-xl bg-black/50 backdrop-blur-sm border border-white/15 w-fit">
                     <span class="text-xs font-bold text-white/90">穩定度</span>
-                    <div class="w-24 h-2 bg-white/25 rounded-full overflow-hidden">
-                        <div id="ui-stability-bar" class="h-full bg-[#4A8B6F] transition-all duration-150" style="width: 100%"></div>
+                    <div class="w-24 sm:w-28 h-2.5 bg-white/25 rounded-full overflow-hidden">
+                        <div id="ui-stability-bar" class="h-full bg-[#3B8C6E] transition-all duration-100 rounded-full" style="width: 10%"></div>
                     </div>
+                    <span id="ui-stability-pct" class="text-[11px] font-black text-white/90 tabular-nums w-8 text-right">--</span>
                 </div>
             </div>
 
-            <button type="button" id="btn-stop-training" class="tap-btn px-4 py-2.5 rounded-2xl bg-black/55 hover:bg-black/75 border border-white/30 backdrop-blur-md text-white font-bold text-base">
-                暫停 / 結束
-            </button>
+            <div class="flex flex-col items-end gap-1.5">
+                <button type="button" id="btn-stop-training" class="tap-btn px-4 py-2.5 rounded-2xl bg-black/60 hover:bg-black/80 border border-white/30 backdrop-blur-md text-white font-bold text-base">
+                    暫停 / 結束
+                </button>
+                <!-- 透明運作模式標示 -->
+                <span id="ui-active-engine-badge" class="px-2.5 py-0.5 rounded-full bg-black/55 border border-white/20 text-[11px] font-bold text-[#A3E4D7]">
+                    即時視覺追蹤中
+                </span>
+            </div>
         </header>
 
-        <!-- 3. 中央人臉目標引導框 + SVG 環形/圓角進度條 -->
+        <!-- 3. 中央人臉目標引導框 + SVG 動態進度框 -->
         <div class="relative z-20 flex-1 flex flex-col items-center justify-center pointer-events-none px-6">
-            <div class="relative w-64 h-80 sm:w-72 sm:h-96 flex items-center justify-center">
-                <!-- SVG 動態進度邊框 -->
+            <div id="target-guide-wrapper" class="relative w-64 h-80 sm:w-72 sm:h-96 flex items-center justify-center">
+                <!-- SVG 動態進度邊框（未偵測到臉為虛線白框，偵測到臉立刻變為亮綠實線進度框） -->
                 <svg class="absolute inset-0 w-full h-full" viewBox="0 0 260 320">
-                    <!-- 底色虛線框 -->
-                    <rect x="8" y="8" width="244" height="304" rx="110" ry="110"
-                          fill="none" stroke="rgba(255,255,255,0.45)" stroke-width="6" stroke-dasharray="12 10" />
-                    <!-- 動態進度實線框 -->
-                    <rect id="progress-rect" x="8" y="8" width="244" height="304" rx="110" ry="110"
-                          fill="none" stroke="#4A8B6F" stroke-width="10" stroke-linecap="round"
-                          stroke-dasharray="930" stroke-dashoffset="930"
-                          style="transition: stroke-dashoffset 0.1s linear, stroke 0.25s ease;" />
+                    <!-- 底色引導框 -->
+                    <rect id="guide-base-rect" x="8" y="8" width="244" height="304" rx="115" ry="115"
+                          fill="none" stroke="rgba(255,255,255,0.55)" stroke-width="6" stroke-dasharray="12 10"
+                          style="transition: stroke 0.25s ease, stroke-dasharray 0.25s ease;" />
+                    <!-- 動態累積進度實線框 -->
+                    <rect id="progress-rect" x="8" y="8" width="244" height="304" rx="115" ry="115"
+                          fill="none" stroke="#3B8C6E" stroke-width="11" stroke-linecap="round"
+                          stroke-dasharray="940" stroke-dashoffset="940"
+                          style="transition: stroke-dashoffset 0.08s linear, stroke 0.25s ease;" />
                 </svg>
 
-                <!-- 框內中央提示（不遮擋臉部，放在框頂與框底） -->
-                <div class="h-full flex flex-col justify-between items-center py-5">
-                    <span id="ui-box-badge" class="px-4 py-1.5 rounded-full bg-black/60 backdrop-blur-md text-sm font-bold text-white border border-white/20">
-                        請讓臉出現在框框裡
+                <!-- 框內頂部與底部狀態膠囊（不遮擋臉部中央） -->
+                <div class="h-full flex flex-col justify-between items-center py-4">
+                    <span id="ui-box-badge" class="px-4 py-1.5 rounded-full bg-black/65 backdrop-blur-md text-sm sm:text-base font-black text-white border border-white/25 shadow-lg text-center">
+                        請把手機舉高，對準自己的臉
                     </span>
 
-                    <!-- 穩定倒數計時器（僅在穩定倒數時顯示） -->
-                    <div id="ui-countdown-pill" class="hidden flex-col items-center bg-black/65 backdrop-blur-md px-5 py-2.5 rounded-3xl border-2 border-[#4A8B6F]">
-                        <span id="ui-countdown-label" class="text-xs font-bold text-[#A3E4D7]">保持穩定中</span>
+                    <!-- 穩定倒數計時器（偵測到臉時立即亮起） -->
+                    <div id="ui-countdown-pill" class="hidden flex-col items-center bg-black/75 backdrop-blur-md px-5 py-2.5 rounded-3xl border-2 border-[#3B8C6E] shadow-xl">
+                        <span id="ui-countdown-label" class="text-xs font-bold text-[#A3E4D7]">已對準！保持穩定</span>
                         <div class="text-3xl font-black text-white tabular-nums tracking-tight">
                             <span id="ui-hold-sec">0.0</span><span class="text-lg text-white/75"> / <span id="ui-target-sec">3.0</span> 秒</span>
                         </div>
@@ -304,20 +302,18 @@
             </div>
 
             <!-- 已完成照片縮圖列 -->
-            <div id="ui-thumbs-row" class="flex items-center gap-2.5 mt-3 h-14">
-                <!-- 拍完第1、2張後會出現在這裡 -->
-            </div>
+            <div id="ui-thumbs-row" class="flex items-center gap-2.5 mt-3 h-14"></div>
         </div>
 
-        <!-- 4. 底部半透明暖米色語音指令卡片 -->
-        <footer class="relative z-20 p-4 pb-safe bg-gradient-to-t from-black/80 via-black/40 to-transparent">
-            <div class="bg-[#FAF6F0]/95 backdrop-blur-md text-[#2D2926] rounded-3xl p-4 border-2 border-[#E07A3D]/40 shadow-2xl flex items-center gap-3.5">
+        <!-- 4. 底部暖米色語音指令卡片 -->
+        <footer class="relative z-20 p-4 pb-safe bg-gradient-to-t from-black/85 via-black/45 to-transparent">
+            <div class="bg-[#FAF6F0]/95 backdrop-blur-md text-[#2D2926] rounded-3xl p-4 border-2 border-[#E07A3D]/50 shadow-2xl flex items-center gap-3.5">
                 <div id="ui-prompt-icon" class="w-12 h-12 rounded-2xl bg-[#FDF0E6] text-2xl flex items-center justify-center shrink-0">
                     🙌
                 </div>
                 <div class="flex-1 min-w-0">
                     <div id="ui-state-tag" class="text-xs font-black text-[#E07A3D] tracking-wider">
-                        階段 1：舉高手機對準臉部
+                        第 1 次 • 舉高對準
                     </div>
                     <p id="ui-main-instruction" class="text-lg sm:text-xl font-black text-[#2D2926] leading-snug">
                         雙手握穩手機，慢慢舉高！
@@ -328,13 +324,13 @@
     </section>
 
     <!-- =================================================================
-         畫面 3：結算與三連拍自我對比畫面 (End / Summary Screen)
+         畫面 3：結算與三連拍自我對比畫面
     ================================================================== -->
     <section id="view-summary" class="hidden flex-1 flex flex-col justify-between p-5 sm:p-6 overflow-y-auto">
         <div>
             <!-- 頂部完成標題 -->
             <header class="text-center mt-1 mb-4">
-                <span class="inline-block px-3.5 py-1 rounded-full bg-[#EBF5F0] border border-[#A9DFBF] text-[#366B54] text-sm font-bold mb-1.5">
+                <span class="inline-block px-3.5 py-1 rounded-full bg-[#EBF5F0] border border-[#A9DFBF] text-[#2E6F57] text-sm font-bold mb-1.5">
                     ✨ 連續 3 次訓練完成
                 </span>
                 <h2 class="text-2xl sm:text-3xl font-black text-[#2D2926]">
@@ -346,12 +342,10 @@
             </header>
 
             <!-- 三連拍照片並排卡片 -->
-            <div id="summary-photos-grid" class="grid grid-cols-3 gap-2.5 mb-4">
-                <!-- JS 動態插入 3 張卡片 -->
-            </div>
+            <div id="summary-photos-grid" class="grid grid-cols-3 gap-2.5 mb-4"></div>
 
-            <!-- 自我觀察小提示（不打分數、不批判） -->
-            <div class="mag-card p-4 mb-4">
+            <!-- 自我觀察小提示（不打分數、純觀察） -->
+            <div class="warm-card p-4 mb-4">
                 <h3 class="text-base font-black text-[#2D2926] flex items-center gap-2 mb-2.5">
                     <span class="w-7 h-7 rounded-xl bg-[#FDF0E6] text-[#E07A3D] flex items-center justify-center text-sm">🔍</span>
                     <span>自我觀察小提示（不打分數，純觀察）</span>
@@ -362,32 +356,32 @@
                         <span><strong>高度一致嗎？</strong>看看三張照片裡，臉在畫面的位置是不是一樣高？</span>
                     </li>
                     <li class="flex items-start gap-2">
-                        <span class="w-5 h-5 rounded-full bg-[#4A8B6F] text-white text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">2</span>
+                        <span class="w-5 h-5 rounded-full bg-[#3B8C6E] text-white text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">2</span>
                         <span><strong>肩膀放鬆嗎？</strong>看看第 3 次的肩膀有沒有比第 1 次聳起來？</span>
                     </li>
                     <li class="flex items-start gap-2">
-                        <span class="w-5 h-5 rounded-full bg-[#4B7B9D] text-white text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">3</span>
+                        <span class="w-5 h-5 rounded-full bg-[#3A6B88] text-white text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">3</span>
                         <span><strong>表情自然嗎？</strong>最後一次是不是憋氣或太用力了？</span>
                     </li>
                 </ul>
             </div>
 
-            <!-- 合成圖預覽彈窗區塊（方便 iPhone Safari 長按儲存至相簿） -->
-            <div id="collage-preview-box" class="hidden mag-card p-3 mb-4 text-center bg-[#FDF0E6]/60">
+            <!-- 合成圖預覽區（方便 iPhone Safari 長按儲存至相簿） -->
+            <div id="collage-preview-box" class="hidden warm-card p-3 mb-4 text-center bg-[#FDF0E6]/60">
                 <p class="text-sm font-black text-[#C86428] mb-2">
-                    📱 已合成三連拍成果圖！若未自動下載，請「長按下方圖片」儲存到手機相簿：
+                    📱 已合成三連拍紀錄圖卡！若未自動下載，請「長按下方圖片」儲存到手機相簿：
                 </p>
-                <img id="collage-preview-img" alt="三連拍對比成果圖" class="w-full rounded-2xl border-2 border-[#EDE4D7] shadow-md" />
+                <img id="collage-preview-img" alt="三連拍對比紀錄圖卡" class="w-full rounded-2xl border-2 border-[#EDE4D7] shadow-md" />
             </div>
         </div>
 
         <!-- 底部按鈕群 -->
         <div class="space-y-2.5 pb-2">
-            <button type="button" id="btn-export-collage" class="tap-btn w-full py-4 rounded-3xl bg-[#4A8B6F] hover:bg-[#3D755D] text-white text-lg sm:text-xl font-black shadow-lg flex items-center justify-center gap-2">
-                <span>🖼️ 合成並下載 3 張對比成果圖</span>
+            <button type="button" id="btn-export-collage" class="tap-btn w-full py-4 rounded-3xl bg-[#3B8C6E] hover:bg-[#2F735A] text-white text-lg sm:text-xl font-black shadow-lg flex items-center justify-center gap-2">
+                <span>🖼️ 合成並下載今日三連拍紀錄圖卡</span>
             </button>
             <button type="button" id="btn-play-again" class="tap-btn w-full py-3.5 rounded-3xl bg-white border-2 border-[#E07A3D] text-[#C86428] text-lg font-black flex items-center justify-center gap-2">
-                <span>🔄 再練一次</span>
+                <span>🔄 再練習一組</span>
             </button>
         </div>
     </section>
@@ -402,24 +396,28 @@
 <canvas id="collage-canvas" class="hidden"></canvas>
 
 <!-- =================================================================
-     核心邏輯：載入 MediaPipe Tasks Vision + 自動化狀態機
+     核心邏輯：雙引擎自動備援人臉與穩定度偵測系統
 ================================================================== -->
 <script type="module">
-    import { FaceDetector, FilesetResolver } from "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/+esm";
-
     // ==========================================
-    // 1. 系統設定與全域狀態
+    // 1. 系統參數與全域狀態
     // ==========================================
     const CONFIG = {
         TOTAL_ROUNDS: 3,
         MIN_REST_SEC: 4.0,       // 拍完照後強制最低休息 4 秒
-        MAX_REST_SEC: 7.5,       // 休息保底自動重置上限 7.5 秒（防止手臂無力無法大幅放下而卡死）
-        FACE_GRACE_SEC: 0.8,     // 穩定倒數時，臉部短暫遺失容許緩衝時間
-        THRESHOLDS: {
-            // 每幀標準化位移門檻（經過指數移動平均平滑後）
-            relaxed: 0.014,
-            normal:  0.0085,
-            strict:  0.005
+        MAX_REST_SEC: 6.0,       // 休息保底自動重置上限 6 秒
+        FACE_GRACE_SEC: 0.9,     // 穩定倒數時短暫遺失容許緩衝時間
+        // 引擎 1（MediaPipe）鼻尖標準化位移門檻
+        MP_THRESHOLDS: {
+            relaxed: 0.015,
+            normal:  0.009,
+            strict:  0.0055
+        },
+        // 引擎 2（離屏 64x48 YCbCr + MAD 視覺引擎）晃動分數門檻
+        VIS_THRESHOLDS: {
+            relaxed: 12.0,
+            normal:  7.5,
+            strict:  4.5
         }
     };
 
@@ -429,13 +427,17 @@
         difficulty: 'normal',    // 'relaxed' | 'normal' | 'strict'
         voiceEnabled: true,
 
-        // AI 與硬體狀態
-        faceDetector: null,
-        aiReady: false,
+        // 雙引擎狀態
+        mpDetector: null,
+        mpReady: false,
+        activeEngineName: 'VISION', // 'MEDIAPIPE' | 'VISION'
+
+        // 硬體與感測器狀態
         mediaStream: null,
         wakeLock: null,
-        deviceBeta: null,        // 手機前後傾斜角 (-180 ~ 180)
-        captureBeta: null,       // 拍照當下的手機傾斜角基準
+        deviceBeta: null,        // 手機前後傾角
+        captureBeta: null,       // 拍照當下的手機傾角基準
+        gyroJitter: 0,           // 手機加速度計/陀螺儀輔助晃動量
 
         // 訓練狀態機: 'IDLE' | 'LIFTING' | 'HOLDING' | 'RESTING' | 'COMPLETED'
         phase: 'IDLE',
@@ -446,32 +448,45 @@
         lastVideoTime: -1,
         lastFrameTs: 0,
 
-        // 臉部追蹤與穩定度計算
-        prevNoseNorm: null,      // { x, y } 鏡像後的標準化座標 (0~1)
-        smoothedJitter: 0,       // 指數移動平均晃動量
-        faceLostDuration: 0,     // 連續未偵測到臉的時間
-        noFaceFramesInRest: 0,   // 休息期間臉離開畫面的幀數
-        lastVoiceHintTs: 0,      // 避免語音方向引導太頻繁重複
+        // 引擎 1 追蹤變數
+        prevNoseNorm: null,
+        smoothedMpJitter: 0,
 
-        // 成果紀錄
+        // 引擎 2（64x48 離屏視覺分析）變數
+        visionCanvas: document.createElement('canvas'),
+        visionCtx: null,
+        prevLumaFrame: null,
+        prevCentroid: null,
+        smoothedVisJitter: 0,
+
+        // 共用追蹤與緩衝變數
+        faceLostDuration: 0,
+        noFaceFramesInRest: 0,
+        lastVoiceHintTs: 0,
+
+        // 成果照片紀錄
         photos: []               // [{ round, dataUrl, stabilizeTimeSec }]
     };
+
+    // 初始化 64x48 離屏分析畫布
+    state.visionCanvas.width = 64;
+    state.visionCanvas.height = 48;
+    state.visionCtx = state.visionCanvas.getContext('2d', { willReadFrequently: true });
 
     // ==========================================
     // 2. DOM 參照快取
     // ==========================================
     const dom = {
-        guard: document.getElementById('inapp-browser-guard'),
+        guard: document.getElementById('inapp-guard'),
         btnDismissGuard: document.getElementById('btn-dismiss-guard'),
 
         viewStart: document.getElementById('view-start'),
         viewTraining: document.getElementById('view-training'),
         viewSummary: document.getElementById('view-summary'),
 
-        aiStatusBanner: document.getElementById('ai-status-banner'),
-        aiStatusText: document.getElementById('ai-status-text'),
+        engineStatusPill: document.getElementById('engine-status-pill'),
+        engineStatusText: document.getElementById('engine-status-text'),
         btnStartApp: document.getElementById('btn-start-app'),
-        btnStartLabel: document.getElementById('btn-start-label'),
 
         video: document.getElementById('camera-video'),
         overlayCanvas: document.getElementById('overlay-canvas'),
@@ -479,8 +494,11 @@
 
         uiRoundNum: document.getElementById('ui-round-num'),
         uiStabilityBar: document.getElementById('ui-stability-bar'),
+        uiStabilityPct: document.getElementById('ui-stability-pct'),
+        uiActiveEngineBadge: document.getElementById('ui-active-engine-badge'),
         btnStopTraining: document.getElementById('btn-stop-training'),
 
+        guideBaseRect: document.getElementById('guide-base-rect'),
         progressRect: document.getElementById('progress-rect'),
         uiBoxBadge: document.getElementById('ui-box-badge'),
         uiCountdownPill: document.getElementById('ui-countdown-pill'),
@@ -504,45 +522,58 @@
     };
 
     // ==========================================
-    // 3. 瀏覽器環境偵測與初始化 MediaPipe AI
+    // 3. 瀏覽器環境偵測與背景非阻塞載入 MediaPipe AI（GPU -> CPU 自動降級）
     // ==========================================
     function checkInAppBrowser() {
         const ua = navigator.userAgent || navigator.vendor || '';
-        const isInApp = /Line\/|FBAN|FBAV|Instagram/i.test(ua);
-        if (isInApp) {
+        if (/Line\/|FBAN|FBAV|Instagram/i.test(ua)) {
             dom.guard.classList.remove('hidden');
         }
     }
+    dom.btnDismissGuard.addEventListener('click', () => dom.guard.classList.add('hidden'));
 
-    dom.btnDismissGuard.addEventListener('click', () => {
-        dom.guard.classList.add('hidden');
-    });
-
-    async function initMediaPipeFaceDetector() {
+    async function loadMediaPipeInBackground() {
         try {
+            // 動態載入模組，若 CDN 被阻擋或逾時完全不影響第二引擎運作
+            const mpModule = await Promise.race([
+                import("https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/+esm"),
+                new Promise((_, reject) => setTimeout(() => reject(new Error("CDN 載入逾時")), 8000))
+            ]);
+            const { FaceDetector, FilesetResolver } = mpModule;
             const vision = await FilesetResolver.forVisionTasks(
                 "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/wasm"
             );
-            state.faceDetector = await FaceDetector.createFromOptions(vision, {
-                baseOptions: {
-                    modelAssetPath: "https://storage.googleapis.com/mediapipe-models/face_detector/blaze_face_short_range/float16/1/blaze_face_short_range.tflite",
-                    delegate: "GPU"
-                },
-                runningMode: "VIDEO",
-                minDetectionConfidence: 0.55
-            });
 
-            state.aiReady = true;
-            dom.aiStatusBanner.className = "px-4 py-2.5 rounded-2xl bg-[#EBF5F0] border border-[#A9DFBF] flex items-center justify-center gap-2 text-sm font-black text-[#366B54]";
-            dom.aiStatusBanner.innerHTML = `<span>✅</span><span>AI 臉部偵測已就緒（免觸控自動追蹤）</span>`;
+            // 優先嘗試 GPU 加速，若手機 WebGL 權限受限則自動降級 CPU
+            try {
+                state.mpDetector = await FaceDetector.createFromOptions(vision, {
+                    baseOptions: {
+                        modelAssetPath: "https://storage.googleapis.com/mediapipe-models/face_detector/blaze_face_short_range/float16/1/blaze_face_short_range.tflite",
+                        delegate: "GPU"
+                    },
+                    runningMode: "VIDEO",
+                    minDetectionConfidence: 0.5
+                });
+            } catch (gpuErr) {
+                console.warn("GPU Delegate 不可用，自動降級為 CPU:", gpuErr);
+                state.mpDetector = await FaceDetector.createFromOptions(vision, {
+                    baseOptions: {
+                        modelAssetPath: "https://storage.googleapis.com/mediapipe-models/face_detector/blaze_face_short_range/float16/1/blaze_face_short_range.tflite",
+                        delegate: "CPU"
+                    },
+                    runningMode: "VIDEO",
+                    minDetectionConfidence: 0.5
+                });
+            }
 
-            dom.btnStartApp.disabled = false;
-            dom.btnStartApp.className = "tap-btn w-full py-4 rounded-3xl bg-gradient-to-r from-[#E07A3D] to-[#E89158] text-white text-xl font-black tracking-wide shadow-lg shadow-[#E07A3D]/30 flex items-center justify-center gap-2 cursor-pointer";
-            dom.btnStartLabel.textContent = "開始 3 輪練習";
+            state.mpReady = true;
+            dom.engineStatusText.textContent = "✅ AI 臉部追蹤 + 即時視覺雙引擎已就緒";
+            dom.uiActiveEngineBadge.textContent = "AI 臉部追蹤中";
         } catch (err) {
-            console.error("MediaPipe 初始化失敗:", err);
-            dom.aiStatusBanner.className = "px-4 py-3 rounded-2xl bg-[#FDEDEC] border border-[#F5B7B1] text-sm font-bold text-[#922B21] text-center";
-            dom.aiStatusBanner.textContent = "⚠️ AI 模型載入失敗，請確認網路連線後重新整理網頁。";
+            console.info("MediaPipe 未載入，自動由內建零依賴即時視覺引擎全權接管:", err.message);
+            state.mpReady = false;
+            dom.engineStatusText.textContent = "✅ 內建即時視覺追蹤引擎已就緒（免下載秒開）";
+            dom.uiActiveEngineBadge.textContent = "即時視覺追蹤中";
         }
     }
 
@@ -550,12 +581,9 @@
     // 4. 語音合成 (TTS)、快門音效與防休眠
     // ==========================================
     function speak(text, forceInterrupt = true) {
-        if (!state.voiceEnabled) return;
-        if (!('speechSynthesis' in window)) return;
+        if (!state.voiceEnabled || !('speechSynthesis' in window)) return;
         try {
-            if (forceInterrupt) {
-                window.speechSynthesis.cancel();
-            }
+            if (forceInterrupt) window.speechSynthesis.cancel();
             const u = new SpeechSynthesisUtterance(text);
             u.lang = 'zh-TW';
             u.rate = 0.96;
@@ -566,13 +594,11 @@
         }
     }
 
-    // 合成清脆相機機械快門聲
     function playShutterAudio() {
         try {
             const AudioCtx = window.AudioContext || window.webkitAudioContext;
             if (!AudioCtx) return;
             const ctx = new AudioCtx();
-
             const click = (delay, startFreq, endFreq, dur) => {
                 const osc = ctx.createOscillator();
                 const gain = ctx.createGain();
@@ -586,7 +612,6 @@
                 osc.start(ctx.currentTime + delay);
                 osc.stop(ctx.currentTime + delay + dur + 0.01);
             };
-
             click(0, 950, 140, 0.06);
             click(0.075, 1100, 180, 0.07);
         } catch (e) {
@@ -598,9 +623,7 @@
         if ('wakeLock' in navigator) {
             try {
                 state.wakeLock = await navigator.wakeLock.request('screen');
-            } catch (e) {
-                console.info("WakeLock 未啟用:", e.message);
-            }
+            } catch (e) {}
         }
     }
 
@@ -615,7 +638,7 @@
         dom.toast.textContent = msg;
         dom.toast.classList.remove('opacity-0');
         clearTimeout(dom.toast._t);
-        dom.toast._t = setTimeout(() => dom.toast.classList.add('opacity-0'), 3000);
+        dom.toast._t = setTimeout(() => dom.toast.classList.add('opacity-0'), 3200);
     }
 
     // ==========================================
@@ -641,7 +664,7 @@
             document.querySelectorAll('.opt-diff').forEach(b => {
                 b.className = "opt-diff tap-btn py-2.5 rounded-2xl border-2 border-[#EDE4D7] bg-white font-bold text-base text-[#5A534E]";
             });
-            btn.className = "opt-diff tap-btn py-2.5 rounded-2xl border-2 border-[#4A8B6F] bg-[#EBF5F0] font-black text-base text-[#366B54]";
+            btn.className = "opt-diff tap-btn py-2.5 rounded-2xl border-2 border-[#3B8C6E] bg-[#EBF5F0] font-black text-base text-[#2E6F57]";
         });
     });
 
@@ -651,14 +674,14 @@
             document.querySelectorAll('.opt-voice').forEach(b => {
                 b.className = "opt-voice tap-btn px-4 py-1.5 rounded-xl text-[#6E6761] font-bold text-sm";
             });
-            btn.className = "opt-voice tap-btn px-4 py-1.5 rounded-xl bg-[#4A8B6F] text-white font-bold text-sm shadow-sm";
+            btn.className = "opt-voice tap-btn px-4 py-1.5 rounded-xl bg-[#3B8C6E] text-white font-bold text-sm shadow-sm";
             if (state.voiceEnabled) speak("語音引導已開啟");
             else if ('speechSynthesis' in window) window.speechSynthesis.cancel();
         });
     });
 
     // ==========================================
-    // 6. 啟動相機、iOS 感測器權限與進入訓練
+    // 6. 啟動相機、動作感測器與進入訓練
     // ==========================================
     function handleDeviceOrientation(event) {
         if (typeof event.beta === 'number') {
@@ -666,27 +689,36 @@
         }
     }
 
-    dom.btnStartApp.addEventListener('click', async () => {
-        if (!state.aiReady) return;
+    function handleDeviceMotion(event) {
+        const rot = event.rotationRate;
+        if (rot && typeof rot.alpha === 'number') {
+            const mag = Math.hypot(rot.alpha || 0, rot.beta || 0, rot.gamma || 0);
+            state.gyroJitter = state.gyroJitter * 0.7 + mag * 0.3;
+        }
+    }
 
-        // 1. 解鎖 iOS 語音合成（必須在使用者點擊事件內觸發）
+    dom.btnStartApp.addEventListener('click', async () => {
+        // 1. 解鎖 iOS 語音合成
         if (state.voiceEnabled && 'speechSynthesis' in window) {
-            const unlock = new SpeechSynthesisUtterance('');
-            window.speechSynthesis.speak(unlock);
+            window.speechSynthesis.speak(new SpeechSynthesisUtterance(''));
         }
 
-        // 2. 申請 iOS 13+ 動作感測器權限（輔助判斷手機放下傾斜角）
-        if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
-            try {
+        // 2. 申請 iOS 13+ 動作與方向感測器權限（輔助判斷晃動與放下傾角）
+        try {
+            if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
                 const perm = await DeviceOrientationEvent.requestPermission();
-                if (perm === 'granted') {
-                    window.addEventListener('deviceorientation', handleDeviceOrientation);
-                }
-            } catch (e) {
-                console.info("動作感測器權限未開啟，將純以視覺追蹤運行:", e);
+                if (perm === 'granted') window.addEventListener('deviceorientation', handleDeviceOrientation);
+            } else {
+                window.addEventListener('deviceorientation', handleDeviceOrientation);
             }
-        } else {
-            window.addEventListener('deviceorientation', handleDeviceOrientation);
+            if (typeof DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission === 'function') {
+                const mPerm = await DeviceMotionEvent.requestPermission();
+                if (mPerm === 'granted') window.addEventListener('devicemotion', handleDeviceMotion);
+            } else {
+                window.addEventListener('devicemotion', handleDeviceMotion);
+            }
+        } catch (e) {
+            console.info("感測器權限未開啟，將純以視覺追蹤運行:", e);
         }
 
         // 3. 開啟前鏡頭
@@ -733,23 +765,27 @@
         enterLiftingState();
 
         state.lastFrameTs = performance.now();
-        requestAnimationFrame(detectionLoop);
+        requestAnimationFrame(mainDetectionLoop);
     }
 
-    // 狀態 1：舉高手機對準臉部 (LIFTING)
+    // 階段一：舉高對準 (LIFTING)
     function enterLiftingState() {
         state.phase = 'LIFTING';
         state.holdElapsed = 0;
         state.prevNoseNorm = null;
-        state.smoothedJitter = 0;
+        state.smoothedMpJitter = 0;
+        state.prevLumaFrame = null;
+        state.prevCentroid = null;
+        state.smoothedVisJitter = 0;
         state.faceLostDuration = 0;
         state.roundStartTimestamp = performance.now();
 
         dom.uiRoundNum.textContent = state.currentRound;
-        updateProgressRing(0, '#4A8B6F');
+        setGuideBoxDetectedStyle(false);
+        updateProgressRing(0, '#3B8C6E');
 
-        dom.uiBoxBadge.textContent = '請讓臉進入框框裡';
-        dom.uiBoxBadge.className = 'px-4 py-1.5 rounded-full bg-black/60 backdrop-blur-md text-sm font-bold text-white border border-white/20';
+        dom.uiBoxBadge.textContent = '請把手機舉高，對準自己的臉';
+        dom.uiBoxBadge.className = 'px-4 py-1.5 rounded-full bg-black/65 backdrop-blur-md text-sm sm:text-base font-black text-white border border-white/25 shadow-lg text-center';
 
         dom.uiCountdownPill.classList.add('hidden');
         dom.uiCountdownPill.classList.remove('flex');
@@ -764,19 +800,21 @@
         speak(msg);
     }
 
-    // 狀態 2：找到臉部，開始穩定保持倒數 (HOLDING)
+    // 階段二：找到臉部，開始穩定保持倒數 (HOLDING)
     function enterHoldingState() {
         if (state.phase === 'HOLDING') return;
         state.phase = 'HOLDING';
         state.faceLostDuration = 0;
 
-        dom.uiBoxBadge.textContent = '✓ 已對準！穩住不要動';
-        dom.uiBoxBadge.className = 'px-4 py-1.5 rounded-full bg-[#4A8B6F] text-sm font-black text-white shadow-md';
+        setGuideBoxDetectedStyle(true);
+
+        dom.uiBoxBadge.textContent = `已對準！保持穩定 ${state.holdElapsed.toFixed(1)} / ${state.holdDuration.toFixed(1)} 秒`;
+        dom.uiBoxBadge.className = 'px-4 py-1.5 rounded-full bg-[#3B8C6E] text-sm sm:text-base font-black text-white shadow-lg border border-white/40';
 
         dom.uiCountdownPill.classList.remove('hidden');
         dom.uiCountdownPill.classList.add('flex');
-        dom.uiCountdownPill.style.borderColor = '#4A8B6F';
-        dom.uiCountdownLabel.textContent = '保持穩定中';
+        dom.uiCountdownPill.style.borderColor = '#3B8C6E';
+        dom.uiCountdownLabel.textContent = '已對準！保持穩定';
         dom.uiCountdownLabel.className = 'text-xs font-bold text-[#A3E4D7]';
 
         dom.uiPromptIcon.textContent = '🎯';
@@ -785,20 +823,31 @@
         speak('找到臉了！保持穩定');
     }
 
-    // 狀態 3：自動拍照並進入雙軌休息重置緩衝 (RESTING)
+    // 切換中央引導框外觀（未偵測到臉：白虛線；偵測到臉：亮綠實線底框）
+    function setGuideBoxDetectedStyle(detected) {
+        if (detected) {
+            dom.guideBaseRect.setAttribute('stroke', 'rgba(59, 140, 110, 0.45)');
+            dom.guideBaseRect.removeAttribute('stroke-dasharray');
+        } else {
+            dom.guideBaseRect.setAttribute('stroke', 'rgba(255, 255, 255, 0.55)');
+            dom.guideBaseRect.setAttribute('stroke-dasharray', '12 10');
+        }
+    }
+
+    // 階段三與四：自動拍照並進入雙軌休息重置 (RESTING)
     function triggerAutoCaptureAndRest() {
         state.phase = 'RESTING';
         state.restElapsed = 0;
         state.noFaceFramesInRest = 0;
         state.captureBeta = state.deviceBeta;
 
-        // 1. 快門音效 + 閃光動畫
+        // 1. 快門音效 + 閃白動畫
         playShutterAudio();
         dom.flashOverlay.classList.remove('animate-flash');
         void dom.flashOverlay.offsetWidth;
         dom.flashOverlay.classList.add('animate-flash');
 
-        // 2. 擷取鏡像後的真實自拍畫面
+        // 2. 擷取真實自拍照片
         const photoDataUrl = captureMirroredPhoto();
         const totalRoundSec = ((performance.now() - state.roundStartTimestamp) / 1000).toFixed(1);
 
@@ -808,49 +857,46 @@
             stabilizeTimeSec: totalRoundSec
         });
 
-        // 在畫面上顯示小縮圖回饋
+        // 顯示角落縮圖
         const thumb = document.createElement('div');
-        thumb.className = 'w-11 h-14 rounded-xl overflow-hidden border-2 border-[#4A8B6F] shadow-lg bg-black relative';
+        thumb.className = 'w-11 h-14 rounded-xl overflow-hidden border-2 border-[#3B8C6E] shadow-lg bg-black relative';
         thumb.innerHTML = `
             <img src="${photoDataUrl}" class="w-full h-full object-cover" />
-            <span class="absolute bottom-0 inset-x-0 bg-[#4A8B6F] text-white text-[10px] font-black text-center leading-tight">第${state.currentRound}張</span>
+            <span class="absolute bottom-0 inset-x-0 bg-[#3B8C6E] text-white text-[10px] font-black text-center leading-tight">第${state.currentRound}張</span>
         `;
         dom.uiThumbsRow.appendChild(thumb);
 
-        // 3. 若已完成第 3 次，準備進入結算畫面
+        // 3. 若已完成第 3 次，跳轉結算對比頁
         if (state.currentRound >= CONFIG.TOTAL_ROUNDS) {
             dom.uiPromptIcon.textContent = '🎉';
             dom.uiStateTag.textContent = '全部完成！';
             dom.uiMainInstruction.textContent = '太棒了！三次練習全部完成！';
             speak('拍照成功！太棒了，三次練習全部完成！');
 
-            setTimeout(() => {
-                completeAllRounds();
-            }, 1800);
+            setTimeout(() => completeAllRounds(), 1700);
             return;
         }
 
-        // 4. 進入休息與放下重置緩衝
+        // 4. 進入休息與防連拍重置
+        setGuideBoxDetectedStyle(false);
         updateProgressRing(0, '#E07A3D');
         dom.uiCountdownPill.classList.add('hidden');
         dom.uiCountdownPill.classList.remove('flex');
 
         dom.uiBoxBadge.textContent = '📸 拍照成功！請放下手機休息';
-        dom.uiBoxBadge.className = 'px-4 py-1.5 rounded-full bg-[#E07A3D] text-sm font-black text-white shadow-md';
+        dom.uiBoxBadge.className = 'px-4 py-1.5 rounded-full bg-[#E07A3D] text-sm sm:text-base font-black text-white shadow-lg';
 
         dom.uiPromptIcon.textContent = '😮‍💨';
         dom.uiStateTag.textContent = `第 ${state.currentRound} 次完成 • 休息緩衝`;
-        dom.uiMainInstruction.textContent = `拍照成功！完成第 ${state.currentRound} 次，請慢慢把手機放下來休息`;
-        speak(`拍照成功！完成第 ${state.currentRound} 次！請慢慢把手機放下來休息`);
+        dom.uiMainInstruction.textContent = `拍照成功！完成第 ${state.currentRound} 次，很好！慢慢把手機放下來休息`;
+        speak(`拍照成功！完成第 ${state.currentRound} 次！很好！慢慢把手機放下來休息`);
     }
 
-    // 擷取鏡像翻轉照片（確保與螢幕預覽左右方向一致）
     function captureMirroredPhoto() {
         const video = dom.video;
         const vw = video.videoWidth || 720;
         const vh = video.videoHeight || 960;
 
-        // 輸出 3:4 比例直向自拍照
         const targetW = 600;
         const targetH = 800;
         const canvas = document.createElement('canvas');
@@ -858,7 +904,6 @@
         canvas.height = targetH;
         const ctx = canvas.getContext('2d');
 
-        // 計算置中裁切區域
         const srcRatio = vw / vh;
         const dstRatio = targetW / targetH;
         let sx = 0, sy = 0, sw = vw, sh = vh;
@@ -870,7 +915,6 @@
             sy = (vh - sh) / 2;
         }
 
-        // 水平鏡像翻轉繪製
         ctx.save();
         ctx.translate(targetW, 0);
         ctx.scale(-1, 1);
@@ -882,15 +926,220 @@
 
     function updateProgressRing(ratio, colorHex) {
         const clamped = Math.max(0, Math.min(1, ratio));
-        const perimeter = 930;
+        const perimeter = 940;
         dom.progressRect.style.strokeDashoffset = perimeter * (1 - clamped);
         if (colorHex) dom.progressRect.style.stroke = colorHex;
     }
 
     // ==========================================
-    // 8. 即時 MediaPipe 影像分析與穩定度演算法主迴圈
+    // 8. 雙引擎分析模組：
+    //    引擎 1 (MediaPipe AI) + 引擎 2 (64x48 YCbCr 膚色質心 + Frame MAD)
     // ==========================================
-    function detectionLoop(now) {
+
+    // 引擎 1：MediaPipe FaceDetector 推論
+    function runEngine1MediaPipe(video, now) {
+        if (!state.mpReady || !state.mpDetector) return null;
+        try {
+            const res = state.mpDetector.detectForVideo(video, now);
+            if (!res || !res.detections || res.detections.length === 0) {
+                return { engine: 'MEDIAPIPE', detected: false };
+            }
+            const det = res.detections[0];
+            const vw = video.videoWidth || 1;
+            const vh = video.videoHeight || 1;
+            const bbox = det.boundingBox;
+
+            // 鏡像後標準化座標 (0 ~ 1)
+            const normX = 1 - (bbox.originX + bbox.width / 2) / vw;
+            const normY = (bbox.originY + bbox.height / 2) / vh;
+            const normW = bbox.width / vw;
+            const normH = bbox.height / vh;
+
+            let trackX = normX;
+            let trackY = normY;
+            if (det.keypoints && det.keypoints.length >= 3) {
+                trackX = 1 - det.keypoints[2].x;
+                trackY = det.keypoints[2].y;
+            }
+
+            // 判斷是否落在合理目標框內
+            const isAligned = (normX >= 0.22 && normX <= 0.78) &&
+                              (normY >= 0.18 && normY <= 0.78) &&
+                              (normW >= 0.13 && normW <= 0.76);
+
+            let disp = 0;
+            if (state.prevNoseNorm && isAligned) {
+                disp = Math.hypot(trackX - state.prevNoseNorm.x, trackY - state.prevNoseNorm.y);
+            }
+            state.prevNoseNorm = isAligned ? { x: trackX, y: trackY } : null;
+            state.smoothedMpJitter = state.smoothedMpJitter * 0.7 + disp * 0.3;
+
+            const threshold = CONFIG.MP_THRESHOLDS[state.difficulty] || CONFIG.MP_THRESHOLDS.normal;
+            const isSteady = state.smoothedMpJitter <= threshold;
+            const stabilityScore = Math.max(12, Math.min(100, Math.round((1 - state.smoothedMpJitter / (threshold * 2.3)) * 100)));
+
+            return {
+                engine: 'MEDIAPIPE',
+                detected: true,
+                isAligned,
+                normX,
+                normY,
+                normW,
+                normH,
+                trackX,
+                trackY,
+                isSteady,
+                stabilityScore
+            };
+        } catch (err) {
+            // 若執行期發生 WebGL 上下文遺失，自動降級回引擎 2
+            console.warn("MediaPipe 推論異常，切換至視覺引擎:", err);
+            state.mpReady = false;
+            return null;
+        }
+    }
+
+    // 引擎 2：內建零依賴 64x48 YCbCr 膚色質心 + 幀間 MAD 穩定度追蹤
+    function runEngine2InstantVision(video) {
+        const W = 64;
+        const H = 48;
+        const ctx = state.visionCtx;
+
+        // 水平鏡像繪製縮小影格至 64x48
+        ctx.save();
+        ctx.translate(W, 0);
+        ctx.scale(-1, 1);
+        ctx.drawImage(video, 0, 0, W, H);
+        ctx.restore();
+
+        const imgData = ctx.getImageData(0, 0, W, H).data;
+        const currLuma = new Uint8Array(W * H);
+
+        // 定義中央目標框 ROI 範圍 (X: 22%~78%, Y: 16%~80%)
+        const xMin = Math.floor(W * 0.22);
+        const xMax = Math.floor(W * 0.78);
+        const yMin = Math.floor(H * 0.16);
+        const yMax = Math.floor(H * 0.80);
+
+        let roiTotalPixels = 0;
+        let skinPixels = 0;
+        let sumSkinX = 0;
+        let sumSkinY = 0;
+
+        // 計算亮度與 YCbCr 膚色分佈
+        for (let y = 0; y < H; y++) {
+            for (let x = 0; x < W; x++) {
+                const idx = (y * W + x) * 4;
+                const r = imgData[idx];
+                const g = imgData[idx + 1];
+                const b = imgData[idx + 2];
+
+                // BT.601 YCbCr 轉換
+                const Y  =  0.299 * r + 0.587 * g + 0.114 * b;
+                const Cb = 128 - 0.168736 * r - 0.331264 * g + 0.5 * b;
+                const Cr = 128 + 0.5 * r - 0.418688 * g - 0.081312 * b;
+
+                currLuma[y * W + x] = Y;
+
+                if (x >= xMin && x <= xMax && y >= yMin && y <= yMax) {
+                    roiTotalPixels++;
+                    // 寬容人臉膚色與暖光照明區間（涵蓋黃種人、偏白、偏深及室內黃光）
+                    const isSkin = (Y > 45 && Y < 245) &&
+                                   (Cb >= 75 && Cb <= 132) &&
+                                   (Cr >= 130 && Cr <= 180) &&
+                                   (r > g && r > b);
+                    if (isSkin) {
+                        skinPixels++;
+                        sumSkinX += x;
+                        sumSkinY += y;
+                    }
+                }
+            }
+        }
+
+        // 計算目標框內亮度標準差（防止對準單色米白牆壁誤判）
+        let lumaSum = 0;
+        let lumaSqSum = 0;
+        for (let y = yMin; y <= yMax; y++) {
+            for (let x = xMin; x <= xMax; x++) {
+                const v = currLuma[y * W + x];
+                lumaSum += v;
+                lumaSqSum += v * v;
+            }
+        }
+        const meanLuma = lumaSum / roiTotalPixels;
+        const variance = Math.max(0, (lumaSqSum / roiTotalPixels) - (meanLuma * meanLuma));
+        const contrastStd = Math.sqrt(variance);
+
+        const skinRatio = skinPixels / roiTotalPixels;
+
+        // 計算目標框內連續幀間平均絕對差值 (Frame-to-Frame Motion MAD)
+        let mad = 0;
+        if (state.prevLumaFrame) {
+            let diffSum = 0;
+            for (let y = yMin; y <= yMax; y++) {
+                for (let x = xMin; x <= xMax; x++) {
+                    const p = y * W + x;
+                    diffSum += Math.abs(currLuma[p] - state.prevLumaFrame[p]);
+                }
+            }
+            mad = diffSum / roiTotalPixels;
+        }
+        state.prevLumaFrame = currLuma;
+
+        // 判定條件：目標框內膚色佔比 > 18% 且具備五官明暗對比 (contrastStd > 14)
+        const hasFaceFeatures = skinRatio > 0.18 && contrastStd > 14;
+
+        if (!hasFaceFeatures) {
+            state.prevCentroid = null;
+            return {
+                engine: 'VISION',
+                detected: false,
+                isAligned: false,
+                stabilityScore: 15
+            };
+        }
+
+        // 計算膚色質心標準化座標 (0 ~ 1)
+        const trackX = (sumSkinX / skinPixels) / W;
+        const trackY = (sumSkinY / skinPixels) / H;
+        const isAligned = (trackX >= 0.25 && trackX <= 0.75) && (trackY >= 0.20 && trackY <= 0.76);
+
+        // 計算質心位移量
+        let centroidShift = 0;
+        if (state.prevCentroid) {
+            centroidShift = Math.hypot(trackX - state.prevCentroid.x, trackY - state.prevCentroid.y) * 140;
+        }
+        state.prevCentroid = { x: trackX, y: trackY };
+
+        // 綜合晃動指數 = 像素亮度變化 MAD * 0.65 + 質心位移 * 0.35 + 手機陀螺儀微幅加權
+        const gyroBonus = Math.min(4, state.gyroJitter * 0.08);
+        const rawJitter = mad * 0.65 + centroidShift * 0.35 + gyroBonus;
+        state.smoothedVisJitter = state.smoothedVisJitter * 0.68 + rawJitter * 0.32;
+
+        const threshold = CONFIG.VIS_THRESHOLDS[state.difficulty] || CONFIG.VIS_THRESHOLDS.normal;
+        const isSteady = state.smoothedVisJitter <= threshold;
+        const stabilityScore = Math.max(15, Math.min(100, Math.round((1 - state.smoothedVisJitter / (threshold * 2.2)) * 100)));
+
+        return {
+            engine: 'VISION',
+            detected: true,
+            isAligned,
+            normX: trackX,
+            normY: trackY,
+            normW: 0.36,
+            normH: 0.44,
+            trackX,
+            trackY,
+            isSteady,
+            stabilityScore
+        };
+    }
+
+    // ==========================================
+    // 9. 主追蹤迴圈與視覺準心繪製
+    // ==========================================
+    function mainDetectionLoop(now) {
         if (state.phase === 'IDLE' || state.phase === 'COMPLETED') return;
 
         const dt = Math.min(0.1, (now - state.lastFrameTs) / 1000);
@@ -899,7 +1148,6 @@
         const video = dom.video;
         const canvas = dom.overlayCanvas;
 
-        // 同步 Overlay Canvas 尺寸與視窗一致
         if (canvas.width !== canvas.clientWidth || canvas.height !== canvas.clientHeight) {
             canvas.width = canvas.clientWidth;
             canvas.height = canvas.clientHeight;
@@ -907,108 +1155,126 @@
         const ctx = canvas.getContext('2d');
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-        let detection = null;
+        let tracking = { detected: false, isAligned: false, stabilityScore: 10 };
 
-        if (video.readyState >= 2 && video.currentTime !== state.lastVideoTime) {
-            state.lastVideoTime = video.currentTime;
-            const result = state.faceDetector.detectForVideo(video, now);
-            if (result && result.detections && result.detections.length > 0) {
-                // 取信心度最高或面積最大的主要人臉
-                detection = result.detections[0];
+        if (video.readyState >= 2) {
+            // 優先執行引擎 1 (MediaPipe)；若未就緒或回傳 null，無縫切換至引擎 2 (即時視覺引擎)
+            const mpResult = runEngine1MediaPipe(video, now);
+            if (mpResult !== null) {
+                tracking = mpResult;
+                if (state.activeEngineName !== 'MEDIAPIPE') {
+                    state.activeEngineName = 'MEDIAPIPE';
+                    dom.uiActiveEngineBadge.textContent = 'AI 臉部追蹤中';
+                }
+            } else {
+                tracking = runEngine2InstantVision(video);
+                if (state.activeEngineName !== 'VISION') {
+                    state.activeEngineName = 'VISION';
+                    dom.uiActiveEngineBadge.textContent = '即時視覺追蹤中';
+                }
             }
         }
 
-        // 處理階段邏輯
-        if (state.phase === 'LIFTING' || state.phase === 'HOLDING') {
-            processActiveTracking(detection, dt, now, ctx, canvas.width, canvas.height);
-        } else if (state.phase === 'RESTING') {
-            processRestingReset(detection, dt);
+        // 在畫面上即時繪製綠色追蹤準心與追蹤框（讓使用者看到系統有在即時感測）
+        if (tracking.detected && (state.phase === 'LIFTING' || state.phase === 'HOLDING')) {
+            drawTrackingReticle(ctx, canvas.width, canvas.height, tracking);
         }
 
-        requestAnimationFrame(detectionLoop);
+        // 依目前階段處理狀態轉移
+        if (state.phase === 'LIFTING' || state.phase === 'HOLDING') {
+            updateActivePhase(tracking, dt, now);
+        } else if (state.phase === 'RESTING') {
+            updateRestingPhase(tracking, dt);
+        }
+
+        requestAnimationFrame(mainDetectionLoop);
     }
 
-    function processActiveTracking(detection, dt, now, ctx, cw, ch) {
-        const vw = dom.video.videoWidth || 1;
-        const vh = dom.video.videoHeight || 1;
+    // 繪製即時綠色追蹤框與鼻尖/中心動態對準十字光點
+    function drawTrackingReticle(ctx, cw, ch, tracking) {
+        const px = tracking.trackX * cw;
+        const py = tracking.trackY * ch;
+        const color = tracking.isAligned ? '#3B8C6E' : '#E07A3D';
 
-        if (!detection) {
-            // 畫面中沒有偵測到人臉
-            state.prevNoseNorm = null;
-            dom.uiStabilityBar.style.width = '20%';
-            dom.uiStabilityBar.style.backgroundColor = '#E07A3D';
+        ctx.save();
+        // 1. 臉部追蹤圓角框（僅在 MediaPipe 取得精準邊界或對準時顯示柔和外框）
+        if (tracking.engine === 'MEDIAPIPE') {
+            const bw = tracking.normW * cw;
+            const bh = tracking.normH * ch;
+            const bx = tracking.normX * cw - bw / 2;
+            const by = tracking.normY * ch - bh / 2;
+
+            ctx.strokeStyle = tracking.isAligned ? 'rgba(59, 140, 110, 0.85)' : 'rgba(224, 122, 61, 0.85)';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.roundRect(bx, by, bw, bh, 24);
+            ctx.stroke();
+        }
+
+        // 2. 臉部中心動態綠色對準十字與光點
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 2.5;
+        ctx.beginPath();
+        ctx.moveTo(px - 16, py);
+        ctx.lineTo(px + 16, py);
+        ctx.moveTo(px, py - 16);
+        ctx.lineTo(px, py + 16);
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.arc(px, py, 7, 0, Math.PI * 2);
+        ctx.fillStyle = color;
+        ctx.fill();
+        ctx.lineWidth = 2.5;
+        ctx.strokeStyle = '#FFFFFF';
+        ctx.stroke();
+        ctx.restore();
+    }
+
+    function updateActivePhase(tracking, dt, now) {
+        // 更新頂部穩定度能量條
+        const pct = tracking.detected ? tracking.stabilityScore : 10;
+        dom.uiStabilityBar.style.width = `${pct}%`;
+        dom.uiStabilityPct.textContent = tracking.detected ? `${pct}%` : '--';
+        dom.uiStabilityBar.style.backgroundColor = (tracking.detected && tracking.isSteady) ? '#3B8C6E' : '#E07A3D';
+
+        if (!tracking.detected) {
+            setGuideBoxDetectedStyle(false);
 
             if (state.phase === 'HOLDING') {
                 state.faceLostDuration += dt;
                 if (state.faceLostDuration > CONFIG.FACE_GRACE_SEC) {
-                    // 離開太久，退回舉高對準狀態（保留已累積進度的一半，不完全歸零造成挫折）
                     state.phase = 'LIFTING';
                     state.holdElapsed = Math.max(0, state.holdElapsed * 0.5);
                     dom.uiCountdownPill.classList.add('hidden');
                     dom.uiCountdownPill.classList.remove('flex');
                     dom.uiBoxBadge.textContent = '臉離開框框了，慢慢移回來';
-                    dom.uiBoxBadge.className = 'px-4 py-1.5 rounded-full bg-[#E07A3D] text-sm font-bold text-white';
+                    dom.uiBoxBadge.className = 'px-4 py-1.5 rounded-full bg-[#E07A3D] text-sm sm:text-base font-black text-white shadow-lg';
                     dom.uiMainInstruction.textContent = '沒關係，慢慢調整手機讓臉回到框框裡';
                 }
             } else {
                 dom.uiBoxBadge.textContent = '請把手機舉高，對準自己的臉';
+                dom.uiBoxBadge.className = 'px-4 py-1.5 rounded-full bg-black/65 backdrop-blur-md text-sm sm:text-base font-black text-white border border-white/25 shadow-lg text-center';
             }
             return;
         }
 
-        // 成功偵測到人臉！計算鏡像後的標準化座標 (0 ~ 1)
+        // 有偵測到臉！
         state.faceLostDuration = 0;
-        const bbox = detection.boundingBox;
-        // 因為 video 做了 scaleX(-1)，原始 X 需做 1 - x 鏡像映射
-        const rawCenterX = (bbox.originX + bbox.width / 2) / vw;
-        const rawCenterY = (bbox.originY + bbox.height / 2) / vh;
-        const normX = 1 - rawCenterX;
-        const normY = rawCenterY;
-        const normWidth = bbox.width / vw;
 
-        // 優先使用鼻尖關鍵點（keypoints[2]）計算微小晃動，若無則用中心點
-        let trackX = normX;
-        let trackY = normY;
-        if (detection.keypoints && detection.keypoints.length >= 3) {
-            trackX = 1 - detection.keypoints[2].x;
-            trackY = detection.keypoints[2].y;
-        }
-
-        // 在 Overlay 上繪製極簡柔和的追蹤呼吸點（讓使用者知道 AI 真的有抓到臉）
-        const px = trackX * cw;
-        const py = trackY * ch;
-        ctx.save();
-        ctx.beginPath();
-        ctx.arc(px, py, 8, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(74, 139, 111, 0.85)';
-        ctx.fill();
-        ctx.lineWidth = 3;
-        ctx.strokeStyle = '#FFFFFF';
-        ctx.stroke();
-        ctx.restore();
-
-        // 判斷臉部是否落在合理目標框內（中心區域且距離適中）
-        const inHorizontalZone = normX >= 0.24 && normX <= 0.76;
-        const inVerticalZone = normY >= 0.20 && normY <= 0.76;
-        const reasonableSize = normWidth >= 0.14 && normWidth <= 0.72;
-        const isAligned = inHorizontalZone && inVerticalZone && reasonableSize;
-
-        if (!isAligned) {
-            state.prevNoseNorm = null;
-            // 給予即時方向引導提示
-            let guideMsg = '慢慢調整手機位置，讓臉對準框框';
-            if (normY > 0.76) guideMsg = '再舉高一點點，臉偏下方囉';
-            else if (normY < 0.20) guideMsg = '稍微放低一點點，臉偏上方囉';
-            else if (normX < 0.24) guideMsg = '手機稍微往左移一點點';
-            else if (normX > 0.76) guideMsg = '手機稍微往右移一點點';
-            else if (normWidth < 0.14) guideMsg = '手機拿近一點，看清楚您的臉';
+        if (!tracking.isAligned) {
+            setGuideBoxDetectedStyle(false);
+            let guideMsg = '慢慢移動手機，讓臉對準中央框框';
+            if (tracking.normY > 0.76) guideMsg = '再舉高一點點，臉偏下方囉';
+            else if (tracking.normY < 0.20) guideMsg = '稍微放低一點點，臉偏上方囉';
+            else if (tracking.normX < 0.25) guideMsg = '手機稍微往左移一點點';
+            else if (tracking.normX > 0.75) guideMsg = '手機稍微往右移一點點';
 
             dom.uiBoxBadge.textContent = guideMsg;
-            dom.uiBoxBadge.className = 'px-4 py-1.5 rounded-full bg-[#E07A3D] text-sm font-bold text-white shadow';
+            dom.uiBoxBadge.className = 'px-4 py-1.5 rounded-full bg-[#E07A3D] text-sm sm:text-base font-black text-white shadow-lg';
 
             if (state.phase === 'LIFTING') {
                 dom.uiMainInstruction.textContent = guideMsg;
-                // 每隔 5.5 秒才語音提醒一次方向，避免一直吵使用者
                 if (now - state.lastVoiceHintTs > 5500) {
                     state.lastVoiceHintTs = now;
                     speak(guideMsg, false);
@@ -1017,68 +1283,50 @@
             return;
         }
 
-        // 臉部已對準框框！若還在 LIFTING，立刻切換到 HOLDING
+        // 臉已進入目標框框！切換至 HOLDING 並亮起綠色實線框
         if (state.phase === 'LIFTING') {
             enterHoldingState();
         }
+        setGuideBoxDetectedStyle(true);
 
-        // 計算幀間位移速度（晃動程度）
-        let frameDisplacement = 0;
-        if (state.prevNoseNorm) {
-            const dx = trackX - state.prevNoseNorm.x;
-            const dy = trackY - state.prevNoseNorm.y;
-            frameDisplacement = Math.hypot(dx, dy);
-        }
-        state.prevNoseNorm = { x: trackX, y: trackY };
+        const curStr = Math.min(state.holdDuration, state.holdElapsed).toFixed(1);
+        const tarStr = state.holdDuration.toFixed(1);
 
-        // 指數移動平均 (EMA) 平滑雜訊
-        state.smoothedJitter = state.smoothedJitter * 0.72 + frameDisplacement * 0.28;
-
-        const threshold = CONFIG.THRESHOLDS[state.difficulty] || CONFIG.THRESHOLDS.normal;
-        const isSteady = state.smoothedJitter <= threshold;
-
-        // 更新頂部穩定度視覺長條
-        const stabilityPct = Math.max(15, Math.min(100, Math.round((1 - state.smoothedJitter / (threshold * 2.2)) * 100)));
-        dom.uiStabilityBar.style.width = `${stabilityPct}%`;
-        dom.uiStabilityBar.style.backgroundColor = isSteady ? '#4A8B6F' : '#E07A3D';
-
-        if (isSteady) {
-            // 穩定維持中：累積秒數！
+        if (tracking.isSteady) {
             state.holdElapsed += dt;
             const ratio = state.holdElapsed / state.holdDuration;
-            updateProgressRing(ratio, '#4A8B6F');
+            updateProgressRing(ratio, '#3B8C6E');
 
-            dom.uiCountdownPill.style.borderColor = '#4A8B6F';
-            dom.uiCountdownLabel.textContent = '穩住喔！保持穩定中';
+            dom.uiBoxBadge.textContent = `已對準！保持穩定 ${curStr} / ${tarStr} 秒`;
+            dom.uiBoxBadge.className = 'px-4 py-1.5 rounded-full bg-[#3B8C6E] text-sm sm:text-base font-black text-white shadow-lg border border-white/40';
+
+            dom.uiCountdownPill.style.borderColor = '#3B8C6E';
+            dom.uiCountdownLabel.textContent = '已對準！保持穩定';
             dom.uiCountdownLabel.className = 'text-xs font-bold text-[#A3E4D7]';
-            dom.uiHoldSec.textContent = Math.min(state.holdDuration, state.holdElapsed).toFixed(1);
+            dom.uiHoldSec.textContent = curStr;
 
             if (state.holdElapsed >= state.holdDuration) {
                 triggerAutoCaptureAndRest();
             }
         } else {
-            // 手部晃動超過門檻：暫停累積（絕不歸零扣分），溫和提示穩住
+            // 晃動過大：暫停累積（絕不歸零扣分），提示穩住
             updateProgressRing(state.holdElapsed / state.holdDuration, '#E07A3D');
+
+            dom.uiBoxBadge.textContent = `放輕鬆，穩住喔（${curStr} / ${tarStr} 秒）`;
+            dom.uiBoxBadge.className = 'px-4 py-1.5 rounded-full bg-[#E07A3D] text-sm sm:text-base font-black text-white shadow-lg';
+
             dom.uiCountdownPill.style.borderColor = '#E07A3D';
-            dom.uiCountdownLabel.textContent = '手有點晃喔，放輕鬆穩住';
+            dom.uiCountdownLabel.textContent = '放輕鬆，穩住喔';
             dom.uiCountdownLabel.className = 'text-xs font-bold text-[#F5B041]';
         }
     }
 
-    // 雙軌制休息重置邏輯：避免連拍、也絕不讓無力患者卡死
-    function processRestingReset(detection, dt) {
+    // 雙軌制休息重置：臉離開框框 OR 手機下傾 > 25 度 OR 滿 6 秒保底重置
+    function updateRestingPhase(tracking, dt) {
         state.restElapsed += dt;
 
-        if (!detection) {
+        if (!tracking.detected || !tracking.isAligned) {
             state.noFaceFramesInRest += 1;
-        } else {
-            // 若臉部偏離中央框框也算有放下動作
-            const vw = dom.video.videoWidth || 1;
-            const vh = dom.video.videoHeight || 1;
-            const normY = (detection.boundingBox.originY + detection.boundingBox.height / 2) / vh;
-            if (normY < 0.15 || normY > 0.85) {
-                state.noFaceFramesInRest += 1;
-            }
         }
 
         const remain = Math.max(0, Math.ceil(CONFIG.MIN_REST_SEC - state.restElapsed));
@@ -1087,17 +1335,13 @@
             return;
         }
 
-        // 已滿最低休息 4 秒，檢查雙軌重置條件：
-        // 條件 A：臉部確實離開鏡頭/框框（代表手機已放下）
-        const faceLeftView = state.noFaceFramesInRest >= 12;
-        // 條件 B：手機傾斜角 (beta) 比拍照時明顯改變超過 22 度（放低至胸腹前）
+        const faceLeftBox = state.noFaceFramesInRest >= 10;
         const phoneTiltedDown = (state.captureBeta !== null && state.deviceBeta !== null)
-            ? Math.abs(state.deviceBeta - state.captureBeta) > 22
+            ? Math.abs(state.deviceBeta - state.captureBeta) > 25
             : false;
-        // 條件 C：休息已達 7.5 秒保底上限（即使患者無力只放低幾公分，也自動進入下一輪）
         const failsafeTimeout = state.restElapsed >= CONFIG.MAX_REST_SEC;
 
-        if (faceLeftView || phoneTiltedDown || failsafeTimeout) {
+        if (faceLeftBox || phoneTiltedDown || failsafeTimeout) {
             state.currentRound += 1;
             enterLiftingState();
         } else {
@@ -1106,7 +1350,7 @@
     }
 
     // ==========================================
-    // 9. 停止相機與渲染結算三連拍對比畫面
+    // 10. 停止相機與渲染三連拍對比結束畫面
     // ==========================================
     function stopCameraAndSensors() {
         state.phase = 'IDLE';
@@ -1115,6 +1359,7 @@
             state.mediaStream = null;
         }
         window.removeEventListener('deviceorientation', handleDeviceOrientation);
+        window.removeEventListener('devicemotion', handleDeviceMotion);
         releaseScreenWakeLock();
     }
 
@@ -1137,7 +1382,7 @@
 
         state.photos.forEach(item => {
             const card = document.createElement('div');
-            card.className = 'mag-card overflow-hidden flex flex-col bg-white';
+            card.className = 'warm-card overflow-hidden flex flex-col bg-white';
             card.innerHTML = `
                 <div class="bg-[#FDF0E6] py-1.5 text-center border-b border-[#EDE4D7]">
                     <span class="text-sm sm:text-base font-black text-[#C86428]">第 ${item.round} 次</span>
@@ -1145,9 +1390,12 @@
                 <div class="aspect-[3/4] bg-[#2D2926] overflow-hidden">
                     <img src="${item.dataUrl}" alt="第${item.round}次自拍" class="w-full h-full object-cover" />
                 </div>
-                <div class="p-1.5 text-center bg-white">
-                    <span class="inline-block px-2 py-0.5 rounded-lg bg-[#EBF5F0] text-[#366B54] text-[11px] sm:text-xs font-bold">
-                        穩住 ${state.holdDuration} 秒達標
+                <div class="p-1.5 text-center bg-white space-y-0.5">
+                    <span class="block px-1.5 py-0.5 rounded-lg bg-[#EBF5F0] text-[#2E6F57] text-[11px] sm:text-xs font-black">
+                        穩住 ${state.holdDuration} 秒
+                    </span>
+                    <span class="block text-[10px] text-[#6E6761] font-medium">
+                        本輪耗時 ${item.stabilizeTimeSec}s
                     </span>
                 </div>
             `;
@@ -1156,20 +1404,18 @@
     }
 
     // ==========================================
-    // 10. HTML5 Canvas 合成三連拍分享圖（支援下載 + 長按存相簿）
+    // 11. HTML5 Canvas 合成今日三連拍復健紀錄圖卡
     // ==========================================
     dom.btnExportCollage.addEventListener('click', async () => {
         if (state.photos.length < 3) return;
-        showToast('正在為您合成三連拍對比成果圖...');
+        showToast('正在為您合成今日三連拍紀錄圖卡...');
 
         const canvas = dom.collageCanvas;
         const ctx = canvas.getContext('2d');
 
-        // 1080 x 1380 高解析紀念圖卡
         const W = canvas.width = 1080;
         const H = canvas.height = 1380;
 
-        // 暖米白背景與外框
         ctx.fillStyle = '#FAF6F0';
         ctx.fillRect(0, 0, W, H);
 
@@ -1177,11 +1423,10 @@
         ctx.lineWidth = 14;
         ctx.strokeRect(24, 24, W - 48, H - 48);
 
-        // 日期與標題
         const now = new Date();
         const dateStr = `${now.getFullYear()} 年 ${now.getMonth() + 1} 月 ${now.getDate()} 日`;
 
-        ctx.fillStyle = '#4A8B6F';
+        ctx.fillStyle = '#3B8C6E';
         ctx.font = 'bold 34px "Noto Sans TC", sans-serif';
         ctx.textAlign = 'center';
         ctx.fillText(`🌿 ${dateStr}・日常上肢穩定訓練紀錄`, W / 2, 105);
@@ -1190,7 +1435,6 @@
         ctx.font = '900 54px "Noto Sans TC", sans-serif';
         ctx.fillText('《舉高手機自拍》三連拍挑戰完成！', W / 2, 180);
 
-        // 載入 3 張自拍照
         const loadImage = (src) => new Promise(resolve => {
             const img = new Image();
             img.onload = () => resolve(img);
@@ -1208,17 +1452,16 @@
         loadedImgs.forEach((img, idx) => {
             const x = startX + idx * (cardW + gap);
             const y = startY;
+            const item = state.photos[idx];
 
-            // 拍立得白底卡片
             ctx.fillStyle = '#FFFFFF';
             ctx.beginPath();
-            ctx.roundRect(x - 8, y - 8, cardW + 16, photoH + 115, 24);
+            ctx.roundRect(x - 8, y - 8, cardW + 16, photoH + 122, 24);
             ctx.fill();
             ctx.lineWidth = 4;
             ctx.strokeStyle = '#EDE4D7';
             ctx.stroke();
 
-            // 照片圓角裁切
             ctx.save();
             ctx.beginPath();
             ctx.roundRect(x, y, cardW, photoH, 16);
@@ -1226,66 +1469,60 @@
             ctx.drawImage(img, x, y, cardW, photoH);
             ctx.restore();
 
-            // 第幾次標題與穩住秒數
             ctx.fillStyle = '#C86428';
             ctx.font = '900 34px "Noto Sans TC", sans-serif';
             ctx.textAlign = 'center';
-            ctx.fillText(`第 ${idx + 1} 次`, x + cardW / 2, y + photoH + 48);
+            ctx.fillText(`第 ${idx + 1} 次`, x + cardW / 2, y + photoH + 46);
 
-            ctx.fillStyle = '#4A8B6F';
-            ctx.font = 'bold 24px "Noto Sans TC", sans-serif';
-            ctx.fillText(`穩定維持 ${state.holdDuration} 秒`, x + cardW / 2, y + photoH + 86);
+            ctx.fillStyle = '#3B8C6E';
+            ctx.font = 'bold 23px "Noto Sans TC", sans-serif';
+            ctx.fillText(`穩定 ${state.holdDuration} 秒（耗時 ${item.stabilizeTimeSec}s）`, x + cardW / 2, y + photoH + 86);
         });
 
-        // 底部自我觀察小語卡片
-        const boxY = 815;
+        const boxY = 820;
         ctx.fillStyle = '#FFFFFF';
         ctx.beginPath();
-        ctx.roundRect(65, boxY, W - 130, 410, 28);
+        ctx.roundRect(65, boxY, W - 130, 405, 28);
         ctx.fill();
         ctx.lineWidth = 4;
         ctx.strokeStyle = '#A9DFBF';
         ctx.stroke();
 
-        ctx.fillStyle = '#366B54';
+        ctx.fillStyle = '#2E6F57';
         ctx.font = '900 36px "Noto Sans TC", sans-serif';
         ctx.textAlign = 'left';
         ctx.fillText('🔍 今日自我觀察小提示：', 110, boxY + 68);
 
         ctx.fillStyle = '#2D2926';
         ctx.font = 'bold 30px "Noto Sans TC", sans-serif';
-        ctx.fillText('1. 高度一致嗎？三張照片裡臉的位置是不是一樣高？', 110, boxY + 140);
-        ctx.fillText('2. 肩膀放鬆嗎？第 3 次有沒有比第 1 次聳肩？', 110, boxY + 205);
-        ctx.fillText('3. 表情自然嗎？保持自然呼吸，每次舉起都是進步！', 110, boxY + 270);
+        ctx.fillText('1. 高度一致嗎？三張照片裡臉的位置是不是一樣高？', 110, boxY + 138);
+        ctx.fillText('2. 肩膀放鬆嗎？第 3 次有沒有比第 1 次聳肩？', 110, boxY + 203);
+        ctx.fillText('3. 表情自然嗎？保持自然呼吸，每次舉起都是進步！', 110, boxY + 268);
 
         ctx.fillStyle = '#E07A3D';
         ctx.font = '900 32px "Noto Sans TC", sans-serif';
         ctx.textAlign = 'center';
-        ctx.fillText('雙手穩穩舉起，為自己拍一張最棒的鼓勵照 💛', W / 2, boxY + 355);
+        ctx.fillText('雙手穩穩舉起，為自己拍一張最棒的鼓勵照 💛', W / 2, boxY + 352);
 
         const finalDataUrl = canvas.toDataURL('image/png');
 
-        // 1. 顯示在網頁畫面上，方便 iOS Safari 使用者長按儲存到相簿
         dom.collagePreviewImg.src = finalDataUrl;
         dom.collagePreviewBox.classList.remove('hidden');
         dom.collagePreviewBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
 
-        // 2. 同時觸發瀏覽器檔案下載
         const link = document.createElement('a');
         link.download = `舉高手機自拍_三連拍紀錄_${now.getMonth() + 1}月${now.getDate()}日.png`;
         link.href = finalDataUrl;
         link.click();
 
-        showToast('✅ 已產生對比成果圖！若未自動存檔可長按圖片儲存');
+        showToast('✅ 已產生對比紀錄圖卡！若未自動存檔可長按圖片儲存');
     });
 
-    dom.btnPlayAgain.addEventListener('click', () => {
-        switchView('start');
-    });
+    dom.btnPlayAgain.addEventListener('click', () => switchView('start'));
 
     // 啟動初始化
     checkInAppBrowser();
-    initMediaPipeFaceDetector();
+    loadMediaPipeInBackground();
 </script>
 </body>
 </html>

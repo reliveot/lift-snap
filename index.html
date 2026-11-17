@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-  <title>舉高拍｜生活拍照復健 V2.1</title>
+  <title>舉高拍｜生活拍照復健 V2.3</title>
   <style>
     :root {
       --bg-cream: #FAF6F0;
@@ -536,17 +536,6 @@
       align-items: center;
       text-align: center;
     }
-    /* 行動裝置可隨時開始，資源卡與設定內容仍可正常捲動 */
-    #screen-start #btn-start-train {
-      position: fixed;
-      bottom: max(12px, env(safe-area-inset-bottom));
-      left: 50%;
-      transform: translateX(-50%);
-      width: min(calc(100vw - 36px), 504px);
-      z-index: 30;
-      box-shadow: 0 8px 28px rgba(64, 40, 20, .3);
-    }
-    #screen-start #btn-start-train:active { transform: translateX(-50%) scale(.985); }
     /* 參考電子名片的暖色資訊卡與聯絡入口 */
     .setting-caption { color: var(--text-sub); margin:-5px 0 12px; font-size:13px; line-height:1.55; }
     .setting-tip { background:#F1F5ED; border:1px solid #DFE7D9; color:#536446; padding:11px 13px;
@@ -588,6 +577,73 @@
       .contact-actions { width:100%; }
       .contact-actions a { flex:1; justify-content:center; }
     }
+
+    /* V2.3 首頁：主要開始按鈕先呈現，再接五排緊湊設定，資源僅一個標題 */
+    html { scroll-behavior: smooth; }
+    #screen-start { padding:0; max-width:540px; margin:0 auto; justify-content:flex-start; }
+    #screen-start .launch-zone {
+      min-height: 0;
+      display:flex; flex-direction:column; gap:0;
+      padding: max(16px,env(safe-area-inset-top)) 16px max(10px,env(safe-area-inset-bottom));
+    }
+    #screen-start .launch-header { margin:0 0 14px; }
+    #screen-start .launch-eyebrow { display:flex; gap:7px; align-items:center; font-size:12px; font-weight:800;
+      letter-spacing:.035em; color:#80705E; margin-bottom:6px; }
+    #screen-start .launch-dot { width:8px; height:8px; border-radius:50%; background:#74936A; }
+    #screen-start .launch-version { margin-left:auto; color:#A18C78; font-size:11px; font-weight:700; }
+    #screen-start .launch-header h1 { font-size:29px; line-height:1.14; letter-spacing:.025em; margin:0 0 7px; }
+    #screen-start .launch-title-en { color:#A28E7A; font-size:13px; font-weight:650; letter-spacing:0; vertical-align:middle; }
+    #screen-start .launch-header p { margin:0; font-size:13px; line-height:1.45; color:#75675D; }
+    #screen-start .quick-settings { padding:8px 13px 9px; background:#FFFDF9; border:1.5px solid #E8DAC8;
+      border-radius:22px; box-shadow:0 8px 28px #5D49360D; }
+    #screen-start .quick-settings-head { display:flex; align-items:center; gap:10px; padding:5px 1px 8px; }
+    #screen-start .quick-settings-head strong { font-size:15px; color:#574735; }
+    #screen-start .quick-settings-head span { color:#9A8D7D; font-size:11px; }
+    #screen-start .setting-row { display:grid; grid-template-columns: 91px minmax(0,1fr); gap:7px; align-items:center;
+      padding:8px 0; border-top:1px solid #F0E9DF; }
+    #screen-start .setting-label { color:#574D43; font-size:13px; font-weight:750; letter-spacing:-.02em; white-space:nowrap; }
+    #screen-start .setting-label span { margin-right:3px; }
+    #screen-start .option-group { grid-template-columns:repeat(2,minmax(0,1fr)); gap:6px; }
+    #screen-start #opt-hold-sec,#screen-start #opt-tolerance { grid-template-columns:repeat(3,minmax(0,1fr)); }
+    #screen-start .opt-btn { min-width:0; min-height:44px; padding:7px 2px; border-radius:11px;
+      font-size:13px; border-width:1.5px; white-space:nowrap; box-shadow:none; }
+    #screen-start .opt-btn.selected { color:#B75526; background:#FFF0E7; border-color:#E87A3D; }
+    #screen-start .setting-tip { margin:7px 0 0; padding:7px 9px; font-size:11.5px; line-height:1.45;
+      border:0; border-radius:9px; background:#EFF5EA; color:#476245; }
+    #screen-start .launch-action-area { margin:0 0 12px; padding-top:0; }
+    #screen-start .launch-safety { font-size:11px; color:#837563; margin:10px 0 0; text-align:center; }
+    #screen-start .launch-safety span { color:#E87A3D; }
+    #screen-start #btn-start-train { position:static; display:block; transform:none; width:100%;
+      border-radius:16px; padding:14px 12px; font-size:18px; box-shadow:0 7px 17px #E87A3D30; }
+    #screen-start #btn-start-train:active { transform:scale(.985); }
+    #screen-start #btn-start-train span { font-size:14px; opacity:.92; }
+    #screen-start .resource-section { padding:20px 16px 25px; background:#F5EFE5;
+      border-top:1px solid #E8DCCA; }
+    #screen-start .resource-section .setting-section-heading { margin:0 0 12px; }
+    #screen-start .safety-details { margin-top:17px; padding:10px 13px; border-radius:12px;
+      background:#FFFDF9; border:1px solid #E8DAC8; color:#77695A; font-size:13px; }
+    #screen-start .safety-details summary { cursor:pointer; font-weight:700; color:#6D5B49; }
+    #screen-start .safety-details p { margin:8px 0; line-height:1.65; }
+    @media (max-width:365px) {
+      #screen-start .launch-zone { padding-left:12px; padding-right:12px; }
+      #screen-start .setting-row { grid-template-columns:82px minmax(0,1fr); gap:5px; }
+      #screen-start .setting-label { font-size:12px; }
+      #screen-start .opt-btn { font-size:12px; }
+    }
+    @media(max-height:690px) {
+      #screen-start .launch-zone { padding-top:max(9px,env(safe-area-inset-top)); padding-bottom:max(7px,env(safe-area-inset-bottom)); }
+      #screen-start .launch-header { margin-bottom:8px; }
+      #screen-start .launch-header h1 { font-size:25px; margin-bottom:3px; }
+      #screen-start .launch-header p { font-size:12px; }
+      #screen-start .quick-settings { padding:6px 11px; }
+      #screen-start .quick-settings-head { padding:3px 1px 5px; }
+      #screen-start .setting-row { padding:5px 0; }
+      #screen-start .opt-btn { min-height:37px; padding:5px 1px; }
+      #screen-start .setting-tip { margin-top:4px; padding:6px 7px; }
+      #screen-start .launch-action-area { margin-bottom:9px; }
+      #screen-start .launch-safety { margin-top:8px; }
+      #screen-start #btn-start-train { padding:12px 10px; }
+    }
   </style>
 </head>
 <body>
@@ -602,63 +658,68 @@
     <button class="btn-glass" onclick="document.getElementById('inapp-warning').style.display='none'">仍要在此嘗試開啟</button>
   </div>
 
-  <!-- ================= 1. 開始設定畫面 ================= -->
+  <!-- ================= 1. 精簡首頁：首屏設定、下滑資源 ================= -->
   <section id="screen-start" class="screen active">
-    <div>
-      <span class="header-badge">生活拍照 × 上肢穩定控制 · V2.1</span>
-      <h1>舉高拍</h1>
-      <p class="subtitle">選擇鏡頭，拿穩手機，保持穩定就能自動拍照。可以自拍、拍家人，也可以拍身邊的生活風景。</p>
+    <div class="launch-zone">
+      <header class="launch-header">
+        <div class="launch-eyebrow"><span class="launch-dot"></span> 吱吱復健 · 生活拍照練習 <span class="launch-version">V2.3</span></div>
+        <h1>舉高拍 <span class="launch-title-en">Lift & Snap</span></h1>
+        <p>舉起手機、對準目標、保持穩定，完成自己的照片。</p>
+      </header>
 
-      <div class="card">
-        <div class="card-title">📷 1. 選擇拍攝鏡頭</div>
-        <p class="setting-caption">前鏡頭拍自己；後鏡頭可以拍家人、朋友或日常物品。</p>
-        <div class="option-group" id="opt-camera" style="grid-template-columns:repeat(2,1fr)">
-          <button class="opt-btn selected" data-val="user" type="button">前鏡頭・自拍</button>
-          <button class="opt-btn" data-val="environment" type="button">後鏡頭・拍生活</button>
-        </div>
-      </div>
-      <div class="card">
-        <div class="card-title">🙂 2. 是否偵測人臉</div>
-        <p class="setting-caption">開啟：找到人臉、對準後保持穩定；關閉：自由構圖，準備好後只判斷穩定度。</p>
-        <div class="option-group" id="opt-face" style="grid-template-columns:repeat(2,1fr)">
-          <button class="opt-btn selected" data-val="on" type="button">開啟人臉偵測</button>
-          <button class="opt-btn" data-val="off" type="button">關閉・自由拍</button>
-        </div>
-        <div class="setting-tip" id="mode-summary">目前：前鏡頭自拍。找到臉並保持穩定後，自動拍照。</div>
-      </div>
-      <div class="card">
-        <div class="card-title">⏱️ 3. 每次需要保持穩定的秒數</div>
-        <div class="option-group" id="opt-hold-sec">
-          <button class="opt-btn" data-val="2">2 秒</button>
-          <button class="opt-btn selected" data-val="3">3 秒（預設）</button>
-          <button class="opt-btn" data-val="5">5 秒</button>
-        </div>
+      <div class="launch-action-area">
+        <button id="btn-start-train" class="btn-primary" type="button">開始拍照練習 <span>（3 次）</span></button>
       </div>
 
-      <div class="card">
-        <div class="card-title">🎯 4. 穩定度靈敏度要求</div>
-        <div class="option-group" id="opt-tolerance">
-          <button class="opt-btn" data-val="loose">寬鬆</button>
-          <button class="opt-btn selected" data-val="normal">一般（預設）</button>
-          <button class="opt-btn" data-val="strict">嚴格</button>
+      <div class="quick-settings" aria-label="拍照練習設定">
+        <div class="quick-settings-head">
+          <strong>拍照設定</strong><span>可依需要調整</span>
         </div>
-      </div>
-
-      <div class="card">
-        <div class="card-title">🔊 5. 語音與快門音效</div>
-        <div class="option-group" id="opt-sound">
-          <button class="opt-btn selected" data-val="on">開啟語音</button>
-          <button class="opt-btn" data-val="off">靜音模式</button>
+        <div class="setting-row">
+          <div class="setting-label"><span aria-hidden="true">📷</span> 鏡頭</div>
+          <div class="option-group" id="opt-camera">
+            <button class="opt-btn selected" data-val="user" type="button">前鏡頭</button>
+            <button class="opt-btn" data-val="environment" type="button">後鏡頭</button>
+          </div>
         </div>
+        <div class="setting-row">
+          <div class="setting-label"><span aria-hidden="true">🙂</span> 人臉偵測</div>
+          <div class="option-group" id="opt-face">
+            <button class="opt-btn selected" data-val="on" type="button">開啟</button>
+            <button class="opt-btn" data-val="off" type="button">關閉</button>
+          </div>
+        </div>
+        <div class="setting-row">
+          <div class="setting-label"><span aria-hidden="true">⏱️</span> 穩定時間</div>
+          <div class="option-group" id="opt-hold-sec">
+            <button class="opt-btn" data-val="2" type="button">2 秒</button>
+            <button class="opt-btn selected" data-val="3" type="button">3 秒</button>
+            <button class="opt-btn" data-val="5" type="button">5 秒</button>
+          </div>
+        </div>
+        <div class="setting-row">
+          <div class="setting-label"><span aria-hidden="true">🎯</span> 晃動容許</div>
+          <div class="option-group" id="opt-tolerance">
+            <button class="opt-btn" data-val="loose" type="button">寬鬆</button>
+            <button class="opt-btn selected" data-val="normal" type="button">一般</button>
+            <button class="opt-btn" data-val="strict" type="button">嚴格</button>
+          </div>
+        </div>
+        <div class="setting-row">
+          <div class="setting-label"><span aria-hidden="true">🔊</span> 聲音提示</div>
+          <div class="option-group" id="opt-sound">
+            <button class="opt-btn selected" data-val="on" type="button">開啟</button>
+            <button class="opt-btn" data-val="off" type="button">靜音</button>
+          </div>
+        </div>
+        <p class="setting-tip" id="mode-summary" aria-live="polite">前鏡頭 · 偵測人臉 · 對準並穩定後自動拍照</p>
       </div>
+      <p class="launch-safety"><span aria-hidden="true">♡</span> 建議坐穩再練習；若有不適請休息。</p>
 
-      <div class="safety-box">
-        <strong>🛡️ 安全與隱私提醒：</strong><br>
-        • 請在坐姿穩定或安全站姿下練習，不需搶快。<br>
-        • 若肩膀疼痛或過度疲勞，請隨時放下手機休息。<br>
-        • 所有影像與人臉偵測皆在您的手機本地運算，絕不上傳伺服器。
-      </div>
-      <p class="result-summary-note">開始後會先有 3 秒準備時間，再自動進行穩定判斷；每張拍完都有休息時間，不用再按快門。</p>
+
+    </div>
+
+    <div class="resource-section" id="start-resources">
       <div class="setting-section-heading">更多復健資源</div>
       <div class="resource-grid" aria-label="相關復健資源">
         <a class="resource-card" href="https://reliveot.github.io/stroke-rehab-guide/" target="_blank" rel="noopener noreferrer">
@@ -675,16 +736,22 @@
         </a>
       </div>
       <div class="contact-strip">
-        <div class="contact-text"><strong>吱吱復健 · 楊昀霖職能治療師</strong><small>想了解練習方式或居家復能服務？</small></div>
+        <div class="contact-text"><strong>吱吱復健 · 楊昀霖職能治療師</strong><small>居家復能與練習諮詢</small></div>
         <div class="contact-actions">
           <a class="mini-link" href="https://reliveot.github.io/card/" target="_blank" rel="noopener noreferrer">電子名片 ↗</a>
           <a class="mini-link primary" href="https://lin.ee/4HnOdD4" target="_blank" rel="noopener noreferrer">聯絡楊昀霖老師 ↗</a>
         </div>
       </div>
-      <p class="app-version">舉高拍 V2.1 · 適合坐姿穩定、安全的環境練習</p>
+      <details class="safety-details">
+        <summary>練習方式、安全與隱私說明</summary>
+        <div>
+          <p>開始後有 3 秒準備時間，系統判斷穩定後自動拍照；每輪拍完會有休息時間。</p>
+          <p>請在穩定、安全的位置練習，不必追求速度。如有肩膀疼痛、頭暈或明顯疲勞，請停止練習。</p>
+          <p>相機影像與人臉偵測在裝置端運算，照片不會由本網頁主動上傳。</p>
+        </div>
+      </details>
+      <p class="app-version">舉高拍 V2.3 · 吱吱復健</p>
     </div>
-
-    <button id="btn-start-train" class="btn-primary" type="button">📸 開始拍照練習（3 次）</button>
   </section>
 
   <!-- ================= 2. 訓練進行畫面 ================= -->
@@ -957,8 +1024,8 @@
     function updateModeSummary() {
       const c = CONFIG.cameraFacing === "user" ? "前鏡頭自拍" : "後鏡頭拍生活";
       document.getElementById("mode-summary").textContent = CONFIG.faceDetection
-        ? `目前：${c}。找到人臉、構圖對準且保持穩定後，自動拍照。`
-        : `目前：${c}。自由選擇拍攝主題，準備倒數後保持手機穩定，自動拍照。`;
+        ? `${c} · 偵測人臉，對準並穩定後自動拍照`
+        : `${c} · 自由構圖，準備倒數後穩定拍照`;
     }
     function saveSettings() {
       try { localStorage.setItem("liftSnapSettingsV21", JSON.stringify({

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-  <title>舉高手機自拍｜互動式上肢復健訓練 V1.8</title>
+  <title>舉高手機自拍｜互動式上肢復健訓練 V2.0</title>
   <style>
     :root {
       --bg-cream: #FAF6F0;
@@ -150,82 +150,30 @@
       transform: scale(0.98);
     }
 
-    /* ================= 全螢幕寬視野訓練畫面 ================= */
+    /* ================= 訓練畫面（相機原生比例零裁切＋上下獨立卡片） ================= */
     #screen-train {
       position: fixed;
       inset: 0;
       width: 100vw;
       height: 100dvh;
-      background: #0D0D0D;
+      background: #161514;
       display: none;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: max(10px, env(safe-area-inset-top)) 12px max(12px, env(safe-area-inset-bottom));
+      gap: 8px;
       overflow: hidden;
     }
     #screen-train.active {
-      display: block;
+      display: flex;
     }
 
-    .camera-stage {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      background: #0D0D0D;
-    }
-
-    #camera-video {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transform: scaleX(-1);
-    }
-
-    #overlay-canvas {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: 5;
-    }
-
-    /* 仰俯角異常時的邊緣漸層模糊提示層 */
-    .pitch-blur-mask {
-      position: absolute;
-      left: 0;
-      right: 0;
-      height: 34%;
-      pointer-events: none;
-      z-index: 6;
-      opacity: 0;
-      transition: opacity 0.25s ease;
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-    }
-    #pitch-blur-top {
-      top: 0;
-      background: linear-gradient(to bottom, rgba(232, 122, 61, 0.36), rgba(232, 122, 61, 0));
-      mask-image: linear-gradient(to bottom, black 35%, transparent 100%);
-      -webkit-mask-image: linear-gradient(to bottom, black 35%, transparent 100%);
-    }
-    #pitch-blur-bottom {
-      bottom: 0;
-      background: linear-gradient(to top, rgba(232, 122, 61, 0.36), rgba(232, 122, 61, 0));
-      mask-image: linear-gradient(to top, black 35%, transparent 100%);
-      -webkit-mask-image: linear-gradient(to top, black 35%, transparent 100%);
-    }
-
-    /* 頂部半透明懸浮狀態列 */
     .train-top-bar {
-      position: absolute;
-      top: max(10px, env(safe-area-inset-top));
-      left: 12px;
-      right: 12px;
       z-index: 20;
       display: flex;
       flex-direction: column;
       gap: 6px;
+      flex-shrink: 0;
     }
 
     .top-header-row {
@@ -236,13 +184,12 @@
     }
 
     .round-pill {
-      background: rgba(232, 122, 61, 0.94);
+      background: var(--accent-orange);
       color: #fff;
       font-size: 16px;
       font-weight: 800;
       padding: 6px 14px;
       border-radius: 999px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
     }
 
     .top-actions {
@@ -251,9 +198,7 @@
     }
 
     .btn-glass {
-      background: rgba(20, 20, 20, 0.65);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
+      background: rgba(255, 255, 255, 0.15);
       color: #fff;
       border: 1.5px solid rgba(255,255,255,0.28);
       border-radius: 999px;
@@ -271,10 +216,8 @@
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       gap: 5px;
-      background: rgba(20, 20, 20, 0.62);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      border: 1px solid rgba(255,255,255,0.18);
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255,255,255,0.16);
       border-radius: 14px;
       padding: 6px 8px;
       color: #fff;
@@ -328,10 +271,55 @@
       transition: width 0.15s ease-out, background-color 0.2s;
     }
 
-    /* 可展開的工程測試模式面板 */
+    /* 中央置中容器：完全順應相機原生寬高比，絕不裁切放大 */
+    .camera-outer {
+      flex: 1;
+      min-height: 0;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .camera-box {
+      position: relative;
+      display: inline-flex;
+      max-width: 100%;
+      max-height: 100%;
+      border-radius: 20px;
+      overflow: hidden;
+      background: #000;
+      box-shadow: 0 8px 28px rgba(0,0,0,0.45);
+    }
+
+    /* 相機照什麼比例就呈現什麼比例，width/height auto 零裁切 */
+    #camera-video {
+      display: block;
+      width: auto;
+      height: auto;
+      max-width: 100%;
+      max-height: 100%;
+      transform: scaleX(-1);
+    }
+
+    #overlay-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 5;
+    }
+
     #debug-panel {
       display: none;
-      background: rgba(10, 15, 25, 0.92);
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      right: 8px;
+      z-index: 25;
+      background: rgba(10, 15, 25, 0.94);
       border: 1.5px solid #3B82F6;
       border-radius: 14px;
       padding: 10px 12px;
@@ -339,7 +327,7 @@
       font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
       font-size: 11.5px;
       line-height: 1.4;
-      max-height: 44dvh;
+      max-height: 85%;
       overflow-y: auto;
     }
     #debug-panel.open {
@@ -381,34 +369,27 @@
       cursor: pointer;
     }
 
-    /* 底部半透明懸浮大字引導卡片 */
     .train-bottom-card {
-      position: absolute;
-      bottom: max(14px, env(safe-area-inset-bottom));
-      left: 12px;
-      right: 12px;
       z-index: 20;
+      flex-shrink: 0;
       min-height: 98px;
       display: flex;
       flex-direction: column;
       justify-content: center;
-      background: rgba(250, 246, 240, 0.92);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
+      background: var(--bg-cream);
       border: 2.5px solid var(--accent-orange);
       border-radius: 20px;
       padding: 10px 16px;
       text-align: center;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.35);
       transition: border-color 0.25s, background-color 0.25s;
     }
     .train-bottom-card.state-holding {
       border-color: var(--accent-green);
-      background: rgba(230, 245, 236, 0.94);
+      background: var(--accent-green-light);
     }
     .train-bottom-card.state-resting {
       border-color: var(--accent-blue);
-      background: rgba(232, 243, 248, 0.94);
+      background: var(--accent-blue-light);
     }
 
     .stage-tag {
@@ -571,7 +552,7 @@
   <!-- ================= 1. 開始設定畫面 ================= -->
   <section id="screen-start" class="screen active">
     <div>
-      <span class="header-badge">上肢控制 × 生活自拍復健 V1.8</span>
+      <span class="header-badge">上肢控制 × 生活自拍復健 V2.0</span>
       <h1>舉高手機自拍訓練</h1>
       <p class="subtitle">雙手握穩手機慢慢舉高，讓臉進入畫面中央並保持穩定，系統將自動完成 3 次自拍對比。</p>
 
@@ -612,16 +593,8 @@
     <button id="btn-start-train" class="btn-primary">開始 3 輪練習</button>
   </section>
 
-  <!-- ================= 2. 全螢幕訓練進行畫面 ================= -->
+  <!-- ================= 2. 訓練進行畫面 ================= -->
   <section id="screen-train" class="screen">
-    <div class="camera-stage" id="camera-stage">
-      <video id="camera-video" playsinline muted autoplay></video>
-      <div id="pitch-blur-top" class="pitch-blur-mask"></div>
-      <div id="pitch-blur-bottom" class="pitch-blur-mask"></div>
-      <canvas id="overlay-canvas"></canvas>
-      <div id="flash-overlay"></div>
-    </div>
-
     <div class="train-top-bar">
       <div class="top-header-row">
         <div class="round-pill" id="ui-round-pill">第 1 次 / 共 3 次</div>
@@ -659,11 +632,20 @@
           <button id="btn-fallback-mode">⚠️ AI 偵測異常？點此切換「簡易穩定自拍模式」</button>
         </div>
       </div>
+    </div>
+
+    <!-- 中央原生比例相機區（相機輸出什麼比例就完整顯示什麼比例） -->
+    <div class="camera-outer">
+      <div class="camera-box" id="camera-box">
+        <video id="camera-video" playsinline muted autoplay></video>
+        <canvas id="overlay-canvas"></canvas>
+        <div id="flash-overlay"></div>
+      </div>
 
       <div id="debug-panel">
         <div class="debug-grid">
           <span class="debug-k">偵測引擎：</span><span class="debug-v" id="dbg-engine">初始化中</span>
-          <span class="debug-k">鏡頭解析度：</span><span class="debug-v" id="dbg-res">無資料</span>
+          <span class="debug-k">相機原生解析度：</span><span class="debug-v" id="dbg-res">無資料</span>
           <span class="debug-k">人臉信心分數：</span><span class="debug-v" id="dbg-face-conf">無資料</span>
           <span class="debug-k">人臉標準化座標：</span><span class="debug-v" id="dbg-face-pos">無資料</span>
           <span class="debug-k">臉部寬度佔比：</span><span class="debug-v" id="dbg-face-size">無資料</span>
@@ -678,7 +660,7 @@
 
     <div class="train-bottom-card" id="ui-bottom-card">
       <div class="stage-tag" id="ui-stage-tag">準備開始</div>
-      <p class="main-instruction" id="ui-main-inst">正在開啟全螢幕前鏡頭與 AI 模型...</p>
+      <p class="main-instruction" id="ui-main-inst">正在開啟前鏡頭與 AI 模型...</p>
       <div class="hold-timer-display" id="ui-hold-timer">0.0 / 3.0 秒</div>
     </div>
   </section>
@@ -742,6 +724,7 @@
       restMovedEnough: false,
       restStartPitch: null,
       lastFrameTime: 0,
+      lastVideoTime: -1,
       photos: [],
       wakeLock: null,
       debugOpen: false,
@@ -766,7 +749,7 @@
 
       faceDetected: false,
       faceConf: null,
-      faceScreenBox: null,
+      faceNormBox: null, // 直接以 0~1 標準化比例對齊原生 video 畫面
       faceCenterHistory: [],
       faceMoveSpeed: 0,
       alignResult: { passed: false, code: "no_face", label: "未偵測到臉" },
@@ -779,9 +762,9 @@
       rawGyroMag: null,
       smoothGyroMag: null,
       gyroHistory: [],
-      rollDeg: null,         // 左右歪斜角度 (-90 ~ +90, 0 為水平拿正)
+      rollDeg: null,
       smoothRollDeg: 0,
-      pitchDeg: null,        // 前後仰俯角度 (+為往後仰朝天花板, -為往前趴朝地板)
+      pitchDeg: null,
       smoothPitchDeg: 5,
 
       isStable: false,
@@ -795,11 +778,9 @@
         train: document.getElementById("screen-train"),
         result: document.getElementById("screen-result")
       },
-      stageBox: document.getElementById("camera-stage"),
+      cameraBox: document.getElementById("camera-box"),
       video: document.getElementById("camera-video"),
       canvas: document.getElementById("overlay-canvas"),
-      blurTop: document.getElementById("pitch-blur-top"),
-      blurBottom: document.getElementById("pitch-blur-bottom"),
       flash: document.getElementById("flash-overlay"),
       roundPill: document.getElementById("ui-round-pill"),
       bottomCard: document.getElementById("ui-bottom-card"),
@@ -887,36 +868,19 @@
         state.mpDetector = await FaceDetector.createFromOptions(vision, {
           baseOptions: {
             modelAssetPath: "https://storage.googleapis.com/mediapipe-models/face_detector/blaze_face_short_range/float16/1/blaze_face_short_range.tflite",
-            delegate: "GPU"
+            delegate: "CPU"
           },
           runningMode: "VIDEO",
-          minDetectionConfidence: 0.5
+          minDetectionConfidence: 0.45
         });
         state.mpReady = true;
         state.mpError = null;
         setStatusText(el.stAi, "AI 模型正常", "val-ok");
       } catch (err) {
-        try {
-          const vision = await FilesetResolver.forVisionTasks(
-            "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/wasm"
-          );
-          state.mpDetector = await FaceDetector.createFromOptions(vision, {
-            baseOptions: {
-              modelAssetPath: "https://storage.googleapis.com/mediapipe-models/face_detector/blaze_face_short_range/float16/1/blaze_face_short_range.tflite",
-              delegate: "CPU"
-            },
-            runningMode: "VIDEO",
-            minDetectionConfidence: 0.5
-          });
-          state.mpReady = true;
-          state.mpError = null;
-          setStatusText(el.stAi, "AI 模型正常(CPU)", "val-ok");
-        } catch (err2) {
-          state.mpReady = false;
-          state.mpError = err2?.message || "模型載入失敗";
-          setStatusText(el.stAi, "偵測器失敗", "val-err");
-          el.btnFallback.style.display = "block";
-        }
+        state.mpReady = false;
+        state.mpError = err?.message || "模型載入失敗";
+        setStatusText(el.stAi, "偵測器失敗", "val-err");
+        el.btnFallback.style.display = "block";
       }
     }
 
@@ -924,7 +888,6 @@
       state.sensorLastTimestamp = performance.now();
       state.sensorEventCount++;
 
-      // 1) 陀螺儀角速度
       const rr = e.rotationRate;
       if (rr && (rr.alpha !== null || rr.beta !== null || rr.gamma !== null)) {
         const a = rr.alpha || 0;
@@ -939,7 +902,6 @@
         state.smoothGyroMag = sum / state.gyroHistory.length;
       }
 
-      // 2) 重力加速度計算左右歪斜 (Roll) 與前後仰俯 (Pitch)
       const ag = e.accelerationIncludingGravity;
       if (ag && typeof ag.x === "number" && typeof ag.y === "number") {
         const absY = Math.max(1.5, Math.abs(ag.y));
@@ -948,7 +910,6 @@
         state.smoothRollDeg = state.smoothRollDeg * 0.8 + rawRoll * 0.2;
 
         if (typeof ag.z === "number") {
-          // 屏幕朝向使用者時，ag.z > 0 代表手機往後仰（鏡頭朝上），ag.z < 0 代表手機往前趴（鏡頭朝下）
           const rawPitch = Math.atan2(ag.z, absY) * (180 / Math.PI);
           state.pitchDeg = rawPitch;
           state.smoothPitchDeg = state.smoothPitchDeg * 0.8 + rawPitch * 0.2;
@@ -982,7 +943,7 @@
       state.sensorEventCount = 0;
     }, 1000);
 
-    // 主動請求全螢幕直向寬視野（ideal 9:16，避免硬裁切 4:3 造成數位變焦）
+    // 不強迫長寬比，直接以清晰的 720p 請求前鏡頭，相機給什麼比例就原樣呈現
     async function startCamera() {
       setStatusText(el.stCamera, "啟動中", "val-warn");
       if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
@@ -990,14 +951,12 @@
         el.mainInst.textContent = "瀏覽器不支援相機存取，請改用 HTTPS 下的 Chrome 或 Safari。";
         return false;
       }
-      const scrRatio = window.innerWidth / Math.max(1, window.innerHeight);
       try {
         const stream = await navigator.mediaDevices.getUserMedia({
           video: {
             facingMode: "user",
-            aspectRatio: { ideal: scrRatio },
-            width: { ideal: 720 },
-            height: { ideal: 1280 }
+            width: { ideal: 960 },
+            height: { ideal: 720 }
           },
           audio: false
         });
@@ -1020,31 +979,25 @@
       } catch (e) {}
     }
 
-    // 精確座標映射（object-cover 全螢幕＋水平鏡像）
-    function mapVideoBoxToScreen(bbox, vidW, vidH, scrW, scrH) {
-      const scale = Math.max(scrW / vidW, scrH / vidH);
-      const renderedW = vidW * scale;
-      const renderedH = vidH * scale;
-      const offsetX = (renderedW - scrW) / 2;
-      const offsetY = (renderedH - scrH) / 2;
-
-      const rawLeft = bbox.originX * scale - offsetX;
-      const rawTop = bbox.originY * scale - offsetY;
-      const rawWidth = bbox.width * scale;
-      const rawHeight = bbox.height * scale;
-      const mirroredLeft = scrW - (rawLeft + rawWidth);
+    // 因為 video 與 canvas 完全貼合原生畫面且零裁切，直接做 0~1 標準化鏡像映射即可，100% 精準零誤差
+    function mapVideoBoxDirect(bbox, vidW, vidH, boxW, boxH) {
+      const normX = bbox.originX / vidW;
+      const normY = bbox.originY / vidH;
+      const normW = bbox.width / vidW;
+      const normH = bbox.height / vidH;
+      const mirroredNormX = 1 - (normX + normW);
 
       return {
-        x: mirroredLeft / scrW,
-        y: rawTop / scrH,
-        w: rawWidth / scrW,
-        h: rawHeight / scrH,
-        cx: (mirroredLeft + rawWidth / 2) / scrW,
-        cy: (rawTop + rawHeight / 2) / scrH,
-        pxX: mirroredLeft,
-        pxY: rawTop,
-        pxW: rawWidth,
-        pxH: rawHeight
+        x: mirroredNormX,
+        y: normY,
+        w: normW,
+        h: normH,
+        cx: mirroredNormX + normW / 2,
+        cy: normY + normH / 2,
+        pxX: mirroredNormX * boxW,
+        pxY: normY * boxH,
+        pxW: normW * boxW,
+        pxH: normH * boxH
       };
     }
 
@@ -1053,7 +1006,7 @@
         return { passed: false, code: "no_face", label: "未偵測到臉" };
       }
 
-      const minW = wasAligned ? 0.16 : 0.20;
+      const minW = wasAligned ? 0.14 : 0.17;
       const maxW = wasAligned ? 0.84 : 0.78;
       if (box.w < minW) {
         return { passed: false, code: "too_small", label: "臉太小（拿近一點）" };
@@ -1065,8 +1018,8 @@
       const pad = wasAligned ? 0.05 : 0.0;
       if (box.cx < 0.24 - pad) return { passed: false, code: "left", label: "偏左（往左移）" };
       if (box.cx > 0.76 + pad) return { passed: false, code: "right", label: "偏右（往右移）" };
-      if (box.cy < 0.22 - pad) return { passed: false, code: "up", label: "偏上（舉高一點）" };
-      if (box.cy > 0.72 + pad) return { passed: false, code: "down", label: "偏下（放低一點）" };
+      if (box.cy < 0.18 - pad) return { passed: false, code: "up", label: "偏上（舉高一點）" };
+      if (box.cy > 0.78 + pad) return { passed: false, code: "down", label: "偏下（放低一點）" };
 
       return { passed: true, code: "aligned", label: "已對準" };
     }
@@ -1090,11 +1043,11 @@
         }
       }
 
-      if (state.engineMode === "mediapipe" && state.faceDetected && state.faceScreenBox) {
+      if (state.engineMode === "mediapipe" && state.faceDetected && state.faceNormBox) {
         state.faceCenterHistory.push({
           t: now,
-          cx: state.faceScreenBox.cx,
-          cy: state.faceScreenBox.cy
+          cx: state.faceNormBox.cx,
+          cy: state.faceNormBox.cy
         });
         while (state.faceCenterHistory.length > 2 && now - state.faceCenterHistory[0].t > 450) {
           state.faceCenterHistory.shift();
@@ -1103,8 +1056,8 @@
           const oldest = state.faceCenterHistory[0];
           const spanSec = (now - oldest.t) / 1000;
           if (spanSec >= 0.15) {
-            const dx = state.faceScreenBox.cx - oldest.cx;
-            const dy = state.faceScreenBox.cy - oldest.cy;
+            const dx = state.faceNormBox.cx - oldest.cx;
+            const dy = state.faceNormBox.cy - oldest.cy;
             state.faceMoveSpeed = Math.sqrt(dx * dx + dy * dy) / spanSec;
             if (state.faceMoveSpeed > shiftLimit) {
               faceMovePass = false;
@@ -1155,33 +1108,9 @@
       }
     }
 
-    // 更新仰俯角邊緣漸層模糊提示
-    function updatePitchEdgeBlur() {
-      if (state.pitchDeg === null || state.stage === "RESTING") {
-        el.blurTop.style.opacity = "0";
-        el.blurBottom.style.opacity = "0";
-        return;
-      }
-      // 合格自然仰俯區間為 -8°（微趴） ~ +18°（自然微仰）
-      if (state.smoothPitchDeg > 18) {
-        // 太往後仰（鏡頭朝上）-> 上方畫面漸層模糊，提示往下壓正
-        const strength = Math.min(1, (state.smoothPitchDeg - 18) / 22);
-        el.blurTop.style.opacity = strength.toFixed(2);
-        el.blurBottom.style.opacity = "0";
-      } else if (state.smoothPitchDeg < -8) {
-        // 太往前趴（鏡頭朝下）-> 下方畫面漸層模糊，提示往上立直
-        const strength = Math.min(1, (-8 - state.smoothPitchDeg) / 22);
-        el.blurBottom.style.opacity = strength.toFixed(2);
-        el.blurTop.style.opacity = "0";
-      } else {
-        el.blurTop.style.opacity = "0";
-        el.blurBottom.style.opacity = "0";
-      }
-    }
-
     function capturePhoto() {
-      const vidW = el.video.videoWidth || 720;
-      const vidH = el.video.videoHeight || 1280;
+      const vidW = el.video.videoWidth || 640;
+      const vidH = el.video.videoHeight || 480;
       const capCanvas = document.createElement("canvas");
       capCanvas.width = vidW;
       capCanvas.height = vidH;
@@ -1191,7 +1120,7 @@
       cCtx.scale(-1, 1);
       cCtx.drawImage(el.video, 0, 0, vidW, vidH);
 
-      const dataUrl = capCanvas.toDataURL("image/jpeg", 0.88);
+      const dataUrl = capCanvas.toDataURL("image/jpeg", 0.9);
       state.photos.push({
         round: state.round,
         dataUrl,
@@ -1203,19 +1132,19 @@
       setTimeout(() => { el.flash.style.opacity = "0"; }, 140);
     }
 
-    // 極簡清潔疊圖：單一中央框 ＋ 框頂左右水平線 ＋ 框右仰俯垂直刻度
-    function drawOverlay(scrW, scrH) {
-      if (el.canvas.width !== scrW || el.canvas.height !== scrH) {
-        el.canvas.width = scrW;
-        el.canvas.height = scrH;
+    // 疊圖完全貼合原生相機視窗大小
+    function drawOverlay(boxW, boxH) {
+      if (el.canvas.width !== boxW || el.canvas.height !== boxH) {
+        el.canvas.width = boxW;
+        el.canvas.height = boxH;
       }
-      ctx.clearRect(0, 0, scrW, scrH);
+      ctx.clearRect(0, 0, boxW, boxH);
 
       // 1) 單一中央人臉對準框
-      const guideW = Math.min(scrW * 0.68, 320);
-      const guideH = Math.min(scrH * 0.44, 380);
-      const guideX = (scrW - guideW) / 2;
-      const guideY = scrH * 0.25;
+      const guideW = boxW * 0.62;
+      const guideH = boxH * 0.64;
+      const guideX = (boxW - guideW) / 2;
+      const guideY = (boxH - guideH) / 2;
 
       ctx.save();
       ctx.lineWidth = state.stage === "HOLDING" ? 5 : 3.5;
@@ -1226,18 +1155,18 @@
         ctx.strokeStyle = "#60A5FA";
         ctx.setLineDash([10, 8]);
       } else {
-        ctx.strokeStyle = "rgba(255, 255, 255, 0.82)";
+        ctx.strokeStyle = "rgba(255, 255, 255, 0.85)";
         ctx.setLineDash([12, 8]);
       }
-      roundRect(ctx, guideX, guideY, guideW, guideH, 34);
+      roundRect(ctx, guideX, guideY, guideW, guideH, 30);
       ctx.stroke();
       ctx.restore();
 
       // 2) HOLDING 階段進度條（框內頂部）
       if (state.stage === "HOLDING") {
         const pct = Math.min(1, state.holdAccumSec / CONFIG.holdTargetSec);
-        const barW = guideW - 36;
-        const barX = guideX + 18;
+        const barW = guideW - 32;
+        const barX = guideX + 16;
         const barY = guideY + 14;
         ctx.fillStyle = "rgba(0,0,0,0.45)";
         roundRect(ctx, barX, barY, barW, 8, 4);
@@ -1255,7 +1184,7 @@
         const isLevel = Math.abs(state.smoothRollDeg) <= 7;
 
         ctx.save();
-        ctx.fillStyle = "rgba(255, 255, 255, 0.8)";
+        ctx.fillStyle = "rgba(255, 255, 255, 0.85)";
         ctx.beginPath();
         ctx.arc(levelCenterX - 44, levelCenterY, 3, 0, Math.PI * 2);
         ctx.arc(levelCenterX + 44, levelCenterY, 3, 0, Math.PI * 2);
@@ -1275,20 +1204,16 @@
 
       // 4) 框右側垂直仰俯刻度條（Pitch 前後傾指示）
       if (state.pitchDeg !== null) {
-        const trackX = Math.min(scrW - 14, guideX + guideW + 16);
+        const trackX = Math.min(boxW - 14, guideX + guideW + 16);
         const trackCenterY = guideY + guideH / 2;
-        const trackHalfH = Math.min(90, guideH * 0.32);
+        const trackHalfH = Math.min(80, guideH * 0.32);
 
-        // 目標中心點設在 +5°（自然直立微仰），合格範圍 -8° ~ +18°
-        const targetPitch = 5;
-        const diffPitch = state.smoothPitchDeg - targetPitch;
-        const isPitchOk = state.smoothPitchDeg >= -8 && state.smoothPitchDeg <= 18;
-        const normOffset = Math.max(-1, Math.min(1, diffPitch / 35));
-        const dotY = trackCenterY - normOffset * trackHalfH; // 往上仰時圓點往上跑，往下趴時往下掉
+        const isPitchOk = Math.abs(state.smoothPitchDeg) <= 22;
+        const normOffset = Math.max(-1, Math.min(1, state.smoothPitchDeg / 45));
+        const dotY = trackCenterY - normOffset * trackHalfH;
 
         ctx.save();
-        // 垂直軌道線
-        ctx.strokeStyle = "rgba(255, 255, 255, 0.45)";
+        ctx.strokeStyle = "rgba(255, 255, 255, 0.55)";
         ctx.lineWidth = 3;
         ctx.lineCap = "round";
         ctx.beginPath();
@@ -1296,14 +1221,12 @@
         ctx.lineTo(trackX, trackCenterY + trackHalfH);
         ctx.stroke();
 
-        // 中央目標小圓環
-        ctx.strokeStyle = "rgba(255, 255, 255, 0.9)";
+        ctx.strokeStyle = "rgba(255, 255, 255, 0.92)";
         ctx.lineWidth = 2.5;
         ctx.beginPath();
         ctx.arc(trackX, trackCenterY, 8, 0, Math.PI * 2);
         ctx.stroke();
 
-        // 動態滑動水泡圓點
         ctx.fillStyle = isPitchOk ? "#4ADE80" : "#F97316";
         ctx.beginPath();
         ctx.arc(trackX, dotY, 6, 0, Math.PI * 2);
@@ -1311,9 +1234,9 @@
         ctx.restore();
       }
 
-      // 5) AI 偵測追蹤框（僅在開啟「🔧 測試面板」時顯示）
-      if (state.debugOpen && state.engineMode === "mediapipe" && state.faceDetected && state.faceScreenBox) {
-        const b = state.faceScreenBox;
+      // 5) AI 偵測追蹤框（僅測試面板開啟時顯示）
+      if (state.debugOpen && state.engineMode === "mediapipe" && state.faceDetected && state.faceNormBox) {
+        const b = state.faceNormBox;
         ctx.save();
         ctx.lineWidth = 2;
         ctx.strokeStyle = "#38BDF8";
@@ -1392,20 +1315,21 @@
       const dt = state.lastFrameTime ? Math.min(0.25, (now - state.lastFrameTime) / 1000) : 0.033;
       state.lastFrameTime = now;
 
-      const scrW = el.stageBox.clientWidth || window.innerWidth;
-      const scrH = el.stageBox.clientHeight || window.innerHeight;
-      const vidW = el.video.videoWidth || 720;
-      const vidH = el.video.videoHeight || 1280;
+      const boxW = el.video.clientWidth || 320;
+      const boxH = el.video.clientHeight || 420;
+      const vidW = el.video.videoWidth || 640;
+      const vidH = el.video.videoHeight || 480;
 
       if (state.engineMode === "mediapipe") {
-        if (state.mpReady && el.video.videoWidth > 0) {
+        if (state.mpReady && el.video.readyState >= 2 && el.video.videoWidth > 0 && el.video.currentTime !== state.lastVideoTime) {
+          state.lastVideoTime = el.video.currentTime;
           try {
             const res = state.mpDetector.detectForVideo(el.video, now);
             if (res && res.detections && res.detections.length > 0) {
               const best = res.detections[0];
               state.faceDetected = true;
               state.faceConf = best.categories?.[0]?.score ?? null;
-              state.faceScreenBox = mapVideoBoxToScreen(best.boundingBox, vidW, vidH, scrW, scrH);
+              state.faceNormBox = mapVideoBoxDirect(best.boundingBox, vidW, vidH, boxW, boxH);
               if (state.cachedAiBadge !== "ok") {
                 setStatusText(el.stAi, "已偵測到臉", "val-ok");
                 state.cachedAiBadge = "ok";
@@ -1413,7 +1337,7 @@
             } else {
               state.faceDetected = false;
               state.faceConf = null;
-              state.faceScreenBox = null;
+              state.faceNormBox = null;
               if (state.cachedAiBadge !== "none") {
                 setStatusText(el.stAi, "未偵測到臉", "val-warn");
                 state.cachedAiBadge = "none";
@@ -1425,28 +1349,26 @@
             el.btnFallback.style.display = "block";
           }
         }
-        state.alignResult = evaluateFaceAlignment(state.faceScreenBox, state.stage === "HOLDING");
+        state.alignResult = evaluateFaceAlignment(state.faceNormBox, state.stage === "HOLDING");
       } else {
         state.faceDetected = false;
         state.faceConf = null;
-        state.faceScreenBox = null;
+        state.faceNormBox = null;
         state.alignResult = { passed: true, code: "manual", label: "簡易模式（自行構圖）" };
       }
 
       const stabilityLabel = evaluateStability(now);
-      updatePitchEdgeBlur();
 
-      // 綜合握持角度文字（左右水平 + 前後仰俯）
       let angleLabel = "無角度資料";
       let angleOk = true;
       if (state.rollDeg !== null && state.pitchDeg !== null) {
         const rollOk = Math.abs(state.smoothRollDeg) <= 7;
-        const pitchOk = state.smoothPitchDeg >= -8 && state.smoothPitchDeg <= 18;
+        const pitchOk = Math.abs(state.smoothPitchDeg) <= 22;
         if (rollOk && pitchOk) {
           angleLabel = "垂直拿正";
           angleOk = true;
         } else if (!pitchOk) {
-          angleLabel = state.smoothPitchDeg > 18 ? "太往後仰（往下壓）" : "太往前趴（往上立）";
+          angleLabel = state.smoothPitchDeg > 22 ? "太往後仰（往下壓）" : "太往前趴（往上立）";
           angleOk = false;
         } else {
           angleLabel = state.smoothRollDeg > 0 ? `向右歪 ${Math.round(Math.abs(state.smoothRollDeg))}°` : `向左歪 ${Math.round(Math.abs(state.smoothRollDeg))}°`;
@@ -1596,8 +1518,8 @@
       }
 
       applyThrottledUI(now, nextUi, stabilityLabel, angleLabel, angleOk);
-      drawOverlay(scrW, scrH);
-      updateDebugPanel(now, vidW, vidH, scrW, scrH);
+      drawOverlay(boxW, boxH);
+      updateDebugPanel(now, vidW, vidH, boxW, boxH);
 
       requestAnimationFrame(mainLoop);
     }
@@ -1607,21 +1529,21 @@
       node.className = "status-val " + cls;
     }
 
-    function updateDebugPanel(now, vidW, vidH, scrW, scrH) {
+    function updateDebugPanel(now, vidW, vidH, boxW, boxH) {
       if (!state.debugOpen) return;
       const sensorAlive = (now - state.sensorLastTimestamp) < 1200 && state.smoothGyroMag !== null;
 
       el.dbgEngine.textContent = state.engineMode === "mediapipe" ? "MediaPipe FaceDetector" : "簡易穩定自拍模式(無AI)";
-      el.dbgRes.textContent = `視訊 ${vidW}x${vidH} ｜ 螢幕 ${scrW}x${scrH}`;
+      el.dbgRes.textContent = `相機輸出 ${vidW}x${vidH} ｜ 顯示框 ${boxW}x${boxH}`;
       el.dbgFaceConf.textContent = (state.faceConf !== null) ? `${(state.faceConf * 100).toFixed(1)}%` : "無資料";
-      el.dbgFacePos.textContent = state.faceScreenBox
-        ? `X=${state.faceScreenBox.cx.toFixed(2)}, Y=${state.faceScreenBox.cy.toFixed(2)}`
+      el.dbgFacePos.textContent = state.faceNormBox
+        ? `X=${state.faceNormBox.cx.toFixed(2)}, Y=${state.faceNormBox.cy.toFixed(2)}`
         : "無資料";
-      el.dbgFaceSize.textContent = state.faceScreenBox
-        ? `${(state.faceScreenBox.w * 100).toFixed(1)}% (合格: 20%~78%)`
+      el.dbgFaceSize.textContent = state.faceNormBox
+        ? `${(state.faceNormBox.w * 100).toFixed(1)}% (合格: 17%~78%)`
         : "無資料";
       el.dbgAngles.textContent = (state.rollDeg !== null && state.pitchDeg !== null)
-        ? `左右 ${state.smoothRollDeg.toFixed(1)}° ｜ 前後仰俯 ${state.smoothPitchDeg.toFixed(1)}° (合格 -8~+18°)`
+        ? `左右 ${state.smoothRollDeg.toFixed(1)}° ｜ 前後仰俯 ${state.smoothPitchDeg.toFixed(1)}° (合格 ±22°)`
         : "無資料";
 
       if (!state.sensorSupported) {
@@ -1660,6 +1582,7 @@
       state.roundElapsedSec = 0;
       state.photos = [];
       state.lastFrameTime = performance.now();
+      state.lastVideoTime = -1;
       state.cachedCardClass = "";
       state.cachedStageTag = "";
       state.cachedMainInst = "";
@@ -1692,8 +1615,6 @@
 
     function stopCameraAndLoop() {
       state.isRunning = false;
-      el.blurTop.style.opacity = "0";
-      el.blurBottom.style.opacity = "0";
       if (el.video.srcObject) {
         el.video.srcObject.getTracks().forEach(t => t.stop());
         el.video.srcObject = null;

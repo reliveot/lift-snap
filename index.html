@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-  <title>舉高手機自拍｜互動式上肢復健訓練 V2.2</title>
+  <title>舉高手機自拍｜互動式上肢復健訓練 V2.3</title>
   <style>
     :root {
       --bg-cream: #FAF6F0;
@@ -605,9 +605,9 @@
   <!-- ================= 1. 開始設定畫面 ================= -->
   <section id="screen-start" class="screen active">
     <div>
-      <span class="header-badge">上肢控制 × 多模式自拍復健 V2.2</span>
+      <span class="header-badge">上肢控制 × 雙線導航自拍復健 V2.3</span>
       <h1>舉高手機自拍訓練</h1>
-      <p class="subtitle">雙手握穩手機舉高，完成目標對準並維持穩定，自動拍攝 3 次紀錄對比。</p>
+      <p class="subtitle">雙手握穩手機舉高，對齊目標線條與位置並維持穩定，自動拍攝 3 次紀錄對比。</p>
 
       <!-- 選擇訓練模式 -->
       <div class="card">
@@ -631,9 +631,9 @@
           </div>
         </div>
 
-        <!-- 模式三子設定：空間陀螺儀仰角與左右角 -->
+        <!-- 模式三子設定：空間陀螺儀仰角與左右角（同步連動右側線條目標刻度） -->
         <div class="sub-config-box" id="cfg-gyro-apple">
-          <span class="sub-label">📐 空間蘋果目標高度（手機仰角）</span>
+          <span class="sub-label">📐 空間蘋果目標高度（右側垂直線目標刻度將同步移動）</span>
           <div class="option-group" id="opt-gyro-pitch" style="margin-bottom: 10px;">
             <button class="opt-btn" data-val="0">水平平視<br>(0°)</button>
             <button class="opt-btn selected" data-val="15">微高視線<br>(+15°)</button>
@@ -659,7 +659,7 @@
         <span class="sub-label">🤖 是否啟用人臉／嘴巴自動追蹤辨識？</span>
         <div class="option-group two-col" id="opt-face-detect" style="margin-bottom: 10px;">
           <button class="opt-btn selected" data-val="on">開啟人臉辨識<br><span style="font-size:12px; font-weight:500;">(對準臉框 / 嘴巴吃蘋果)</span></button>
-          <button class="opt-btn" data-val="off">關閉人臉辨識<br><span style="font-size:12px; font-weight:500;">(純看角度與手部穩定)</span></button>
+          <button class="opt-btn" data-val="off">關閉人臉辨識<br><span style="font-size:12px; font-weight:500;">(純看角度線與手部穩定)</span></button>
         </div>
 
         <div class="option-group" id="opt-hold-sec" style="margin-bottom: 10px;">
@@ -734,7 +734,7 @@
           <span class="debug-k">解析度/顯示：</span><span class="debug-v" id="dbg-res">--</span>
           <span class="debug-k">臉部/嘴巴座標：</span><span class="debug-v" id="dbg-face-pos">無資料</span>
           <span class="debug-k">蘋果螢幕座標：</span><span class="debug-v" id="dbg-apple-pos">無資料</span>
-          <span class="debug-k">左右歪/仰俯/方位：</span><span class="debug-v" id="dbg-angles">無資料</span>
+          <span class="debug-k">左右歪/仰俯(目標)：</span><span class="debug-v" id="dbg-angles">無資料</span>
           <span class="debug-k">陀螺儀資料流：</span><span class="debug-v" id="dbg-gyro-status">無資料</span>
           <span class="debug-k">角速度/臉位移：</span><span class="debug-v" id="dbg-gyro-val">無資料</span>
           <span class="debug-k">當前階段：</span><span class="debug-v" id="dbg-stage">IDLE</span>
@@ -1159,18 +1159,22 @@
       return { x: normX, y: normY };
     }
 
-    // ---------- 依據「人臉辨識開關」與「三種模式」進行目標對準判定 ----------
+    // 取得目前模式下的「目標仰俯角」：空間角度抓蘋果模式下直接採用設定的目標仰角，其餘為 0°
+    function getTargetPitchDeg() {
+      return CONFIG.gameMode === "gyro_apple" ? CONFIG.gyroTargetPitch : 0;
+    }
+
     function evaluateTargetAlignment(wasAligned) {
       const useFace = CONFIG.cameraFacing === "user" && CONFIG.faceDetectOn;
+      const targetPitch = getTargetPitchDeg();
 
       // 1. 模式一：標準框框自拍
       if (CONFIG.gameMode === "frame") {
         if (!useFace) {
-          // 關閉人臉辨識或後鏡頭時：只要把手機拿正（氣泡進圈）即算對準
-          const angleOk = (state.rollDeg === null) || (Math.abs(state.smoothRollDeg) <= 10 && Math.abs(state.smoothPitchDeg) <= 22);
+          const angleOk = (state.rollDeg === null) || (Math.abs(state.smoothRollDeg) <= 10 && Math.abs(state.smoothPitchDeg - targetPitch) <= 20);
           return angleOk
-            ? { passed: true, label: "已拿正（無需人臉辨識）" }
-            : { passed: false, label: "請將手機拿正（氣泡移入中央）" };
+            ? { passed: true, label: "已拿正（對齊基準線）" }
+            : { passed: false, label: "請將手機拿正（對齊上方與右側線條）" };
         }
         if (!state.faceDetected || !state.faceNormBox) {
           return { passed: false, label: "未偵測到臉" };
@@ -1209,15 +1213,14 @@
             return { passed: false, label: dy > 0 ? "蘋果在上方（放低手機讓臉往上）" : "蘋果在下方（舉高手機讓臉往下）" };
           }
         } else {
-          // 關閉人臉辨識時：自行對準定點位置並拿正即開始穩定計時
-          const angleOk = (state.rollDeg === null) || (Math.abs(state.smoothRollDeg) <= 12 && Math.abs(state.smoothPitchDeg) <= 25);
+          const angleOk = (state.rollDeg === null) || (Math.abs(state.smoothRollDeg) <= 12 && Math.abs(state.smoothPitchDeg - targetPitch) <= 22);
           return angleOk
             ? { passed: true, label: "已對準定點目標" }
-            : { passed: false, label: "請將手機拿正並穩住" };
+            : { passed: false, label: "請將手機拿正並對齊線條" };
         }
       }
 
-      // 3. 模式三：空間角度抓蘋果（陀螺儀錨點）
+      // 3. 模式三：空間角度抓蘋果（陀螺儀錨點，右側線條目標點同步連動 targetPitch）
       if (CONFIG.gameMode === "gyro_apple") {
         if (state.pitchDeg === null) {
           return { passed: false, label: "感測器無角度資料" };
@@ -1227,8 +1230,8 @@
 
         if (pos.x < 0.08) return { passed: false, label: "蘋果在左方（向左轉動）" };
         if (pos.x > 0.92) return { passed: false, label: "蘋果在右方（向右轉動）" };
-        if (pos.y < 0.08) return { passed: false, label: "蘋果在上方（再舉高仰起）" };
-        if (pos.y > 0.92) return { passed: false, label: "蘋果在下方（稍微放低）" };
+        if (pos.y < 0.08) return { passed: false, label: `蘋果在上方（仰角調至 ${targetPitch}°）` };
+        if (pos.y > 0.92) return { passed: false, label: `蘋果在下方（仰角調至 ${targetPitch}°）` };
 
         if (useFace) {
           if (!state.faceDetected || !state.mouthNormPos) {
@@ -1242,14 +1245,13 @@
             ? { passed: true, label: "🍎 空間蘋果對準嘴巴！" }
             : { passed: false, label: "微調手機讓蘋果碰到嘴巴" };
         } else {
-          // 關閉人臉辨識（或後鏡頭）：讓空間蘋果進入畫面中央目標圈 (0.5, 0.5)
           const dx = pos.x - 0.5;
           const dy = pos.y - 0.5;
           const dist = Math.sqrt(dx * dx + dy * dy);
           const hitRadius = wasAligned ? 0.18 : 0.14;
           return dist <= hitRadius
             ? { passed: true, label: "🍎 空間蘋果已進中央圈！" }
-            : { passed: false, label: "移動手機將蘋果套入中央圈" };
+            : { passed: false, label: "對齊右側角度線將蘋果套入中央圈" };
         }
       }
 
@@ -1397,35 +1399,80 @@
       c.restore();
     }
 
-    function drawCompactBubbleLevel(c, cx, cy) {
-      if (state.rollDeg === null || state.pitchDeg === null) return;
-      const ringR = 20;
-      const isLevel = Math.abs(state.smoothRollDeg) <= 8 && Math.abs(state.smoothPitchDeg) <= 22;
+    // ---------- 分離式雙線條導航：頂部水平線（左右拿平）＋ 右側垂直線（仰俯角度連動蘋果目標） ----------
+    function drawDualAxisGuideLines(c, boxW, boxH, topY, rightX) {
+      const targetPitch = getTargetPitchDeg();
 
-      const offX = Math.max(-ringR + 4, Math.min(ringR - 4, (state.smoothRollDeg / 35) * ringR));
-      const offY = Math.max(-ringR + 4, Math.min(ringR - 4, -(state.smoothPitchDeg / 45) * ringR));
+      // 1) 頂部水平線（Roll 左右拿平指示）
+      if (state.rollDeg !== null) {
+        const levelCenterX = boxW / 2;
+        const isLevel = Math.abs(state.smoothRollDeg) <= 7;
 
-      c.save();
-      c.fillStyle = "rgba(15, 15, 15, 0.55)";
-      c.beginPath();
-      c.arc(cx, cy, ringR + 3, 0, Math.PI * 2);
-      c.fill();
+        c.save();
+        // 左右固定白色基準點
+        c.fillStyle = "rgba(255, 255, 255, 0.88)";
+        c.beginPath();
+        c.arc(levelCenterX - 46, topY, 3.5, 0, Math.PI * 2);
+        c.arc(levelCenterX + 46, topY, 3.5, 0, Math.PI * 2);
+        c.fill();
 
-      c.strokeStyle = isLevel ? "#4ADE80" : "rgba(255, 255, 255, 0.85)";
-      c.lineWidth = 2;
-      c.beginPath();
-      c.arc(cx, cy, ringR, 0, Math.PI * 2);
-      c.moveTo(cx - 6, cy);
-      c.lineTo(cx + 6, cy);
-      c.moveTo(cx, cy - 6);
-      c.lineTo(cx, cy + 6);
-      c.stroke();
+        // 動態水平線
+        c.translate(levelCenterX, topY);
+        c.rotate((-state.smoothRollDeg * Math.PI) / 180);
+        c.strokeStyle = isLevel ? "#4ADE80" : "#F97316";
+        c.lineWidth = 4;
+        c.lineCap = "round";
+        c.beginPath();
+        c.moveTo(-38, 0);
+        c.lineTo(38, 0);
+        c.stroke();
+        c.restore();
+      }
 
-      c.fillStyle = isLevel ? "#4ADE80" : "#F97316";
-      c.beginPath();
-      c.arc(cx + offX, cy + offY, 5.5, 0, Math.PI * 2);
-      c.fill();
-      c.restore();
+      // 2) 右側垂直線（Pitch 前後仰俯指示：白色目標橫槓直接連動 targetPitch！）
+      if (state.pitchDeg !== null) {
+        const trackCenterY = boxH / 2;
+        const trackHalfH = Math.min(95, boxH * 0.32);
+        const maxDeg = 45; // 軌道上下兩端代表 -45° ~ +45°
+
+        // 計算目標刻度橫槓的 Y 位置（例如設定 +15° 或 +30° 時，目標橫槓就往上移到對應高度）
+        const targetNorm = Math.max(-1, Math.min(1, targetPitch / maxDeg));
+        const targetY = trackCenterY - targetNorm * trackHalfH;
+
+        // 計算當前手機實際仰俯角的滑動游標 Y 位置
+        const currentNorm = Math.max(-1, Math.min(1, state.smoothPitchDeg / maxDeg));
+        const currentY = trackCenterY - currentNorm * trackHalfH;
+
+        // 當前仰俯角與目標仰俯角誤差在 ±10° 內即亮綠燈
+        const isPitchAligned = Math.abs(state.smoothPitchDeg - targetPitch) <= 10;
+
+        c.save();
+        // 垂直軌道線
+        c.strokeStyle = "rgba(255, 255, 255, 0.45)";
+        c.lineWidth = 3;
+        c.lineCap = "round";
+        c.beginPath();
+        c.moveTo(rightX, trackCenterY - trackHalfH);
+        c.lineTo(rightX, trackCenterY + trackHalfH);
+        c.stroke();
+
+        // 目標仰角白色基準橫槓（隨蘋果目標仰角移動！）
+        c.strokeStyle = "rgba(255, 255, 255, 0.95)";
+        c.lineWidth = 3;
+        c.beginPath();
+        c.moveTo(rightX - 10, targetY);
+        c.lineTo(rightX + 10, targetY);
+        c.stroke();
+
+        // 當前手機角度動態水平短線（對齊目標橫槓時變亮綠色）
+        c.strokeStyle = isPitchAligned ? "#4ADE80" : "#F97316";
+        c.lineWidth = 4.5;
+        c.beginPath();
+        c.moveTo(rightX - 8, currentY);
+        c.lineTo(rightX + 8, currentY);
+        c.stroke();
+        c.restore();
+      }
     }
 
     function drawOverlay(boxW, boxH) {
@@ -1459,11 +1506,18 @@
         ctx.stroke();
         ctx.restore();
 
-        drawCompactBubbleLevel(ctx, boxW / 2, Math.max(28, guideY - 26));
+        // 框頂水平線 ＋ 框右垂直仰俯線
+        drawDualAxisGuideLines(
+          ctx,
+          boxW,
+          boxH,
+          Math.max(18, guideY - 14),
+          Math.min(boxW - 14, guideX + guideW + 16)
+        );
       } else {
-        drawCompactBubbleLevel(ctx, boxW / 2, 30);
+        // 抓蘋果模式：頂部水平線 ＋ 右側仰俯目標刻度線（直接貼在畫面邊緣，不佔空間）
+        drawDualAxisGuideLines(ctx, boxW, boxH, 20, boxW - 16);
 
-        // 若關閉人臉辨識且為空間角度抓蘋果，中央顯示目標套準圈
         if (!useFace && CONFIG.gameMode === "gyro_apple") {
           ctx.save();
           ctx.strokeStyle = state.alignResult.passed ? "#4ADE80" : "rgba(255,255,255,0.8)";
@@ -1475,7 +1529,6 @@
           ctx.restore();
         }
 
-        // 開啟人臉辨識時，在嘴巴位置畫出柔和目標環
         if (useFace && state.faceDetected && state.mouthNormPos && state.stage !== "RESTING") {
           const mx = state.mouthNormPos.x * boxW;
           const my = state.mouthNormPos.y * boxH;
@@ -1659,17 +1712,19 @@
 
       state.alignResult = evaluateTargetAlignment(state.stage === "HOLDING");
       const stabilityLabel = evaluateStability(now);
+      const targetPitch = getTargetPitchDeg();
 
       let angleLabel = "無感測資料";
       let angleOk = true;
       if (state.rollDeg !== null && state.pitchDeg !== null) {
-        const rollOk = Math.abs(state.smoothRollDeg) <= 8;
-        const pitchOk = Math.abs(state.smoothPitchDeg) <= 22;
+        const rollOk = Math.abs(state.smoothRollDeg) <= 7;
+        const pitchDiff = state.smoothPitchDeg - targetPitch;
+        const pitchOk = Math.abs(pitchDiff) <= 12;
         if (rollOk && pitchOk) {
-          angleLabel = "垂直拿正";
+          angleLabel = `已對準 (${Math.round(state.smoothPitchDeg)}°)`;
           angleOk = true;
         } else if (!pitchOk) {
-          angleLabel = state.smoothPitchDeg > 22 ? "偏後仰" : "偏前趴";
+          angleLabel = pitchDiff > 0 ? `仰角過高 (${Math.round(state.smoothPitchDeg)}°)` : `仰角不足 (${Math.round(state.smoothPitchDeg)}°)`;
           angleOk = false;
         } else {
           angleLabel = state.smoothRollDeg > 0 ? `右歪 ${Math.round(Math.abs(state.smoothRollDeg))}°` : `左歪 ${Math.round(Math.abs(state.smoothRollDeg))}°`;
@@ -1702,7 +1757,7 @@
           state.relYawDeg = 0;
           state.stage = "LIFTING";
           nextUi.forceImmediate = true;
-          speak("基準已鎖定！請舉起手機尋找空中的蘋果", true);
+          speak("基準已鎖定！請對齊右側角度線尋找空中的蘋果", true);
         }
       } else if (state.stage === "LIFTING") {
         state.roundElapsedSec += dt;
@@ -1839,6 +1894,7 @@
     function updateDebugPanel(now, vidW, vidH, boxW, boxH) {
       if (!state.debugOpen) return;
       const sensorAlive = (now - state.sensorLastTimestamp) < 1200 && state.smoothGyroMag !== null;
+      const targetPitch = getTargetPitchDeg();
 
       el.dbgMode.textContent = `${CONFIG.gameMode} ｜ 辨識:${CONFIG.faceDetectOn ? "開" : "關"}`;
       el.dbgRes.textContent = `相機 ${vidW}x${vidH} ｜ 視窗 ${boxW}x${boxH}`;
@@ -1849,7 +1905,7 @@
         ? `X=${state.appleNormPos.x.toFixed(2)}, Y=${state.appleNormPos.y.toFixed(2)}`
         : "不適用(框框模式)";
       el.dbgAngles.textContent = (state.rollDeg !== null)
-        ? `左右 ${state.smoothRollDeg.toFixed(1)}° ｜ 仰俯 ${state.smoothPitchDeg.toFixed(1)}° ｜ 轉向 ${state.relYawDeg.toFixed(1)}°`
+        ? `左右 ${state.smoothRollDeg.toFixed(1)}° ｜ 仰俯 ${state.smoothPitchDeg.toFixed(1)}° (目標 ${targetPitch}°)`
         : "無資料";
       el.dbgGyroStatus.textContent = sensorAlive ? `✅ 接收中 (${state.sensorHz} Hz)` : `無資料 (${state.sensorPermitted})`;
       el.dbgGyroVal.textContent = state.smoothGyroMag !== null

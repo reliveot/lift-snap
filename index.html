@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-  <title>舉高手機自拍｜互動式上肢復健訓練 V2.7</title>
+  <title>舉高手機自拍｜互動式上肢復健訓練 V2.8</title>
   <style>
     :root {
       --bg-cream: #FAF6F0;
@@ -888,6 +888,130 @@
       color: #7F7163;
     }
 
+
+    .ot-feature {
+      background: #F7F3EB;
+      border: 1px solid #EAE0D1;
+      border-radius: 13px;
+      padding: 12px 14px;
+      margin-bottom: 10px;
+    }
+    .ot-feature:last-child {
+      margin-bottom: 0;
+    }
+    .ot-feature h4 {
+      margin: 0 0 4px;
+      font-size: 15px;
+      color: #43392F;
+    }
+    .ot-feature p {
+      margin: 0 0 10px;
+      font-size: 12.5px;
+      color: #7F7163;
+      line-height: 1.5;
+    }
+    .ot-linkrow {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .ot-btn-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      padding: 10px 14px;
+      border-radius: 12px;
+      border: 1.5px solid #CDBDA7;
+      background: #FFFFFF;
+      color: #5D4C39;
+      font-size: 13.5px;
+      font-weight: 800;
+      text-decoration: none;
+      box-shadow: 0 2px 6px rgba(67, 57, 47, 0.08);
+      transition: transform 0.12s ease, background-color 0.15s ease;
+      cursor: pointer;
+    }
+    .ot-btn-link:active {
+      transform: scale(0.97);
+    }
+    .ot-btn-link.solid-brown {
+      background: #6B4A33;
+      color: #FFFFFF;
+      border-color: #6B4A33;
+    }
+    .ot-btn-link.solid-olive {
+      background: #697655;
+      color: #FFFFFF;
+      border-color: #697655;
+    }
+    .ot-btn-link.solid-wood {
+      background: #FFF9F1;
+      color: #69533E;
+      border-color: #BFA88E;
+    }
+    .ot-course-grid {
+      display: grid;
+      grid-template-columns: 104px minmax(0, 1fr);
+      gap: 12px;
+      align-items: center;
+    }
+    .ot-course-grid img {
+      width: 100%;
+      aspect-ratio: 1;
+      object-fit: cover;
+      border-radius: 12px;
+      border: 1px solid #EADCCC;
+    }
+    .ot-paid-tag {
+      display: inline-block;
+      border-radius: 999px;
+      border: 1px solid #C8D4C0;
+      background: #E9F0E6;
+      color: #36513E;
+      padding: 2px 8px;
+      font-size: 11px;
+      font-weight: 800;
+      margin-bottom: 4px;
+    }
+    .ot-tools-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+      margin: 10px 0 12px;
+    }
+    .ot-tool-item {
+      background: #FCFAF6;
+      border: 1px solid #E9DECE;
+      border-radius: 11px;
+      padding: 7px 4px;
+      text-align: center;
+    }
+    .ot-tool-item img {
+      display: block;
+      width: 100%;
+      max-width: 82px;
+      aspect-ratio: 1;
+      object-fit: contain;
+      margin: 0 auto 4px;
+    }
+    .ot-tool-item span {
+      font-size: 11.5px;
+      font-weight: 700;
+      color: #493728;
+      display: block;
+    }
+    .ot-footer-btns {
+      display: flex;
+      gap: 8px;
+      flex: 1;
+      min-width: 215px;
+    }
+    .ot-footer-btns .ot-btn-link {
+      flex: 1;
+      padding: 11px 10px;
+    }
+
     #inapp-warning {
       display: none;
       position: fixed;
@@ -924,7 +1048,7 @@
       </div>
 
       <div class="start-hero-title">
-        <span class="header-badge">上肢控制 × 三軸數據紀錄 V2.7</span>
+        <span class="header-badge">上肢控制 × 三軸數據紀錄 V2.8</span>
         <h1>舉高手機自拍訓練</h1>
       </div>
 
@@ -1095,15 +1219,15 @@
         </details>
       </div>
 
-      <!-- 簡潔頁尾聯絡列（無形象照，純文字按鈕延續電子名片質感） -->
+      <!-- 簡潔頁尾聯絡列（雙實體按鈕延續電子名片質感） -->
       <div class="ot-footer-contact">
         <div class="ot-footer-info">
           <strong>楊昀霖 職能治療師</strong>
           <span>吱吱復健 · Relive OT</span>
         </div>
-        <div class="ot-linkrow">
-          <a class="ot-btn-link solid-olive" href="https://lin.ee/4HnOdD4" rel="noopener" target="_blank">LINE 聯絡 ↗</a>
-          <a class="ot-btn-link" href="https://reliveot.github.io/card/" rel="noopener" target="_blank">電子名片 ↗</a>
+        <div class="ot-footer-btns">
+          <a class="ot-btn-link solid-olive" href="https://lin.ee/4HnOdD4" rel="noopener" target="_blank">💬 LINE 聯絡我 ↗</a>
+          <a class="ot-btn-link solid-wood" href="https://reliveot.github.io/card/" rel="noopener" target="_blank">🪪 電子名片 ↗</a>
         </div>
       </div>
     </div>

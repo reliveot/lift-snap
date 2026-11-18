@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-  <title>舉高手機自拍｜互動式上肢復健訓練 V2.4</title>
+  <title>舉高手機自拍｜互動式上肢復健訓練 V2.5</title>
   <style>
     :root {
       --bg-cream: #FAF6F0;
@@ -171,18 +171,19 @@
       transform: scale(0.98);
     }
 
-    /* ================= 訓練畫面（相機原生比例零裁切＋上下獨立卡片） ================= */
+    /* ================= 訓練畫面（嚴格防溢位排版＋相機原生比例） ================= */
     #screen-train {
       position: fixed;
       inset: 0;
       width: 100vw;
+      max-width: 100vw;
       height: 100dvh;
       background: #161514;
       display: none;
       flex-direction: column;
       justify-content: space-between;
-      padding: max(10px, env(safe-area-inset-top)) 12px max(12px, env(safe-area-inset-bottom));
-      gap: 8px;
+      padding: max(8px, env(safe-area-inset-top)) 10px max(10px, env(safe-area-inset-bottom));
+      gap: 7px;
       overflow: hidden;
     }
     #screen-train.active {
@@ -190,14 +191,16 @@
     }
 
     .train-top-bar {
+      width: 100%;
       z-index: 20;
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      gap: 5px;
       flex-shrink: 0;
     }
 
     .top-header-row {
+      width: 100%;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -207,18 +210,19 @@
     .round-pill {
       background: var(--accent-orange);
       color: #fff;
-      font-size: 15px;
+      font-size: 14px;
       font-weight: 800;
-      padding: 6px 12px;
+      padding: 5px 11px;
       border-radius: 999px;
       white-space: nowrap;
+      flex-shrink: 0;
     }
 
     .top-actions {
       display: flex;
       gap: 5px;
-      flex-wrap: wrap;
-      justify-content: flex-end;
+      align-items: center;
+      flex-shrink: 0;
     }
 
     .btn-glass {
@@ -226,8 +230,8 @@
       color: #fff;
       border: 1.5px solid rgba(255,255,255,0.28);
       border-radius: 999px;
-      padding: 6px 10px;
-      font-size: 12px;
+      padding: 5px 9px;
+      font-size: 11.5px;
       font-weight: 700;
       cursor: pointer;
       white-space: nowrap;
@@ -237,31 +241,35 @@
       border-color: #93C5FD;
     }
     .btn-glass.recenter-btn {
-      background: rgba(59, 126, 161, 0.45);
+      background: rgba(59, 126, 161, 0.55);
       border-color: #7DD3FC;
       display: none;
     }
 
+    /* 嚴格限制兩欄平分寬度且 min-width: 0，絕不向右撐爆螢幕 */
     .live-status-strip {
+      width: 100%;
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 5px;
       background: rgba(255, 255, 255, 0.08);
       border: 1px solid rgba(255,255,255,0.16);
-      border-radius: 14px;
-      padding: 6px 8px;
+      border-radius: 13px;
+      padding: 6px 7px;
       color: #fff;
-      font-size: 12px;
+      font-size: 11.5px;
     }
 
     .status-item {
+      min-width: 0;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      background: rgba(0, 0, 0, 0.35);
-      padding: 4px 8px;
+      background: rgba(0, 0, 0, 0.38);
+      padding: 4px 7px;
       border-radius: 8px;
       gap: 4px;
+      overflow: hidden;
     }
     .status-item.full-row {
       grid-column: span 2;
@@ -271,11 +279,13 @@
     }
 
     .status-label {
-      color: #E2E8F0;
+      color: #CBD5E1;
       font-weight: 600;
       white-space: nowrap;
+      flex-shrink: 0;
     }
     .status-val {
+      min-width: 0;
       font-weight: 800;
       text-align: right;
       white-space: nowrap;
@@ -289,7 +299,7 @@
 
     .stability-meter-bg {
       width: 100%;
-      height: 7px;
+      height: 6px;
       background: rgba(255,255,255,0.2);
       border-radius: 999px;
       overflow: hidden;
@@ -350,14 +360,14 @@
       position: absolute;
       inset: 0;
       z-index: 22;
-      background: rgba(12, 18, 28, 0.78);
+      background: rgba(12, 18, 28, 0.82);
       backdrop-filter: blur(4px);
       -webkit-backdrop-filter: blur(4px);
       flex-direction: column;
       justify-content: center;
       align-items: center;
       text-align: center;
-      padding: 20px;
+      padding: 16px;
       color: #fff;
     }
     #calib-overlay.active {
@@ -367,33 +377,33 @@
       background: rgba(59, 130, 246, 0.35);
       border: 1.5px solid #93C5FD;
       color: #DBEAFE;
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 800;
-      padding: 5px 14px;
+      padding: 4px 12px;
       border-radius: 999px;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
     }
     .calib-big-num {
-      font-size: 86px;
+      font-size: 82px;
       font-weight: 900;
       line-height: 1;
       color: #FBBF24;
       text-shadow: 0 6px 24px rgba(251, 191, 36, 0.45);
-      margin: 6px 0 14px;
+      margin: 4px 0 12px;
       font-variant-numeric: tabular-nums;
     }
     .calib-title {
-      font-size: 22px;
+      font-size: 20px;
       font-weight: 900;
       line-height: 1.35;
       margin: 0 0 6px;
     }
     .calib-sub {
-      font-size: 15px;
+      font-size: 14px;
       color: #CBD5E1;
       line-height: 1.45;
       margin: 0;
-      max-width: 280px;
+      max-width: 260px;
     }
 
     #debug-panel {
@@ -409,7 +419,7 @@
       padding: 10px 12px;
       color: #E2E8F0;
       font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-      font-size: 11.5px;
+      font-size: 11px;
       line-height: 1.4;
       max-height: 85%;
       overflow-y: auto;
@@ -420,7 +430,7 @@
     .debug-grid {
       display: grid;
       grid-template-columns: auto 1fr;
-      gap: 3px 10px;
+      gap: 3px 8px;
     }
     .debug-k { color: #94A3B8; }
     .debug-v { color: #F8FAFC; font-weight: 700; word-break: break-all; }
@@ -440,16 +450,17 @@
     }
 
     .train-bottom-card {
+      width: 100%;
       z-index: 20;
       flex-shrink: 0;
-      min-height: 96px;
+      min-height: 90px;
       display: flex;
       flex-direction: column;
       justify-content: center;
       background: var(--bg-cream);
       border: 2.5px solid var(--accent-orange);
-      border-radius: 20px;
-      padding: 10px 16px;
+      border-radius: 18px;
+      padding: 9px 14px;
       text-align: center;
       transition: border-color 0.25s, background-color 0.25s;
     }
@@ -463,7 +474,7 @@
     }
 
     .stage-tag {
-      font-size: 13px;
+      font-size: 12.5px;
       font-weight: 800;
       color: var(--accent-orange);
       margin-bottom: 2px;
@@ -472,7 +483,7 @@
     .state-resting .stage-tag { color: var(--accent-blue); }
 
     .main-instruction {
-      font-size: 18.5px;
+      font-size: 18px;
       font-weight: 900;
       color: var(--text-main);
       line-height: 1.3;
@@ -481,7 +492,7 @@
 
     .hold-timer-display {
       display: none;
-      font-size: 22px;
+      font-size: 21px;
       font-weight: 900;
       color: var(--accent-green);
       margin-top: 3px;
@@ -498,7 +509,7 @@
       transition: opacity 0.12s ease-out;
     }
 
-    /* ================= 結束三連拍對比畫面（置頂重拍按鈕＋大圖滑動輪播） ================= */
+    /* ================= 結束三連拍對比畫面（含三軸成績數據儲存呈現） ================= */
     #screen-result {
       padding: 14px 16px 40px;
       max-width: 640px;
@@ -553,7 +564,7 @@
     }
 
     .photo-slide {
-      flex: 0 0 84%;
+      flex: 0 0 86%;
       scroll-snap-align: center;
       background: #fff;
       border: 2px solid var(--border-soft);
@@ -577,11 +588,43 @@
 
     .photo-slide img {
       width: 100%;
-      max-height: 54dvh;
+      max-height: 48dvh;
       object-fit: contain;
       display: block;
       background: #141414;
     }
+
+    /* 每張照片下方的三軸表現紀錄面板 */
+    .axis-record-box {
+      padding: 10px 12px;
+      background: #FAF6F0;
+      border-top: 1.5px solid var(--border-soft);
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+      text-align: center;
+    }
+    .axis-pill {
+      background: #FFFFFF;
+      border: 1px solid var(--border-soft);
+      border-radius: 10px;
+      padding: 6px 4px;
+    }
+    .axis-pill-label {
+      display: block;
+      font-size: 11px;
+      color: var(--text-sub);
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+    .axis-pill-val {
+      display: block;
+      font-size: 14px;
+      font-weight: 900;
+      color: var(--text-main);
+    }
+    .axis-pill-val.good { color: var(--accent-green); }
+    .axis-pill-val.warn { color: var(--accent-orange); }
 
     .carousel-dots {
       display: flex;
@@ -666,9 +709,9 @@
   <!-- ================= 1. 開始設定畫面 ================= -->
   <section id="screen-start" class="screen active">
     <div>
-      <span class="header-badge">上肢控制 × 獨立三軸導航 V2.4</span>
+      <span class="header-badge">上肢控制 × 三軸數據紀錄 V2.5</span>
       <h1>舉高手機自拍訓練</h1>
-      <p class="subtitle">雙手握穩手機舉高，對齊三軸目標線條與位置並維持穩定，自動拍攝 3 次紀錄對比。</p>
+      <p class="subtitle">雙手握穩手機舉高，對齊三軸目標線條與位置並維持穩定，自動拍攝 3 次紀錄並儲存三軸表現。</p>
 
       <!-- 選擇訓練模式 -->
       <div class="card">
@@ -692,7 +735,7 @@
           </div>
         </div>
 
-        <!-- 模式三子設定：空間陀螺儀仰角與左右角（同步連動右側與上方軌道刻度） -->
+        <!-- 模式三子設定：空間陀螺儀仰角與左右角 -->
         <div class="sub-config-box" id="cfg-gyro-apple">
           <span class="sub-label">📐 空間蘋果目標高度（右側垂直線白色刻度同步移動）</span>
           <div class="option-group" id="opt-gyro-pitch" style="margin-bottom: 10px;">
@@ -717,10 +760,10 @@
           <button class="opt-btn" data-val="environment">📷 後鏡頭（拍環境）</button>
         </div>
 
-        <span class="sub-label">🤖 是否啟用人臉／嘴巴自動追蹤辨識？</span>
+        <span class="sub-label">🤖 人臉／嘴巴辨識（關閉時將嚴格要求三軸線條全對準＋穩住才拍照）</span>
         <div class="option-group two-col" id="opt-face-detect" style="margin-bottom: 10px;">
-          <button class="opt-btn selected" data-val="on">開啟人臉辨識<br><span style="font-size:12px; font-weight:500;">(對準臉框 / 嘴巴吃蘋果)</span></button>
-          <button class="opt-btn" data-val="off">關閉人臉辨識<br><span style="font-size:12px; font-weight:500;">(純看三軸線與手部穩定)</span></button>
+          <button class="opt-btn selected" data-val="on">開啟人臉辨識<br><span style="font-size:12px; font-weight:500;">(臉框 / 嘴巴吃蘋果輔助)</span></button>
+          <button class="opt-btn" data-val="off">關閉人臉辨識<br><span style="font-size:12px; font-weight:500;">(純三軸線條精準校正)</span></button>
         </div>
 
         <div class="option-group" id="opt-hold-sec" style="margin-bottom: 10px;">
@@ -736,7 +779,7 @@
 
       <div class="safety-box">
         <strong>🛡️ 三軸線條說明：</strong><br>
-        • <strong>上方水平線（左右轉）</strong>：對準蘋果左右方向<br>
+        • <strong>上方水平線（左右轉）</strong>：對準蘋果左右方位<br>
         • <strong>右側垂直線（仰俯角）</strong>：對準蘋果高度<br>
         • <strong>下方短水平（左右倒）</strong>：保持手機拿平不歪斜
       </div>
@@ -751,8 +794,8 @@
       <div class="top-header-row">
         <div class="round-pill" id="ui-round-pill">第 1 次 / 共 3 次</div>
         <div class="top-actions">
-          <button id="btn-recenter" class="btn-glass recenter-btn">🎯 重設正前方</button>
-          <button id="btn-toggle-debug" class="btn-glass">🔧 測試面板</button>
+          <button id="btn-recenter" class="btn-glass recenter-btn">🎯 重設正前</button>
+          <button id="btn-toggle-debug" class="btn-glass">🔧 測試</button>
           <button id="btn-exit-train" class="btn-glass">結束</button>
         </div>
       </div>
@@ -760,24 +803,24 @@
       <div class="live-status-strip">
         <div class="status-item">
           <span class="status-label">📷 鏡頭</span>
-          <span class="status-val val-warn" id="st-camera">尚未啟動</span>
+          <span class="status-val val-warn" id="st-camera">啟動中</span>
         </div>
         <div class="status-item">
-          <span class="status-label">🤖 視覺追蹤</span>
+          <span class="status-label">🤖 辨識</span>
           <span class="status-val val-warn" id="st-ai">載入中</span>
         </div>
         <div class="status-item">
-          <span class="status-label">🎯 目標對準</span>
-          <span class="status-val val-warn" id="st-align">等待畫面</span>
+          <span class="status-label">🎯 對準</span>
+          <span class="status-val val-warn" id="st-align">等待中</span>
         </div>
         <div class="status-item">
-          <span class="status-label">📐 三軸姿態</span>
-          <span class="status-val val-warn" id="st-angle">等待感測</span>
+          <span class="status-label">📐 姿態</span>
+          <span class="status-val val-warn" id="st-angle">感測中</span>
         </div>
         <div class="status-item full-row">
           <div style="display:flex; justify-content:space-between; align-items:center;">
             <span class="status-label">⚖️ 穩定度判定</span>
-            <span class="status-val val-warn" id="st-stability">等待評估</span>
+            <span class="status-val val-warn" id="st-stability">評估中</span>
           </div>
           <div class="stability-meter-bg">
             <div class="stability-meter-fill" id="st-stability-bar"></div>
@@ -829,9 +872,9 @@
       <button id="btn-restart-top" class="btn-retake-top">🔄 重新拍照（再練習一次）</button>
     </div>
 
-    <span class="header-badge">練習完成！左右滑動檢視大圖</span>
-    <h1>三連拍姿勢對比</h1>
-    <p class="subtitle">左右滑動下方照片卡片，仔細比較第 1 次到第 3 次的動作變化：</p>
+    <span class="header-badge">練習完成！已記錄每次三軸角度數據</span>
+    <h1>三連拍姿勢與三軸對比</h1>
+    <p class="subtitle">左右滑動下方照片卡片，檢視每次拍照時的動作與三軸角度表現：</p>
 
     <div class="carousel-wrapper">
       <div class="photos-carousel" id="result-photos-carousel"></div>
@@ -841,13 +884,13 @@
     <div class="card">
       <div class="card-title">👀 自我觀察 3 個小重點</div>
       <ul class="observe-list">
-        <li><strong>高度是否一致：</strong>第 3 張照片裡，臉或目標位置有沒有比第 1 張掉下來？</li>
-        <li><strong>左右是否歪斜：</strong>頭或肩膀有沒有因為用力而向某一側傾斜？</li>
+        <li><strong>仰俯高度是否一致：</strong>第 3 次的「上下仰俯角」有沒有比第 1 次掉下來？</li>
+        <li><strong>左右轉向與歪斜：</strong>「左右轉向」與「手機左右倒」有沒有保持在目標範圍內？</li>
         <li><strong>表情與呼吸：</strong>最後一次有沒有憋氣或皺眉？記得保持自然呼吸。</li>
       </ul>
     </div>
 
-    <button id="btn-export-collage" class="btn-secondary">🖼️ 合成三連拍紀錄圖（可長按儲存）</button>
+    <button id="btn-export-collage" class="btn-secondary">🖼️ 合成三連拍紀錄圖（含三軸數據，可長按儲存）</button>
 
     <div id="collage-preview-box">
       <p style="font-size:14px; color:var(--text-sub); margin-bottom:8px;">已生成今日紀錄圖！手機請<strong>長按下方圖片</strong>選擇「儲存到照片」：</p>
@@ -935,7 +978,7 @@
       faceMoveSpeed: 0,
 
       appleNormPos: { x: 0.5, y: 0.5 },
-      alignResult: { passed: false, label: "等待畫面" },
+      alignResult: { passed: false, shortLabel: "等待中", fullHint: "等待畫面" },
 
       sensorSupported: "DeviceMotionEvent" in window,
       sensorPermitted: "未知",
@@ -1075,7 +1118,7 @@
     }
 
     async function initMediaPipe() {
-      setStatusText(el.stAi, "AI 模型載入中", "val-warn");
+      setStatusText(el.stAi, "載入中", "val-warn");
       try {
         const vision = await FilesetResolver.forVisionTasks(
           "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/wasm"
@@ -1090,11 +1133,11 @@
         });
         state.mpReady = true;
         state.mpError = null;
-        setStatusText(el.stAi, "AI 模型正常", "val-ok");
+        setStatusText(el.stAi, "模型就緒", "val-ok");
       } catch (err) {
         state.mpReady = false;
         state.mpError = err?.message || "載入失敗";
-        setStatusText(el.stAi, "模型失敗", "val-err");
+        setStatusText(el.stAi, "載入失敗", "val-err");
       }
     }
 
@@ -1176,7 +1219,7 @@
       el.video.classList.toggle("rear-cam", !isFront);
 
       if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-        setStatusText(el.stCamera, "無相機API", "val-err");
+        setStatusText(el.stCamera, "無API", "val-err");
         return false;
       }
       try {
@@ -1190,10 +1233,10 @@
         });
         el.video.srcObject = stream;
         await el.video.play();
-        setStatusText(el.stCamera, isFront ? "前鏡頭正常" : "後鏡頭正常", "val-ok");
+        setStatusText(el.stCamera, isFront ? "前鏡頭" : "後鏡頭", "val-ok");
         return true;
       } catch (err) {
-        setStatusText(el.stCamera, "啟動失敗", "val-err");
+        setStatusText(el.stCamera, "失敗", "val-err");
         el.mainInst.textContent = "無法開啟鏡頭，請確認瀏覽器相機權限後重試。";
         return false;
       }
@@ -1262,98 +1305,135 @@
       return CONFIG.gameMode === "gyro_apple" ? CONFIG.gyroTargetYaw : 0;
     }
 
+    // 檢查三軸線條是否全數對準（關閉人臉辨識時的嚴格校正條件）
+    function checkThreeAxesAligned(wasAligned) {
+      if (state.rollDeg === null || state.pitchDeg === null) {
+        return { passed: false, shortLabel: "無感測", fullHint: "感測器無角度資料" };
+      }
+      const targetPitch = getTargetPitchDeg();
+      const targetYaw = getTargetYawDeg();
+
+      const tolYaw = wasAligned ? 11 : 8;
+      const tolPitch = wasAligned ? 13 : 10;
+      const tolRoll = wasAligned ? 11 : 8;
+
+      const yawDiff = state.relYawDeg - targetYaw;
+      const pitchDiff = state.smoothPitchDeg - targetPitch;
+      const rollDiff = state.smoothRollDeg;
+
+      if (Math.abs(yawDiff) > tolYaw) {
+        return {
+          passed: false,
+          shortLabel: "左右轉未準",
+          fullHint: yawDiff > 0 ? "上方滑塊偏右：請向左轉動手機" : "上方滑塊偏左：請向右轉動手機"
+        };
+      }
+      if (Math.abs(pitchDiff) > tolPitch) {
+        return {
+          passed: false,
+          shortLabel: "仰俯角未準",
+          fullHint: pitchDiff > 0 ? `右側滑塊過高：請稍微放低手機（目標 ${targetPitch}°）` : `右側滑塊過低：請舉高仰起手機（目標 ${targetPitch}°）`
+        };
+      }
+      if (Math.abs(rollDiff) > tolRoll) {
+        return {
+          passed: false,
+          shortLabel: "手機拿歪",
+          fullHint: rollDiff > 0 ? "下方水平線右斜：請把手機拿平" : "下方水平線左斜：請把手機拿平"
+        };
+      }
+      return {
+        passed: true,
+        shortLabel: "三軸全對準",
+        fullHint: "三軸線條全數綠燈！請穩住不動"
+      };
+    }
+
     function evaluateTargetAlignment(wasAligned) {
       const useFace = CONFIG.cameraFacing === "user" && CONFIG.faceDetectOn;
       const targetPitch = getTargetPitchDeg();
 
-      // 1. 模式一：標準框框自拍
-      if (CONFIG.gameMode === "frame") {
-        if (!useFace) {
-          const angleOk = (state.rollDeg === null) || (Math.abs(state.smoothRollDeg) <= 10 && Math.abs(state.smoothPitchDeg - targetPitch) <= 20);
-          return angleOk
-            ? { passed: true, label: "已拿正（對齊三軸線條）" }
-            : { passed: false, label: "請將手機拿正（對齊邊緣線條）" };
+      // 【關閉人臉辨識時】：純三軸線條精準校正模式（三軸全綠燈＋穩住才拍照）
+      if (!useFace) {
+        if (CONFIG.gameMode === "hud_apple") {
+          state.appleNormPos = HUD_COORDS[CONFIG.hudPos] || { x: 0.5, y: 0.25 };
+        } else if (CONFIG.gameMode === "gyro_apple") {
+          state.appleNormPos = computeGyroApplePos();
         }
+        return checkThreeAxesAligned(wasAligned);
+      }
+
+      // 【開啟人臉辨識時】：人臉 / 嘴巴視覺引導模式
+      if (CONFIG.gameMode === "frame") {
         if (!state.faceDetected || !state.faceNormBox) {
-          return { passed: false, label: "未偵測到臉" };
+          return { passed: false, shortLabel: "未偵測到臉", fullHint: "找不到臉：請舉高手機讓臉進入框框" };
         }
         const b = state.faceNormBox;
         const minW = wasAligned ? 0.14 : 0.17;
         const maxW = wasAligned ? 0.84 : 0.78;
-        if (b.w < minW) return { passed: false, label: "臉太小（拿近一點）" };
-        if (b.w > maxW) return { passed: false, label: "臉太大（拿遠一點）" };
+        if (b.w < minW) return { passed: false, shortLabel: "臉太小", fullHint: "臉太小（拿近一點）" };
+        if (b.w > maxW) return { passed: false, shortLabel: "臉太大", fullHint: "臉太大（拿遠一點）" };
 
         const pad = wasAligned ? 0.05 : 0.0;
-        if (b.cx < 0.24 - pad) return { passed: false, label: "偏左（往左移）" };
-        if (b.cx > 0.76 + pad) return { passed: false, label: "偏右（往右移）" };
-        if (b.cy < 0.18 - pad) return { passed: false, label: "偏上（舉高一點）" };
-        if (b.cy > 0.78 + pad) return { passed: false, label: "偏下（放低一點）" };
-        return { passed: true, label: "已對準框框" };
+        if (b.cx < 0.24 - pad) return { passed: false, shortLabel: "偏左", fullHint: "臉偏左（往左移一點）" };
+        if (b.cx > 0.76 + pad) return { passed: false, shortLabel: "偏右", fullHint: "臉偏右（往右移一點）" };
+        if (b.cy < 0.18 - pad) return { passed: false, shortLabel: "偏上", fullHint: "臉偏上（舉高一點）" };
+        if (b.cy > 0.78 + pad) return { passed: false, shortLabel: "偏下", fullHint: "臉偏下（放低一點）" };
+        return { passed: true, shortLabel: "已對準框框", fullHint: "已對準框框！保持穩定" };
       }
 
-      // 2. 模式二：螢幕定點抓蘋果
       if (CONFIG.gameMode === "hud_apple") {
         state.appleNormPos = HUD_COORDS[CONFIG.hudPos] || { x: 0.5, y: 0.25 };
-        if (useFace) {
-          if (!state.faceDetected || !state.mouthNormPos) {
-            return { passed: false, label: "請讓臉進入畫面" };
-          }
-          const dx = state.mouthNormPos.x - state.appleNormPos.x;
-          const dy = state.mouthNormPos.y - state.appleNormPos.y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-          const hitRadius = wasAligned ? 0.17 : 0.13;
-          if (dist <= hitRadius) {
-            return { passed: true, label: "🍎 吃到蘋果了！" };
-          }
-          if (Math.abs(dx) > Math.abs(dy)) {
-            return { passed: false, label: dx > 0 ? "蘋果在左邊（往右移手機）" : "蘋果在右邊（往左移手機）" };
-          } else {
-            return { passed: false, label: dy > 0 ? "蘋果在上方（放低手機讓臉往上）" : "蘋果在下方（舉高手機讓臉往下）" };
-          }
+        if (!state.faceDetected || !state.mouthNormPos) {
+          return { passed: false, shortLabel: "未偵測到臉", fullHint: "請讓臉進入畫面" };
+        }
+        const dx = state.mouthNormPos.x - state.appleNormPos.x;
+        const dy = state.mouthNormPos.y - state.appleNormPos.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        const hitRadius = wasAligned ? 0.17 : 0.13;
+        if (dist <= hitRadius) {
+          return { passed: true, shortLabel: "🍎 吃到蘋果", fullHint: "🍎 吃到蘋果了！保持穩定" };
+        }
+        if (Math.abs(dx) > Math.abs(dy)) {
+          return {
+            passed: false,
+            shortLabel: "調整左右",
+            fullHint: dx > 0 ? "蘋果在左邊（往右移手機）" : "蘋果在右邊（往左移手機）"
+          };
         } else {
-          const angleOk = (state.rollDeg === null) || (Math.abs(state.smoothRollDeg) <= 12 && Math.abs(state.smoothPitchDeg - targetPitch) <= 22);
-          return angleOk
-            ? { passed: true, label: "已對準定點目標" }
-            : { passed: false, label: "請將手機拿正並對齊線條" };
+          return {
+            passed: false,
+            shortLabel: "調整高度",
+            fullHint: dy > 0 ? "蘋果在上方（放低手機讓臉往上）" : "蘋果在下方（舉高手機讓臉往下）"
+          };
         }
       }
 
-      // 3. 模式三：空間角度抓蘋果
       if (CONFIG.gameMode === "gyro_apple") {
         if (state.pitchDeg === null) {
-          return { passed: false, label: "感測器無角度資料" };
+          return { passed: false, shortLabel: "無感測", fullHint: "感測器無角度資料" };
         }
         const pos = computeGyroApplePos();
         state.appleNormPos = pos;
 
-        if (pos.x < 0.08) return { passed: false, label: "蘋果在左方（向左轉動）" };
-        if (pos.x > 0.92) return { passed: false, label: "蘋果在右方（向右轉動）" };
-        if (pos.y < 0.08) return { passed: false, label: `蘋果在上方（仰角調至 ${targetPitch}°）` };
-        if (pos.y > 0.92) return { passed: false, label: `蘋果在下方（仰角調至 ${targetPitch}°）` };
+        if (pos.x < 0.08) return { passed: false, shortLabel: "蘋果在左", fullHint: "蘋果在左方（向左轉動手機）" };
+        if (pos.x > 0.92) return { passed: false, shortLabel: "蘋果在右", fullHint: "蘋果在右方（向右轉動手機）" };
+        if (pos.y < 0.08) return { passed: false, shortLabel: "蘋果在上方", fullHint: `蘋果在上方（仰角調至 ${targetPitch}°）` };
+        if (pos.y > 0.92) return { passed: false, shortLabel: "蘋果在下方", fullHint: `蘋果在下方（仰角調至 ${targetPitch}°）` };
 
-        if (useFace) {
-          if (!state.faceDetected || !state.mouthNormPos) {
-            return { passed: false, label: "已看到蘋果，請讓臉入鏡" };
-          }
-          const dx = state.mouthNormPos.x - pos.x;
-          const dy = state.mouthNormPos.y - pos.y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-          const hitRadius = wasAligned ? 0.19 : 0.15;
-          return dist <= hitRadius
-            ? { passed: true, label: "🍎 空間蘋果對準嘴巴！" }
-            : { passed: false, label: "微調手機讓蘋果碰到嘴巴" };
-        } else {
-          const dx = pos.x - 0.5;
-          const dy = pos.y - 0.5;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-          const hitRadius = wasAligned ? 0.18 : 0.14;
-          return dist <= hitRadius
-            ? { passed: true, label: "🍎 空間蘋果已進中央圈！" }
-            : { passed: false, label: "對齊上方與右側線條將蘋果套入中央圈" };
+        if (!state.faceDetected || !state.mouthNormPos) {
+          return { passed: false, shortLabel: "請讓臉入鏡", fullHint: "已看到蘋果，請讓臉入鏡" };
         }
+        const dx = state.mouthNormPos.x - pos.x;
+        const dy = state.mouthNormPos.y - pos.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        const hitRadius = wasAligned ? 0.19 : 0.15;
+        return dist <= hitRadius
+          ? { passed: true, shortLabel: "🍎 吃到蘋果", fullHint: "🍎 空間蘋果對準嘴巴！保持穩定" }
+          : { passed: false, shortLabel: "對準嘴巴", fullHint: "微調手機讓蘋果碰到嘴巴" };
       }
 
-      return { passed: false, label: "未知模式" };
+      return { passed: false, shortLabel: "未知", fullHint: "未知模式" };
     }
 
     function evaluateStability(now) {
@@ -1399,7 +1479,7 @@
       if (!sensorAlive) {
         if (faceMovePass && useFace) {
           state.isStable = true;
-          state.stabilityReason = "視覺位置穩定（無陀螺儀）";
+          state.stabilityReason = "視覺穩定（無陀螺儀）";
           el.stStabilityBar.style.width = "88%";
           el.stStabilityBar.style.background = "#4ADE80";
           return "穩定（純視覺）";
@@ -1407,7 +1487,7 @@
         state.isStable = false;
         state.stabilityReason = "感測器無資料";
         el.stStabilityBar.style.width = "0%";
-        return "感測器無資料";
+        return "無感測資料";
       }
 
       el.stStabilityBar.style.width = meterPct + "%";
@@ -1415,7 +1495,7 @@
         state.isStable = true;
         state.stabilityReason = "穩定";
         el.stStabilityBar.style.background = "#4ADE80";
-        return state.smoothGyroMag < THRESH.gyroEnter * 0.55 ? "穩定" : "稍微晃動（可接受）";
+        return state.smoothGyroMag < THRESH.gyroEnter * 0.55 ? "穩定" : "微晃（合格）";
       } else {
         state.isStable = false;
         state.stabilityReason = !gyroPass
@@ -1426,6 +1506,7 @@
       }
     }
 
+    // ---------- 拍照並同步儲存該次三軸表現數據 ----------
     function capturePhoto() {
       const vidW = el.video.videoWidth || 640;
       const vidH = el.video.videoHeight || 480;
@@ -1449,11 +1530,28 @@
         drawAppleIcon(cCtx, ax, ay, Math.min(vidW, vidH) * 0.09);
       }
 
+      const targetPitch = getTargetPitchDeg();
+      const targetYaw = getTargetYawDeg();
+
+      const snapPitch = state.pitchDeg !== null ? Math.round(state.smoothPitchDeg) : null;
+      const snapYaw = Math.round(state.relYawDeg);
+      const snapRoll = state.rollDeg !== null ? Math.round(state.smoothRollDeg) : null;
+
       const dataUrl = capCanvas.toDataURL("image/jpeg", 0.9);
       state.photos.push({
         round: state.round,
         dataUrl,
-        elapsedSec: state.roundElapsedSec.toFixed(1)
+        elapsedSec: state.roundElapsedSec.toFixed(1),
+        axes: {
+          pitch: snapPitch,
+          targetPitch,
+          pitchOk: snapPitch !== null && Math.abs(snapPitch - targetPitch) <= 12,
+          yaw: snapYaw,
+          targetYaw,
+          yawOk: Math.abs(snapYaw - targetYaw) <= 10,
+          roll: snapRoll,
+          rollOk: snapRoll !== null && Math.abs(snapRoll) <= 10
+        }
       });
 
       playShutterSound();
@@ -1497,12 +1595,12 @@
       c.restore();
     }
 
-    // ---------- 三邊緣獨立三軸視覺導航（上：左右轉Yaw滑塊、右：仰俯Pitch滑塊、下：左右倒Roll水平線） ----------
+    // ---------- 三邊緣獨立三軸視覺導航 ----------
     function drawThreeAxisGuides(c, boxW, boxH, topY, rightX, bottomY) {
       const targetPitch = getTargetPitchDeg();
       const targetYaw = getTargetYawDeg();
 
-      // 【軸 1：正上方水平滑塊】左右轉（Yaw 方位角，對應空間蘋果左右位置）
+      // 【軸 1：正上方水平滑塊】左右轉（Yaw）
       const trackCenterX = boxW / 2;
       const trackHalfW = Math.min(95, boxW * 0.28);
       const maxYaw = 45;
@@ -1515,7 +1613,6 @@
       const isYawAligned = Math.abs(state.relYawDeg - targetYaw) <= 8;
 
       c.save();
-      // 水平軌道線
       c.strokeStyle = "rgba(255, 255, 255, 0.45)";
       c.lineWidth = 3;
       c.lineCap = "round";
@@ -1524,7 +1621,6 @@
       c.lineTo(trackCenterX + trackHalfW, topY);
       c.stroke();
 
-      // 目標方位白色小豎槓
       c.strokeStyle = "rgba(255, 255, 255, 0.95)";
       c.lineWidth = 3;
       c.beginPath();
@@ -1532,14 +1628,13 @@
       c.lineTo(targetYawX, topY + 8);
       c.stroke();
 
-      // 當前轉向動態圓點
       c.fillStyle = isYawAligned ? "#4ADE80" : "#F97316";
       c.beginPath();
       c.arc(curYawX, topY, 6, 0, Math.PI * 2);
       c.fill();
       c.restore();
 
-      // 【軸 2：正右側垂直滑塊】仰俯角（Pitch，對應空間蘋果上下高度）
+      // 【軸 2：正右側垂直滑塊】仰俯角（Pitch）
       if (state.pitchDeg !== null) {
         const trackCenterY = boxH / 2;
         const trackHalfH = Math.min(95, boxH * 0.30);
@@ -1553,7 +1648,6 @@
         const isPitchAligned = Math.abs(state.smoothPitchDeg - targetPitch) <= 10;
 
         c.save();
-        // 垂直軌道線
         c.strokeStyle = "rgba(255, 255, 255, 0.45)";
         c.lineWidth = 3;
         c.lineCap = "round";
@@ -1562,7 +1656,6 @@
         c.lineTo(rightX, trackCenterY + trackHalfH);
         c.stroke();
 
-        // 目標高度白色小橫槓
         c.strokeStyle = "rgba(255, 255, 255, 0.95)";
         c.lineWidth = 3;
         c.beginPath();
@@ -1570,7 +1663,6 @@
         c.lineTo(rightX + 9, targetPitchY);
         c.stroke();
 
-        // 當前仰角動態橫槓
         c.strokeStyle = isPitchAligned ? "#4ADE80" : "#F97316";
         c.lineWidth = 4.5;
         c.beginPath();
@@ -1580,20 +1672,18 @@
         c.restore();
       }
 
-      // 【軸 3：正下方旋轉水平線】左右倒（Roll 方向盤歪斜，提醒手機拿平）
+      // 【軸 3：正下方旋轉水平線】左右倒（Roll）
       if (state.rollDeg !== null) {
         const rollCenterX = boxW / 2;
-        const isRollLevel = Math.abs(state.smoothRollDeg) <= 7;
+        const isRollLevel = Math.abs(state.smoothRollDeg) <= 8;
 
         c.save();
-        // 左右白色基準點
         c.fillStyle = "rgba(255, 255, 255, 0.88)";
         c.beginPath();
         c.arc(rollCenterX - 42, bottomY, 3, 0, Math.PI * 2);
         c.arc(rollCenterX + 42, bottomY, 3, 0, Math.PI * 2);
         c.fill();
 
-        // 動態旋轉水平線
         c.translate(rollCenterX, bottomY);
         c.rotate((-state.smoothRollDeg * Math.PI) / 180);
         c.strokeStyle = isRollLevel ? "#4ADE80" : "#F97316";
@@ -1638,7 +1728,6 @@
         ctx.stroke();
         ctx.restore();
 
-        // 三邊緣獨立三軸導航線（框上：左右轉、框右：仰俯角、框下：左右倒）
         drawThreeAxisGuides(
           ctx,
           boxW,
@@ -1648,7 +1737,6 @@
           Math.min(boxH - 16, guideY + guideH + 14)
         );
       } else {
-        // 抓蘋果模式：三軸導航線直接貼在畫面邊緣
         const bottomGuideY = state.stage === "HOLDING" ? boxH - 36 : boxH - 18;
         drawThreeAxisGuides(ctx, boxW, boxH, 18, boxW - 16, bottomGuideY);
 
@@ -1780,9 +1868,9 @@
       if (now - state.lastStripTime > 400) {
         state.lastStripTime = now;
 
-        if (state.alignResult.label !== state.cachedStAlign) {
-          setStatusText(el.stAlign, state.alignResult.label, state.alignResult.passed ? "val-ok" : "val-warn");
-          state.cachedStAlign = state.alignResult.label;
+        if (state.alignResult.shortLabel !== state.cachedStAlign) {
+          setStatusText(el.stAlign, state.alignResult.shortLabel, state.alignResult.passed ? "val-ok" : "val-warn");
+          state.cachedStAlign = state.alignResult.shortLabel;
         }
 
         if (angleLabel !== state.cachedStAngle) {
@@ -1791,7 +1879,7 @@
         }
 
         if (stabilityLabel !== state.cachedStStability) {
-          const cls = stabilityLabel.startsWith("穩定") || stabilityLabel.startsWith("稍微") ? "val-ok" : "val-err";
+          const cls = stabilityLabel.startsWith("穩定") || stabilityLabel.startsWith("微晃") ? "val-ok" : "val-err";
           setStatusText(el.stStability, stabilityLabel, cls);
           state.cachedStStability = stabilityLabel;
         }
@@ -1820,7 +1908,7 @@
               state.faceNormBox = mapped.box;
               state.mouthNormPos = mapped.mouth;
               if (state.cachedAiBadge !== "ok") {
-                setStatusText(el.stAi, "已偵測人臉/嘴巴", "val-ok");
+                setStatusText(el.stAi, "已偵測臉", "val-ok");
                 state.cachedAiBadge = "ok";
               }
             } else {
@@ -1828,7 +1916,7 @@
               state.faceNormBox = null;
               state.mouthNormPos = null;
               if (state.cachedAiBadge !== "none") {
-                setStatusText(el.stAi, "未偵測到臉", "val-warn");
+                setStatusText(el.stAi, "未偵測到", "val-warn");
                 state.cachedAiBadge = "none";
               }
             }
@@ -1839,7 +1927,7 @@
         state.faceNormBox = null;
         state.mouthNormPos = null;
         if (state.cachedAiBadge !== "off") {
-          setStatusText(el.stAi, CONFIG.cameraFacing === "environment" ? "後鏡頭模式" : "已手動關閉", "val-info");
+          setStatusText(el.stAi, CONFIG.cameraFacing === "environment" ? "後鏡頭" : "已關閉", "val-info");
           state.cachedAiBadge = "off";
         }
       }
@@ -1848,20 +1936,20 @@
       const stabilityLabel = evaluateStability(now);
       const targetPitch = getTargetPitchDeg();
 
-      let angleLabel = "無感測資料";
+      let angleLabel = "無感測";
       let angleOk = true;
       if (state.rollDeg !== null && state.pitchDeg !== null) {
-        const rollOk = Math.abs(state.smoothRollDeg) <= 7;
+        const rollOk = Math.abs(state.smoothRollDeg) <= 8;
         const pitchDiff = state.smoothPitchDeg - targetPitch;
         const pitchOk = Math.abs(pitchDiff) <= 12;
         if (rollOk && pitchOk) {
-          angleLabel = `已對準 (${Math.round(state.smoothPitchDeg)}°)`;
+          angleLabel = `已拿正 ${Math.round(state.smoothPitchDeg)}°`;
           angleOk = true;
         } else if (!pitchOk) {
-          angleLabel = pitchDiff > 0 ? `仰角過高 (${Math.round(state.smoothPitchDeg)}°)` : `仰角不足 (${Math.round(state.smoothPitchDeg)}°)`;
+          angleLabel = pitchDiff > 0 ? `仰角高 ${Math.round(state.smoothPitchDeg)}°` : `仰角低 ${Math.round(state.smoothPitchDeg)}°`;
           angleOk = false;
         } else {
-          angleLabel = state.smoothRollDeg > 0 ? `手機右倒 ${Math.round(Math.abs(state.smoothRollDeg))}°` : `手機左倒 ${Math.round(Math.abs(state.smoothRollDeg))}°`;
+          angleLabel = state.smoothRollDeg > 0 ? `右倒 ${Math.round(Math.abs(state.smoothRollDeg))}°` : `左倒 ${Math.round(Math.abs(state.smoothRollDeg))}°`;
           angleOk = false;
         }
       }
@@ -1877,7 +1965,6 @@
       };
 
       if (state.stage === "CALIBRATING") {
-        // 做法 B：大方全螢幕大字 3 -> 2 -> 1 倒數校準遮罩
         state.calibRemainSec -= dt;
         const ceilSec = Math.max(1, Math.ceil(state.calibRemainSec));
         el.calibOverlay.classList.add("active");
@@ -1901,7 +1988,7 @@
           state.stage = "LIFTING";
           nextUi.forceImmediate = true;
           playBeep(880, 0.16);
-          speak("開始！請對齊上方與右側線條尋找空中的蘋果", true);
+          speak("開始！請舉起手機對準目標", true);
         }
       } else if (state.stage === "LIFTING") {
         el.calibOverlay.classList.remove("active");
@@ -1921,8 +2008,8 @@
           speak("對準了！保持穩定", true);
         } else {
           nextUi.stageTag = `第 ${state.round} 次 • 舉高對準`;
-          nextUi.mainInst = state.alignResult.label;
-          state.blockerReason = `對準未通過：${state.alignResult.label}`;
+          nextUi.mainInst = state.alignResult.fullHint;
+          state.blockerReason = `對準未通過：${state.alignResult.fullHint}`;
         }
       } else if (state.stage === "HOLDING") {
         state.roundElapsedSec += dt;
@@ -1932,10 +2019,10 @@
         if (!state.alignResult.passed) {
           state.stage = "LIFTING";
           state.holdAccumSec = Math.max(0, state.holdAccumSec - 0.5);
-          state.blockerReason = `對準中斷：${state.alignResult.label}`;
+          state.blockerReason = `對準中斷：${state.alignResult.fullHint}`;
           nextUi.cardClass = "train-bottom-card";
           nextUi.stageTag = `第 ${state.round} 次 • 調整位置`;
-          nextUi.mainInst = state.alignResult.label;
+          nextUi.mainInst = state.alignResult.fullHint;
           nextUi.timerShow = false;
           nextUi.forceImmediate = true;
         } else if (!state.isStable) {
@@ -1967,7 +2054,7 @@
               state.stage = "DONE";
               nextUi.cardClass = "train-bottom-card state-resting";
               nextUi.stageTag = "全部完成！";
-              nextUi.mainInst = "太棒了！正在整理三連拍大圖對比...";
+              nextUi.mainInst = "太棒了！正在整理三連拍與三軸成績...";
               nextUi.timerShow = false;
               nextUi.forceImmediate = true;
               speak(`拍照成功！完成全部 ${CONFIG.totalRounds} 次練習！`, true);
@@ -2086,7 +2173,6 @@
       state.cachedAiBadge = "";
       el.roundPill.textContent = `第 1 次 / 共 ${CONFIG.totalRounds} 次`;
 
-      // 顯示「重設正前方」按鈕（尤其空間抓蘋果模式最實用）
       el.btnRecenter.style.display = "inline-block";
 
       if (CONFIG.cameraFacing === "user" && CONFIG.faceDetectOn && !state.mpReady && !state.mpError) {
@@ -2111,7 +2197,6 @@
       requestAnimationFrame(mainLoop);
     });
 
-    // 一鍵重新歸零正前方基準
     el.btnRecenter.addEventListener("click", () => {
       state.baseAlpha = state.rawAlpha ?? 0;
       state.relYawDeg = 0;
@@ -2143,6 +2228,11 @@
       }
     }
 
+    function fmtDeg(val) {
+      if (val === null || val === undefined) return "--";
+      return (val > 0 ? `+${val}°` : `${val}°`);
+    }
+
     function finishTraining() {
       stopCameraAndLoop();
       const carousel = document.getElementById("result-photos-carousel");
@@ -2152,6 +2242,7 @@
       document.getElementById("collage-preview-box").style.display = "none";
 
       state.photos.forEach((p, idx) => {
+        const ax = p.axes;
         const slide = document.createElement("div");
         slide.className = "photo-slide";
         slide.innerHTML = `
@@ -2160,6 +2251,20 @@
             <span style="font-size:13px; color:var(--text-sub);">耗時 ${p.elapsedSec} 秒</span>
           </div>
           <img src="${p.dataUrl}" alt="第 ${p.round} 次自拍" />
+          <div class="axis-record-box">
+            <div class="axis-pill">
+              <span class="axis-pill-label">上下仰俯(目標${fmtDeg(ax.targetPitch)})</span>
+              <span class="axis-pill-val ${ax.pitchOk ? "good" : "warn"}">${fmtDeg(ax.pitch)}</span>
+            </div>
+            <div class="axis-pill">
+              <span class="axis-pill-label">左右轉向(目標${fmtDeg(ax.targetYaw)})</span>
+              <span class="axis-pill-val ${ax.yawOk ? "good" : "warn"}">${fmtDeg(ax.yaw)}</span>
+            </div>
+            <div class="axis-pill">
+              <span class="axis-pill-label">手機左右倒(目標0°)</span>
+              <span class="axis-pill-val ${ax.rollOk ? "good" : "warn"}">${fmtDeg(ax.roll)}</span>
+            </div>
+          </div>
         `;
         carousel.appendChild(slide);
 
@@ -2195,7 +2300,7 @@
 
       const c = document.createElement("canvas");
       const w = 1200;
-      const h = 760;
+      const h = 810;
       c.width = w;
       c.height = h;
       const g = c.getContext("2d");
@@ -2205,30 +2310,36 @@
 
       g.fillStyle = "#2F2A25";
       g.font = "bold 36px sans-serif";
-      g.fillText("舉高手機自拍｜三連拍上肢穩定紀錄", 44, 68);
+      g.fillText("舉高手機自拍｜三連拍姿勢與三軸角度紀錄", 44, 66);
 
       g.fillStyle = "#6E655D";
-      g.font = "24px sans-serif";
+      g.font = "23px sans-serif";
       const dateStr = new Date().toLocaleDateString("zh-TW");
-      g.fillText(`練習日期：${dateStr} ｜ 每次穩定目標：${CONFIG.holdTargetSec} 秒`, 44, 110);
+      g.fillText(`練習日期：${dateStr} ｜ 每次穩定目標：${CONFIG.holdTargetSec} 秒`, 44, 106);
 
       const cardW = 350;
       const cardH = 466;
-      const startY = 145;
+      const startY = 140;
       imgs.forEach((im, idx) => {
+        const p = state.photos[idx];
+        const ax = p.axes;
         const x = 44 + idx * 380;
         g.fillStyle = "#FFFFFF";
-        g.fillRect(x - 6, startY - 6, cardW + 12, cardH + 64);
+        g.fillRect(x - 6, startY - 6, cardW + 12, cardH + 104);
         g.drawImage(im, x, startY, cardW, cardH);
 
         g.fillStyle = "#E87A3D";
-        g.font = "bold 26px sans-serif";
-        g.fillText(`第 ${idx + 1} 次（耗時 ${state.photos[idx].elapsedSec}s）`, x + 12, startY + cardH + 40);
+        g.font = "bold 24px sans-serif";
+        g.fillText(`第 ${idx + 1} 次（耗時 ${p.elapsedSec}s）`, x + 10, startY + cardH + 34);
+
+        g.fillStyle = "#2F2A25";
+        g.font = "bold 19px sans-serif";
+        g.fillText(`仰俯 ${fmtDeg(ax.pitch)} ｜ 轉向 ${fmtDeg(ax.yaw)} ｜ 歪斜 ${fmtDeg(ax.roll)}`, x + 10, startY + cardH + 68);
       });
 
       g.fillStyle = "#234D63";
-      g.font = "bold 24px sans-serif";
-      g.fillText("自我觀察：1. 臉部高度是否一致？  2. 肩膀有沒有歪斜？  3. 表情是否自然放鬆？", 44, 718);
+      g.font = "bold 23px sans-serif";
+      g.fillText("自我觀察：1. 三次仰俯高度是否一致？  2. 左右轉向與歪斜是否穩定？  3. 表情是否自然放鬆？", 44, 765);
 
       const finalUrl = c.toDataURL("image/jpeg", 0.92);
       const previewImg = document.getElementById("collage-img");
@@ -2237,7 +2348,7 @@
 
       const a = document.createElement("a");
       a.href = finalUrl;
-      a.download = `舉高手機自拍紀錄_${dateStr.replace(/\//g, "-")}.jpg`;
+      a.download = `舉高手機三軸紀錄_${dateStr.replace(/\//g, "-")}.jpg`;
       a.click();
     });
 

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-  <title>舉高手機自拍｜互動式上肢復健訓練 V3.0</title>
+  <title>舉高手機自拍｜互動式上肢復健訓練 V3.1</title>
   <style>
     :root {
       --bg-cream: #FAF6F0;
@@ -127,7 +127,7 @@
     }
 
     .scenario-carousel-wrap {
-      margin: 0 -14px 6px;
+      margin: 0 -14px 4px;
       padding: 0 14px;
     }
     .scenario-carousel {
@@ -146,7 +146,7 @@
 
     .scenario-card {
       flex: 0 0 74%;
-      max-width: 290px;
+      max-width: 285px;
       scroll-snap-align: center;
       background: #FFFFFF;
       border: 2.5px solid var(--border-soft);
@@ -158,7 +158,6 @@
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      position: relative;
     }
     .scenario-card.selected {
       background: #FFF9F4;
@@ -193,10 +192,10 @@
       color: #FFFFFF;
     }
     .sc-title {
-      font-size: 16.5px;
+      font-size: 17px;
       font-weight: 900;
       color: var(--text-main);
-      margin: 0 0 3px;
+      margin: 0 0 4px;
     }
     .sc-desc {
       font-size: 12.5px;
@@ -225,87 +224,59 @@
       background: var(--accent-orange);
     }
 
-    /* 折疊面板共用樣式（自訂進階設定 ＋ 延伸資源） */
-    .ot-panel {
-      background: #FFFDFA;
-      border: 1.5px solid #E7DAC8;
+    /* 卡片下方專屬動態設定卡（只顯示當前模式用得到的選項） */
+    .mode-options-card {
+      background: #FFFFFF;
+      border: 1.5px solid var(--border-soft);
       border-radius: 16px;
-      box-shadow: 0 4px 14px rgba(88, 70, 47, 0.04);
-      overflow: hidden;
-      margin-bottom: 9px;
+      padding: 11px 13px;
+      margin-bottom: 10px;
+      box-shadow: 0 4px 14px rgba(47, 42, 37, 0.04);
     }
-    .ot-panel summary {
-      list-style: none;
-      padding: 11px 14px;
+    .mode-options-head {
       display: flex;
+      justify-content: space-between;
       align-items: center;
-      gap: 10px;
-      cursor: pointer;
+      margin-bottom: 8px;
+      padding-bottom: 6px;
+      border-bottom: 1px dashed var(--border-soft);
     }
-    .ot-panel summary::-webkit-details-marker {
-      display: none;
-    }
-    .ot-panel summary:hover {
-      background: #F9F5ED;
-    }
-    .ot-symbol {
-      width: 36px;
-      height: 36px;
-      border-radius: 10px;
-      background: #F0E6D8;
-      color: #80634A;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      font-size: 18px;
-    }
-    .ot-symbol.olive {
-      background: #EFF0E7;
-      color: #697655;
-    }
-    .ot-symbol.orange {
-      background: var(--accent-orange-light);
+    .mode-options-title {
+      font-size: 13px;
+      font-weight: 800;
       color: var(--accent-orange);
     }
-    .ot-panel-text {
-      min-width: 0;
-      flex: 1;
-    }
-    .ot-panel-title {
-      font-size: 14.5px;
-      font-weight: 800;
-      color: #43392F;
-    }
-    .ot-panel-sub {
+    .mode-options-rule {
       font-size: 11.5px;
-      color: #7F7163;
-      margin-top: 1px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    .ot-chev {
-      width: 8px;
-      height: 8px;
-      border-right: 2px solid #80634A;
-      border-bottom: 2px solid #80634A;
-      transform: rotate(45deg);
-      transition: transform 0.2s;
-      margin-right: 4px;
-      flex-shrink: 0;
-    }
-    .ot-panel[open] .ot-chev {
-      transform: rotate(225deg);
-    }
-    .ot-panel-body {
-      padding: 12px 14px 14px;
-      border-top: 1px solid #F1E9DF;
-      background: #FFFFFF;
+      font-weight: 700;
+      color: var(--accent-green);
+      background: var(--accent-green-light);
+      padding: 2px 8px;
+      border-radius: 999px;
     }
 
-    /* 自訂設定內部按鈕組 */
+    .dyn-row {
+      display: none;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+    .dyn-row.visible {
+      display: flex;
+    }
+    .dyn-row.last-row {
+      margin-bottom: 0;
+    }
+    .compact-label {
+      font-size: 12.5px;
+      font-weight: 800;
+      color: var(--text-main);
+      white-space: nowrap;
+      flex-shrink: 0;
+      width: 66px;
+    }
     .option-group {
+      flex: 1;
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 6px;
@@ -330,43 +301,8 @@
       border-color: var(--accent-orange);
       color: var(--accent-orange);
     }
-    .compact-row {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 8px;
-    }
-    .compact-label {
-      font-size: 12.5px;
-      font-weight: 800;
-      color: var(--text-main);
-      white-space: nowrap;
-      flex-shrink: 0;
-      width: 66px;
-    }
-    .compact-group {
-      flex: 1;
-    }
-    .sub-config-box {
-      display: none;
-      margin: 4px 0 9px;
-      padding: 8px 10px;
-      background: #FAF6F0;
-      border-radius: 11px;
-      border: 1px dashed var(--border-soft);
-    }
-    .sub-config-box.visible {
-      display: block;
-    }
-    .sub-label {
-      font-size: 12px;
-      font-weight: 700;
-      color: var(--text-sub);
-      margin-bottom: 6px;
-      display: block;
-    }
 
-    /* 延伸資源區塊 */
+    /* 延伸資源折疊面板（預設收合） */
     .ot-section-divider {
       margin: 12px 0 8px;
       display: flex;
@@ -384,6 +320,77 @@
       flex: 1;
       background: #D6CABA;
     }
+    .ot-panel {
+      background: #FFFDFA;
+      border: 1px solid #E7DAC8;
+      border-radius: 16px;
+      box-shadow: 0 4px 14px rgba(88, 70, 47, 0.04);
+      overflow: hidden;
+      margin-bottom: 9px;
+    }
+    .ot-panel summary {
+      list-style: none;
+      padding: 11px 14px;
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      cursor: pointer;
+    }
+    .ot-panel summary::-webkit-details-marker {
+      display: none;
+    }
+    .ot-panel summary:hover {
+      background: #F9F5ED;
+    }
+    .ot-symbol {
+      width: 38px;
+      height: 38px;
+      border-radius: 11px;
+      background: #F0E6D8;
+      color: #80634A;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .ot-symbol.olive {
+      background: #EFF0E7;
+      color: #697655;
+    }
+    .ot-panel-text {
+      min-width: 0;
+      flex: 1;
+    }
+    .ot-panel-title {
+      font-size: 15px;
+      font-weight: 800;
+      color: #43392F;
+    }
+    .ot-panel-sub {
+      font-size: 12px;
+      color: #7F7163;
+      margin-top: 1px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .ot-chev {
+      width: 9px;
+      height: 9px;
+      border-right: 2px solid #80634A;
+      border-bottom: 2px solid #80634A;
+      transform: rotate(45deg);
+      transition: transform 0.2s;
+      margin-right: 4px;
+      flex-shrink: 0;
+    }
+    .ot-panel[open] .ot-chev {
+      transform: rotate(225deg);
+    }
+    .ot-panel-body {
+      padding: 12px 14px 16px;
+      border-top: 1px solid #F1E9DF;
+    }
     .ot-feature {
       background: #F7F3EB;
       border: 1px solid #EAE0D1;
@@ -396,7 +403,7 @@
     }
     .ot-feature h4 {
       margin: 0 0 4px;
-      font-size: 14.5px;
+      font-size: 15px;
       color: #43392F;
     }
     .ot-feature p {
@@ -420,7 +427,7 @@
       border: 1.5px solid #CDBDA7;
       background: #FFFFFF;
       color: #5D4C39;
-      font-size: 13px;
+      font-size: 13.5px;
       font-weight: 800;
       text-decoration: none;
       box-shadow: 0 2px 6px rgba(67, 57, 47, 0.08);
@@ -698,57 +705,6 @@
       height: 100%;
       pointer-events: none;
       z-index: 5;
-    }
-
-    #calib-overlay {
-      display: none;
-      position: absolute;
-      inset: 0;
-      z-index: 22;
-      background: rgba(12, 18, 28, 0.82);
-      backdrop-filter: blur(4px);
-      -webkit-backdrop-filter: blur(4px);
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      padding: 16px;
-      color: #fff;
-    }
-    #calib-overlay.active {
-      display: flex;
-    }
-    .calib-badge {
-      background: rgba(59, 130, 246, 0.35);
-      border: 1.5px solid #93C5FD;
-      color: #DBEAFE;
-      font-size: 13px;
-      font-weight: 800;
-      padding: 4px 12px;
-      border-radius: 999px;
-      margin-bottom: 8px;
-    }
-    .calib-big-num {
-      font-size: 82px;
-      font-weight: 900;
-      line-height: 1;
-      color: #FBBF24;
-      text-shadow: 0 6px 24px rgba(251, 191, 36, 0.45);
-      margin: 4px 0 12px;
-      font-variant-numeric: tabular-nums;
-    }
-    .calib-title {
-      font-size: 20px;
-      font-weight: 900;
-      line-height: 1.35;
-      margin: 0 0 6px;
-    }
-    .calib-sub {
-      font-size: 14px;
-      color: #CBD5E1;
-      line-height: 1.45;
-      margin: 0;
-      max-width: 260px;
     }
 
     #debug-panel {
@@ -1047,22 +1003,22 @@
     <button class="btn-glass" onclick="document.getElementById('inapp-warning').style.display='none'">仍要在此嘗試開啟</button>
   </div>
 
-  <!-- ================= 1. 開始設定畫面（左右滑動情境卡片＋預設收合自訂＋延伸資源） ================= -->
+  <!-- ================= 1. 開始設定畫面（6 大滑動卡片＋專屬動態選項＋收合延伸資源） ================= -->
   <section id="screen-start" class="screen active">
     <div class="start-container">
-      <!-- 置頂開始拍照按鈕 -->
+      <!-- 置頂唯一開始拍照按鈕 -->
       <div class="start-sticky-top">
-        <button id="btn-start-train" class="btn-primary">📷 開始拍照（經典自拍 · 3 輪）</button>
+        <button id="btn-start-train" class="btn-primary">📷 開始拍照（鏡中自拍 · 3 輪）</button>
       </div>
 
       <div class="start-hero-title">
-        <span class="header-badge">穩定即拍照 × 三軸數據紀錄 V3.0</span>
+        <span class="header-badge">穩定即拍照 × 三軸數據紀錄 V3.1</span>
         <h1>舉高手機自拍訓練</h1>
       </div>
 
-      <!-- 橫向滑動情境卡片輪播 -->
+      <!-- 橫向滑動 6 大模式卡片 -->
       <div class="scenario-header">
-        <span class="scenario-header-title">🎯 選擇練習情境（穩定即拍照）</span>
+        <span class="scenario-header-title">🎯 選擇練習模式</span>
         <span class="scenario-swipe-hint">👈 左右滑動切換 👉</span>
       </div>
 
@@ -1071,93 +1027,79 @@
       </div>
       <div class="sc-dots" id="scenario-dots"></div>
 
-      <!-- 預設收合：自訂進階設定 -->
-      <details class="ot-panel" id="panel-custom-settings">
-        <summary>
-          <span class="ot-symbol orange">⚙️</span>
-          <div class="ot-panel-text">
-            <div class="ot-panel-title">自訂進階設定（秒數 / 角度 / 嚴格門檻）</div>
-            <div class="ot-panel-sub" id="custom-summary-sub">穩定 3 秒 · 純穩定觸發（三軸僅紀錄不卡關）</div>
-          </div>
-          <span class="ot-chev"></span>
-        </summary>
-        <div class="ot-panel-body">
-          <div class="compact-row">
-            <span class="compact-label">⏱️ 穩定秒數</span>
-            <div class="option-group compact-group" id="opt-hold-sec">
-              <button class="opt-btn" data-val="2">2 秒</button>
-              <button class="opt-btn selected" data-val="3">3 秒</button>
-              <button class="opt-btn" data-val="5">5 秒</button>
-            </div>
-          </div>
+      <!-- 卡片下方：只顯示目前這張卡片專屬能選的東西 -->
+      <div class="mode-options-card">
+        <div class="mode-options-head">
+          <span class="mode-options-title" id="mode-opt-title">🤳 鏡中自拍 · 設定</span>
+          <span class="mode-options-rule">穩住即拍 · 三軸紀錄</span>
+        </div>
 
-          <div class="compact-row">
-            <span class="compact-label">🎯 拍照條件</span>
-            <div class="option-group two-col compact-group" id="opt-strict-mode">
-              <button class="opt-btn selected" data-val="relaxed">只要穩住就拍</button>
-              <button class="opt-btn" data-val="strict">需對準目標才拍</button>
-            </div>
-          </div>
-
-          <!-- 螢幕定點位置子設定（當選擇螢幕定點類情境時顯示） -->
-          <div class="sub-config-box" id="cfg-hud-pos">
-            <span class="sub-label">📍 螢幕物件顯示位置</span>
-            <div class="option-group compact-group" id="opt-hud-pos">
-              <button class="opt-btn" data-val="tl">左上</button>
-              <button class="opt-btn selected" data-val="tc">正上</button>
-              <button class="opt-btn" data-val="tr">右上</button>
-              <button class="opt-btn" data-val="ml">正左</button>
-              <button class="opt-btn" data-val="mc">正中</button>
-              <button class="opt-btn" data-val="mr">正右</button>
-            </div>
-          </div>
-
-          <!-- 空間陀螺儀目標角度子設定（當選擇空間尋寶類情境時顯示） -->
-          <div class="sub-config-box" id="cfg-gyro-pos">
-            <div class="compact-row" style="margin-bottom:6px;">
-              <span class="compact-label">📐 目標高度</span>
-              <div class="option-group compact-group" id="opt-gyro-pitch">
-                <button class="opt-btn" data-val="0">平視 0°</button>
-                <button class="opt-btn selected" data-val="15">微高 +15°</button>
-                <button class="opt-btn" data-val="30">高舉 +30°</button>
-              </div>
-            </div>
-            <div class="compact-row" style="margin-bottom:0;">
-              <span class="compact-label">🧭 目標方位</span>
-              <div class="option-group compact-group" id="opt-gyro-yaw">
-                <button class="opt-btn" data-val="-20">向左 -20°</button>
-                <button class="opt-btn selected" data-val="0">正前 0°</button>
-                <button class="opt-btn" data-val="20">向右 +20°</button>
-              </div>
-            </div>
-          </div>
-
-          <div class="compact-row">
-            <span class="compact-label">🎭 面具款式</span>
-            <div class="option-group compact-group" id="opt-mask-style">
-              <button class="opt-btn selected" data-val="crown">👑 皇冠</button>
-              <button class="opt-btn" data-val="sunglasses">😎 墨鏡</button>
-              <button class="opt-btn" data-val="bunny">🐰 兔耳</button>
-            </div>
-          </div>
-
-          <div class="compact-row">
-            <span class="compact-label">📷 鏡頭方向</span>
-            <div class="option-group two-col compact-group" id="opt-camera-facing">
-              <button class="opt-btn selected" data-val="user">🤳 前鏡頭</button>
-              <button class="opt-btn" data-val="environment">📷 後鏡頭</button>
-            </div>
-          </div>
-
-          <div class="compact-row" style="margin-bottom:0;">
-            <span class="compact-label">🔊 語音引導</span>
-            <div class="option-group two-col compact-group" id="opt-sound">
-              <button class="opt-btn selected" data-val="on">開啟語音</button>
-              <button class="opt-btn" data-val="off">靜音模式</button>
-            </div>
+        <!-- 專屬選項 A：自拍相框款式（僅「自拍相框」顯示） -->
+        <div class="dyn-row" id="row-frame-style">
+          <span class="compact-label">🖼️ 相框款式</span>
+          <div class="option-group" id="opt-frame-style">
+            <button class="opt-btn selected" data-val="polaroid">📷 拍立得</button>
+            <button class="opt-btn" data-val="warm">🌻 暖陽花邊</button>
+            <button class="opt-btn" data-val="cinema">🎬 電影寬幅</button>
           </div>
         </div>
-      </details>
+
+        <!-- 專屬選項 B：隨臉貼圖款式（僅「隨臉貼圖」顯示） -->
+        <div class="dyn-row" id="row-mask-style">
+          <span class="compact-label">🎭 貼圖款式</span>
+          <div class="option-group" id="opt-mask-style">
+            <button class="opt-btn selected" data-val="crown">👑 皇冠</button>
+            <button class="opt-btn" data-val="sunglasses">😎 墨鏡</button>
+            <button class="opt-btn" data-val="bunny">🐰 兔耳</button>
+          </div>
+        </div>
+
+        <!-- 專屬選項 C：定點對焦框位置（僅「定點對焦」顯示） -->
+        <div class="dyn-row" id="row-focus-pos">
+          <span class="compact-label">🎯 對焦位置</span>
+          <div class="option-group" id="opt-focus-pos">
+            <button class="opt-btn selected" data-val="center">正中央</button>
+            <button class="opt-btn" data-val="top">偏上方</button>
+            <button class="opt-btn" data-val="rule3">三分構圖</button>
+          </div>
+        </div>
+
+        <!-- 專屬選項 D：空間尋寶目標與高度參考（僅「空間尋寶」顯示） -->
+        <div class="dyn-row" id="row-treasure-item">
+          <span class="compact-label">🧭 尋寶目標</span>
+          <div class="option-group" id="opt-treasure-item">
+            <button class="opt-btn selected" data-val="bird">🐦 小鳥</button>
+            <button class="opt-btn" data-val="star">🌠 流星</button>
+            <button class="opt-btn" data-val="balloon">🎈 熱氣球</button>
+          </div>
+        </div>
+        <div class="dyn-row" id="row-treasure-pitch">
+          <span class="compact-label">📐 高度參考</span>
+          <div class="option-group" id="opt-gyro-pitch">
+            <button class="opt-btn selected" data-val="0">平視 0°</button>
+            <button class="opt-btn" data-val="12">微高 +12°</button>
+            <button class="opt-btn" data-val="22">高舉 +22°</button>
+          </div>
+        </div>
+
+        <!-- 共用基礎設定：穩定秒數 & 語音引導 -->
+        <div class="dyn-row visible">
+          <span class="compact-label">⏱️ 穩定秒數</span>
+          <div class="option-group" id="opt-hold-sec">
+            <button class="opt-btn" data-val="2">2 秒</button>
+            <button class="opt-btn selected" data-val="3">3 秒</button>
+            <button class="opt-btn" data-val="5">5 秒</button>
+          </div>
+        </div>
+
+        <div class="dyn-row visible last-row">
+          <span class="compact-label">🔊 語音引導</span>
+          <div class="option-group two-col" id="opt-sound">
+            <button class="opt-btn selected" data-val="on">開啟語音</button>
+            <button class="opt-btn" data-val="off">靜音模式</button>
+          </div>
+        </div>
+      </div>
 
       <!-- ================= 延伸資源：預設收合折疊卡片 ================= -->
       <div class="ot-section-divider">延伸資源 · RELIVE OT（點選展開）</div>
@@ -1278,12 +1220,12 @@
           <span class="status-val val-warn" id="st-camera">啟動中</span>
         </div>
         <div class="status-item">
-          <span class="status-label">🎭 情境</span>
-          <span class="status-val val-info" id="st-scenario">經典自拍</span>
+          <span class="status-label">🎭 模式</span>
+          <span class="status-val val-info" id="st-scenario">鏡中自拍</span>
         </div>
         <div class="status-item">
-          <span class="status-label">🎯 引導</span>
-          <span class="status-val val-ok" id="st-align">穩住即可拍</span>
+          <span class="status-label">🎯 狀態</span>
+          <span class="status-val val-ok" id="st-align">穩住即拍</span>
         </div>
         <div class="status-item">
           <span class="status-label">📐 姿態</span>
@@ -1306,22 +1248,14 @@
         <video id="camera-video" playsinline muted autoplay></video>
         <canvas id="overlay-canvas"></canvas>
         <div id="flash-overlay"></div>
-
-        <!-- 空間尋寶模式專用大字倒數校準遮罩 -->
-        <div id="calib-overlay">
-          <span class="calib-badge">正前方方向校準</span>
-          <div class="calib-big-num" id="calib-big-num">3</div>
-          <p class="calib-title">請拿正手機面對正前方</p>
-          <p class="calib-sub">倒數結束「嗶」一聲鎖定正前方，接著就可以舉高尋找目標囉！</p>
-        </div>
       </div>
 
       <div id="debug-panel">
         <div class="debug-grid">
-          <span class="debug-k">當前情境：</span><span class="debug-v" id="dbg-mode">--</span>
+          <span class="debug-k">當前模式：</span><span class="debug-v" id="dbg-mode">--</span>
           <span class="debug-k">解析度/顯示：</span><span class="debug-v" id="dbg-res">--</span>
-          <span class="debug-k">臉部/嘴巴座標：</span><span class="debug-v" id="dbg-face-pos">無資料</span>
-          <span class="debug-k">目標物件座標：</span><span class="debug-v" id="dbg-apple-pos">無資料</span>
+          <span class="debug-k">臉部/雙眼座標：</span><span class="debug-v" id="dbg-face-pos">無資料</span>
+          <span class="debug-k">尋寶目標座標：</span><span class="debug-v" id="dbg-apple-pos">無資料</span>
           <span class="debug-k">仰俯/左右轉/左右倒：</span><span class="debug-v" id="dbg-angles">無資料</span>
           <span class="debug-k">陀螺儀資料流：</span><span class="debug-v" id="dbg-gyro-status">無資料</span>
           <span class="debug-k">角速度/臉位移：</span><span class="debug-v" id="dbg-gyro-val">無資料</span>
@@ -1379,116 +1313,77 @@
       document.getElementById("inapp-warning").style.display = "flex";
     }
 
-    // 8 大臨床與生活化情境定義
-    const SCENARIOS = [
+    // 6 大精簡模式定義（前鏡頭 3 種 × 後鏡頭 3 種，全數「穩住即拍」）
+    const MODES = [
       {
-        id: "classic_selfie",
+        id: "mirror_selfie",
         emoji: "🤳",
-        title: "經典自拍",
-        camTag: "前鏡頭 · 穩住即拍",
+        title: "鏡中自拍",
+        camTag: "前鏡頭 · 單純畫面",
         isRear: false,
-        type: "frame",
-        needFace: true,
-        desc: "舉高手機看到自己、穩住不動就自拍，最無壓力的上肢入門練習。"
+        needFace: false,
+        desc: "舉高手機當作鏡子看著自己，雙手穩住不動就拍照。"
       },
       {
-        id: "ar_mask",
+        id: "selfie_frame",
+        emoji: "🖼️",
+        title: "自拍相框",
+        camTag: "前鏡頭 · 固定相框",
+        isRear: false,
+        needFace: false,
+        desc: "螢幕直接套上紀念相框（不用人臉追蹤），舉高穩住拍出成品照。"
+      },
+      {
+        id: "face_sticker",
         emoji: "🎭",
-        title: "變裝派對面具",
-        camTag: "前鏡頭 · AR貼圖",
+        title: "隨臉貼圖",
+        camTag: "前鏡頭 · 人臉跟隨",
         isRear: false,
-        type: "ar_mask",
         needFace: true,
-        desc: "臉上自動戴上派對皇冠、酷炫墨鏡或可愛兔耳，舉高穩住拍趣味照！"
+        desc: "透過人臉辨識把皇冠、墨鏡或兔耳黏在臉上跟著動，穩住就拍。"
       },
       {
-        id: "eat_apple",
-        emoji: "🍎",
-        title: "舉手吃蘋果",
-        camTag: "前鏡頭 · 定點咬蘋果",
-        isRear: false,
-        type: "hud_item",
-        itemKind: "apple",
-        needFace: true,
-        desc: "舉高手機讓嘴巴靠近上方紅蘋果並穩住，練肩關節上舉耐力。"
-      },
-      {
-        id: "brush_teeth",
-        emoji: "🪥",
-        title: "早上刷牙照鏡子",
-        camTag: "前鏡頭 · ADL模擬",
-        isRear: false,
-        type: "hud_item",
-        itemKind: "toothbrush",
-        needFace: true,
-        desc: "把手機當浴室鏡子，將牙刷對準嘴邊穩住 3 秒，模擬日常刷牙控制。"
-      },
-      {
-        id: "toast_tea",
-        emoji: "🧋",
-        title: "舉杯敬茶乾杯",
-        camTag: "前鏡頭 · 端杯穩定",
-        isRear: false,
-        type: "hud_item",
-        itemKind: "tea",
-        needFace: true,
-        desc: "舉高手機端穩珍珠奶茶跟家人乾杯，練習端杯不手抖的穩定控制。"
-      },
-      {
-        id: "find_bird",
-        emoji: "🐦",
-        title: "戶外尋寶拍小鳥",
-        camTag: "後鏡頭 · 空間尋寶",
-        isRear: true,
-        type: "gyro_item",
-        itemKind: "bird",
-        needFace: false,
-        desc: "舉高並轉動手機尋找停在高處樹枝的小鳥，穩住按下快門拍下牠！"
-      },
-      {
-        id: "family_photo",
+        id: "rear_steady",
         emoji: "📷",
-        title: "幫家人拍合照",
-        camTag: "後鏡頭 · 生活攝影",
+        title: "隨手穩拍",
+        camTag: "後鏡頭 · 單純取景",
         isRear: true,
-        type: "viewfinder",
         needFace: false,
-        desc: "開啟相機觀景窗與水平線，練習拿手機幫家人或寵物拍出不手震照片。"
+        desc: "用後鏡頭對準眼前的家人或物品，雙手穩住不手震就連拍。"
       },
       {
-        id: "stargaze",
-        emoji: "🔭",
-        title: "夜間觀星望遠鏡",
-        camTag: "後鏡頭 · 望遠鏡尋找",
+        id: "rear_focus",
+        emoji: "🎯",
+        title: "定點對焦",
+        camTag: "後鏡頭 · 螢幕構圖",
         isRear: true,
-        type: "gyro_item",
-        itemKind: "star",
         needFace: false,
-        desc: "透過圓形望遠鏡視野在高空尋找許願流星，穩住拍下夜空紀念。"
+        desc: "螢幕固定對焦框與構圖線，把想拍的畫面套進框裡穩住就拍。"
+      },
+      {
+        id: "space_treasure",
+        emoji: "🧭",
+        title: "空間尋寶",
+        camTag: "後鏡頭 · 陀螺儀探索",
+        isRear: true,
+        needFace: false,
+        desc: "一按開始即鎖定當下正前方，轉動與舉高手機尋找空間中的寶藏！"
       }
     ];
 
     const CONFIG = {
-      scenarioId: "classic_selfie",
-      hudPos: "tc",            // tl | tc | tr | ml | mc | mr
-      gyroTargetPitch: 15,     // deg
-      gyroTargetYaw: 0,        // deg
-      maskStyle: "crown",      // crown | sunglasses | bunny
-      cameraFacing: "user",    // user | environment
-      strictAlign: false,      // false = 只要穩住就拍（預設）；true = 需對準目標才拍
+      modeId: "mirror_selfie",
+      frameStyle: "polaroid",     // polaroid | warm | cinema
+      maskStyle: "crown",         // crown | sunglasses | bunny
+      focusPos: "center",         // center | top | rule3
+      treasureItem: "bird",       // bird | star | balloon
+      gyroTargetPitch: 0,         // deg (預設 0° 平視，可選 +12° / +22°)
+      gyroTargetYaw: 0,           // deg
+      cameraFacing: "user",       // user | environment
       totalRounds: 3,
       holdTargetSec: 3,
       soundOn: true,
       restDurationSec: 4.5
-    };
-
-    const HUD_COORDS = {
-      tl: { x: 0.25, y: 0.24 },
-      tc: { x: 0.50, y: 0.22 },
-      tr: { x: 0.75, y: 0.24 },
-      ml: { x: 0.24, y: 0.50 },
-      mc: { x: 0.50, y: 0.50 },
-      mr: { x: 0.76, y: 0.50 }
     };
 
     const THRESH = {
@@ -1501,8 +1396,6 @@
     const state = {
       isRunning: false,
       stage: "IDLE",
-      calibRemainSec: 0,
-      lastCalibInt: 4,
       round: 1,
       holdAccumSec: 0,
       roundElapsedSec: 0,
@@ -1534,13 +1427,13 @@
 
       faceDetected: false,
       faceNormBox: null,
-      mouthNormPos: null,
       eyesCenterNormPos: null,
       faceCenterHistory: [],
       faceMoveSpeed: 0,
 
-      targetNormPos: { x: 0.5, y: 0.22 },
-      alignResult: { passed: true, shortLabel: "穩住即可拍", fullHint: "雙手穩住手機即可自動拍照" },
+      targetNormPos: { x: 0.5, y: 0.5 },
+      guideLabel: "穩住即拍",
+      guideHint: "舉高雙手穩住不動，倒數滿即自動拍照",
 
       sensorSupported: "DeviceMotionEvent" in window,
       sensorPermitted: "未知",
@@ -1571,12 +1464,10 @@
         result: document.getElementById("screen-result")
       },
       btnStart: document.getElementById("btn-start-train"),
-      customSummarySub: document.getElementById("custom-summary-sub"),
+      modeOptTitle: document.getElementById("mode-opt-title"),
       video: document.getElementById("camera-video"),
       canvas: document.getElementById("overlay-canvas"),
       flash: document.getElementById("flash-overlay"),
-      calibOverlay: document.getElementById("calib-overlay"),
-      calibBigNum: document.getElementById("calib-big-num"),
       btnRecenter: document.getElementById("btn-recenter"),
       roundPill: document.getElementById("ui-round-pill"),
       bottomCard: document.getElementById("ui-bottom-card"),
@@ -1604,45 +1495,40 @@
     };
     const ctx = el.canvas.getContext("2d");
 
-    function getCurrentScenario() {
-      return SCENARIOS.find(s => s.id === CONFIG.scenarioId) || SCENARIOS[0];
+    function getCurrentMode() {
+      return MODES.find(m => m.id === CONFIG.modeId) || MODES[0];
     }
 
-    // 初始化首頁橫向滑動情境卡片輪播
-    function renderScenarioCarousel() {
+    // 渲染橫向滑動 6 張卡片
+    function renderModeCarousel() {
       const carousel = document.getElementById("scenario-carousel");
       const dotsBox = document.getElementById("scenario-dots");
       carousel.innerHTML = "";
       dotsBox.innerHTML = "";
 
-      SCENARIOS.forEach((sc, idx) => {
+      MODES.forEach((m) => {
         const card = document.createElement("div");
-        card.className = "scenario-card" + (sc.id === CONFIG.scenarioId ? " selected" : "");
-        card.dataset.id = sc.id;
+        card.className = "scenario-card" + (m.id === CONFIG.modeId ? " selected" : "");
+        card.dataset.id = m.id;
         card.innerHTML = `
           <div>
             <div class="sc-top-row">
-              <span class="sc-emoji">${sc.emoji}</span>
-              <span class="sc-cam-tag ${sc.isRear ? "rear" : ""}">${sc.camTag}</span>
+              <span class="sc-emoji">${m.emoji}</span>
+              <span class="sc-cam-tag ${m.isRear ? "rear" : ""}">${m.camTag}</span>
             </div>
-            <div class="sc-title">${sc.title}</div>
-            <p class="sc-desc">${sc.desc}</p>
+            <div class="sc-title">${m.title}</div>
+            <p class="sc-desc">${m.desc}</p>
           </div>
         `;
-        card.addEventListener("click", () => {
-          selectScenario(sc.id, true);
-        });
+        card.addEventListener("click", () => selectMode(m.id, true));
         carousel.appendChild(card);
 
         const dot = document.createElement("div");
-        dot.className = "sc-dot" + (sc.id === CONFIG.scenarioId ? " active" : "");
-        dot.addEventListener("click", () => {
-          selectScenario(sc.id, true);
-        });
+        dot.className = "sc-dot" + (m.id === CONFIG.modeId ? " active" : "");
+        dot.addEventListener("click", () => selectMode(m.id, true));
         dotsBox.appendChild(dot);
       });
 
-      // 滑動時自動高亮並選取正中央的情境卡片
       let scrollTimer = null;
       carousel.addEventListener("scroll", () => {
         clearTimeout(scrollTimer);
@@ -1658,31 +1544,23 @@
               closestIdx = i;
             }
           });
-          if (SCENARIOS[closestIdx] && SCENARIOS[closestIdx].id !== CONFIG.scenarioId) {
-            selectScenario(SCENARIOS[closestIdx].id, false);
+          if (MODES[closestIdx] && MODES[closestIdx].id !== CONFIG.modeId) {
+            selectMode(MODES[closestIdx].id, false);
           }
-        }, 90);
+        }, 85);
       });
     }
 
-    function selectScenario(id, scrollToCard) {
-      CONFIG.scenarioId = id;
-      const sc = getCurrentScenario();
+    // 切換卡片時，下方動態設定區只顯示「這一張卡片」專屬的選項
+    function selectMode(id, scrollToCard) {
+      CONFIG.modeId = id;
+      const m = getCurrentMode();
+      CONFIG.cameraFacing = m.isRear ? "environment" : "user";
 
-      // 切換情境時自動同步推薦鏡頭方向
-      CONFIG.cameraFacing = sc.isRear ? "environment" : "user";
-      document.querySelectorAll("#opt-camera-facing .opt-btn").forEach(b => {
-        b.classList.toggle("selected", b.dataset.val === CONFIG.cameraFacing);
-      });
-
-      // 顯示/隱藏對應子設定區塊
-      document.getElementById("cfg-hud-pos").classList.toggle("visible", sc.type === "hud_item");
-      document.getElementById("cfg-gyro-pos").classList.toggle("visible", sc.type === "gyro_item");
-
-      // 更新卡片與圓點狀態
+      // 更新卡片與圓點高亮
       const carousel = document.getElementById("scenario-carousel");
       const dots = document.querySelectorAll("#scenario-dots .sc-dot");
-      SCENARIOS.forEach((item, idx) => {
+      MODES.forEach((item, idx) => {
         const cardEl = carousel.children[idx];
         const isSel = item.id === id;
         if (cardEl) {
@@ -1694,14 +1572,16 @@
         if (dots[idx]) dots[idx].classList.toggle("active", isSel);
       });
 
-      updateStartSummary();
-    }
+      // 更新頂部大按鈕與下方設定區標題
+      el.btnStart.textContent = `📷 開始拍照（${m.title} · ${CONFIG.totalRounds} 輪）`;
+      el.modeOptTitle.textContent = `${m.emoji} ${m.title} · 專屬設定`;
 
-    function updateStartSummary() {
-      const sc = getCurrentScenario();
-      el.btnStart.textContent = `📷 開始拍照（${sc.title} · ${CONFIG.totalRounds} 輪）`;
-      const strictTxt = CONFIG.strictAlign ? "需對準目標才拍" : "穩住即拍（三軸僅紀錄）";
-      el.customSummarySub.textContent = `穩定 ${CONFIG.holdTargetSec} 秒 · ${strictTxt}`;
+      // 嚴格切換專屬選項顯示（不屬於目前模式的選項一律隱藏）
+      document.getElementById("row-frame-style").classList.toggle("visible", m.id === "selfie_frame");
+      document.getElementById("row-mask-style").classList.toggle("visible", m.id === "face_sticker");
+      document.getElementById("row-focus-pos").classList.toggle("visible", m.id === "rear_focus");
+      document.getElementById("row-treasure-item").classList.toggle("visible", m.id === "space_treasure");
+      document.getElementById("row-treasure-pitch").classList.toggle("visible", m.id === "space_treasure");
     }
 
     function bindOptionGroup(groupId, callback) {
@@ -1711,22 +1591,20 @@
           group.querySelectorAll(".opt-btn").forEach(b => b.classList.remove("selected"));
           btn.classList.add("selected");
           callback(btn.dataset.val);
-          updateStartSummary();
         });
       });
     }
 
-    bindOptionGroup("opt-hold-sec", v => CONFIG.holdTargetSec = Number(v));
-    bindOptionGroup("opt-strict-mode", v => CONFIG.strictAlign = (v === "strict"));
-    bindOptionGroup("opt-hud-pos", v => CONFIG.hudPos = v);
-    bindOptionGroup("opt-gyro-pitch", v => CONFIG.gyroTargetPitch = Number(v));
-    bindOptionGroup("opt-gyro-yaw", v => CONFIG.gyroTargetYaw = Number(v));
+    bindOptionGroup("opt-frame-style", v => CONFIG.frameStyle = v);
     bindOptionGroup("opt-mask-style", v => CONFIG.maskStyle = v);
-    bindOptionGroup("opt-camera-facing", v => CONFIG.cameraFacing = v);
+    bindOptionGroup("opt-focus-pos", v => CONFIG.focusPos = v);
+    bindOptionGroup("opt-treasure-item", v => CONFIG.treasureItem = v);
+    bindOptionGroup("opt-gyro-pitch", v => CONFIG.gyroTargetPitch = Number(v));
+    bindOptionGroup("opt-hold-sec", v => CONFIG.holdTargetSec = Number(v));
     bindOptionGroup("opt-sound", v => CONFIG.soundOn = (v === "on"));
 
-    renderScenarioCarousel();
-    selectScenario("classic_selfie", false);
+    renderModeCarousel();
+    selectMode("mirror_selfie", false);
 
     // ---------- 語音與音效 ----------
     let lastSpokenText = "";
@@ -1782,7 +1660,7 @@
       } catch (e) {}
     }
 
-    // ---------- MediaPipe 人臉偵測 ----------
+    // ---------- MediaPipe 人臉偵測（僅「隨臉貼圖」模式啟動） ----------
     async function initMediaPipe() {
       try {
         const vision = await FilesetResolver.forVisionTasks(
@@ -1841,7 +1719,11 @@
     function handleDeviceOrientation(e) {
       if (typeof e.alpha === "number") {
         state.rawAlpha = e.alpha;
-        if (state.baseAlpha !== null) {
+        if (state.baseAlpha === null) {
+          // 一按開始收到第一筆方向資料即自動鎖定正前方基準，無需 3 秒倒數遮罩
+          state.baseAlpha = e.alpha;
+          state.relYawDeg = 0;
+        } else {
           let diff = state.baseAlpha - e.alpha;
           while (diff > 180) diff -= 360;
           while (diff < -180) diff += 360;
@@ -1922,28 +1804,18 @@
       const normH = bbox.height / vidH;
       const finalX = isMirrored ? (1 - (normX + normW)) : normX;
 
-      let mouthPos = null;
       let eyesCenter = null;
-      if (det.keypoints && det.keypoints.length >= 4) {
+      if (det.keypoints && det.keypoints.length >= 2) {
         const kpR = det.keypoints[0];
         const kpL = det.keypoints[1];
-        const kpMouth = det.keypoints[3];
         eyesCenter = {
           x: isMirrored ? (1 - (kpR.x + kpL.x) / 2) : (kpR.x + kpL.x) / 2,
           y: (kpR.y + kpL.y) / 2
-        };
-        mouthPos = {
-          x: isMirrored ? (1 - kpMouth.x) : kpMouth.x,
-          y: kpMouth.y
         };
       } else {
         eyesCenter = {
           x: finalX + normW / 2,
           y: normY + normH * 0.36
-        };
-        mouthPos = {
-          x: finalX + normW / 2,
-          y: normY + normH * 0.74
         };
       }
 
@@ -1956,7 +1828,6 @@
           cx: finalX + normW / 2,
           cy: normY + normH / 2
         },
-        mouth: mouthPos,
         eyes: eyesCenter
       };
     }
@@ -1966,7 +1837,6 @@
       const fovY = 65;
       const yawDiff = CONFIG.gyroTargetYaw - state.relYawDeg;
       const pitchDiff = CONFIG.gyroTargetPitch - state.smoothPitchDeg;
-
       return {
         x: 0.5 + (yawDiff / fovX),
         y: 0.5 - (pitchDiff / fovY)
@@ -1974,99 +1844,44 @@
     }
 
     function getTargetPitchDeg() {
-      const sc = getCurrentScenario();
-      return sc.type === "gyro_item" ? CONFIG.gyroTargetPitch : 0;
+      return CONFIG.modeId === "space_treasure" ? CONFIG.gyroTargetPitch : 0;
     }
 
-    function getTargetYawDeg() {
-      const sc = getCurrentScenario();
-      return sc.type === "gyro_item" ? CONFIG.gyroTargetYaw : 0;
+    // ---------- 視覺引導提示（不卡快門，唯一硬性門檻為穩定度） ----------
+    function updateVisualGuidance() {
+      const m = getCurrentMode();
+      if (m.id === "space_treasure") {
+        const pos = computeGyroTargetPos();
+        state.targetNormPos = pos;
+        if (pos.x < 0.1 || pos.x > 0.9 || pos.y < 0.1 || pos.y > 0.9) {
+          state.guideLabel = "尋寶探索中";
+          state.guideHint = "可跟著箭頭找寶藏，或直接穩住手機拍照";
+        } else {
+          state.guideLabel = "發現寶藏";
+          state.guideHint = "找到目標了！雙手穩住不動即可拍下寶藏";
+        }
+      } else if (m.id === "face_sticker") {
+        state.guideLabel = state.faceDetected ? "貼圖已跟隨" : "等待人臉";
+        state.guideHint = state.faceDetected ? "貼圖已戴好！雙手穩住不動就拍照" : "讓臉進入畫面戴上貼圖，穩住即拍";
+      } else if (m.id === "selfie_frame") {
+        state.guideLabel = "相框已就緒";
+        state.guideHint = "把人帶進相框裡，雙手穩住不動就拍照";
+      } else if (m.id === "rear_focus") {
+        state.guideLabel = "對焦構圖中";
+        state.guideHint = "將想拍的畫面對準框框，穩住不手震就拍";
+      } else {
+        state.guideLabel = "穩住即拍";
+        state.guideHint = "舉高雙手穩住不動，倒數滿即自動拍照";
+      }
     }
 
-    // ---------- 目標引導計算（預設不卡關，僅在開啟 strictAlign 時作為硬門檻） ----------
-    function evaluateTargetAlignment(wasAligned) {
-      const sc = getCurrentScenario();
-
-      if (sc.type === "hud_item") {
-        state.targetNormPos = HUD_COORDS[CONFIG.hudPos] || { x: 0.5, y: 0.22 };
-      } else if (sc.type === "gyro_item") {
-        state.targetNormPos = computeGyroTargetPos();
-      }
-
-      // 若未開啟嚴格門檻（預設模式）：只要穩住就拍照！
-      if (!CONFIG.strictAlign) {
-        let hint = "舉高雙手穩住不動，倒數滿即自動拍照";
-        let label = "穩住即可拍";
-        if (sc.type === "hud_item") {
-          hint = `試著靠近${sc.title.slice(2)}，穩住手機即可拍照`;
-          label = "自由對準中";
-        } else if (sc.type === "gyro_item") {
-          const pos = state.targetNormPos;
-          if (pos.x < 0.1 || pos.x > 0.9 || pos.y < 0.1 || pos.y > 0.9) {
-            hint = "可依箭頭尋找目標，或直接穩住手機拍照";
-            label = "目標在畫面外";
-          } else {
-            hint = "找到目標了！穩住手機即可拍下紀念照";
-            label = "目標在視野內";
-          }
-        } else if (sc.type === "ar_mask") {
-          hint = state.faceDetected ? "面具已戴上！保持微笑穩住拍照" : "讓臉入鏡戴上面具，穩住即可拍";
-          label = state.faceDetected ? "面具已就位" : "自由自拍";
-        }
-        return { passed: true, shortLabel: label, fullHint: hint };
-      }
-
-      // 以下僅在使用者於進階設定主動開啟「需對準目標才拍」時執行
-      if (sc.type === "frame" || sc.type === "ar_mask") {
-        if (!state.faceDetected || !state.faceNormBox) {
-          return { passed: false, shortLabel: "未偵測到臉", fullHint: "請舉高手機讓臉進入框框" };
-        }
-        const b = state.faceNormBox;
-        const pad = wasAligned ? 0.05 : 0.0;
-        if (b.cx < 0.24 - pad || b.cx > 0.76 + pad || b.cy < 0.18 - pad || b.cy > 0.78 + pad) {
-          return { passed: false, shortLabel: "請置中臉部", fullHint: "請移動手機讓臉進入中央框框" };
-        }
-        return { passed: true, shortLabel: "已對準框框", fullHint: "對準了！保持穩定" };
-      }
-
-      if (sc.type === "hud_item") {
-        if (!state.faceDetected || !state.mouthNormPos) {
-          return { passed: false, shortLabel: "未偵測到臉", fullHint: "請讓臉進入畫面" };
-        }
-        const dx = state.mouthNormPos.x - state.targetNormPos.x;
-        const dy = state.mouthNormPos.y - state.targetNormPos.y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        const hitRadius = wasAligned ? 0.19 : 0.15;
-        if (dist <= hitRadius) {
-          return { passed: true, shortLabel: "已對準目標", fullHint: "對準了！保持穩定" };
-        }
-        return {
-          passed: false,
-          shortLabel: "調整對準中",
-          fullHint: Math.abs(dx) > Math.abs(dy)
-            ? (dx > 0 ? "目標在左邊（往右移手機）" : "目標在右邊（往左移手機）")
-            : (dy > 0 ? "目標在上方（放低手機讓臉往上）" : "目標在下方（舉高手機讓臉往下）")
-        };
-      }
-
-      if (sc.type === "gyro_item") {
-        const pos = state.targetNormPos;
-        const dist = Math.sqrt(Math.pow(pos.x - 0.5, 2) + Math.pow(pos.y - 0.5, 2));
-        const tol = wasAligned ? 0.24 : 0.18;
-        if (dist <= tol) {
-          return { passed: true, shortLabel: "目標入框", fullHint: "目標進入取景框！穩住拍照" };
-        }
-        return { passed: false, shortLabel: "尋找目標中", fullHint: "跟著紅色箭頭轉動舉高手機尋找目標" };
-      }
-
-      return { passed: true, shortLabel: "穩住即可拍", fullHint: "保持穩定即可拍照" };
-    }
-
+    // ---------- 穩定度判定（唯一拍照門檻，且移動舉起中自動不讀秒） ----------
     function evaluateStability(now) {
       const sensorAlive = (now - state.sensorLastTimestamp) < 1200 && state.smoothGyroMag !== null;
       const gyroLimit = state.isStable ? THRESH.gyroExit : THRESH.gyroEnter;
       const shiftLimit = state.isStable ? THRESH.faceShiftExit : THRESH.faceShiftEnter;
-      const useFace = CONFIG.cameraFacing === "user" && state.faceDetected && state.faceNormBox;
+      const m = getCurrentMode();
+      const useFace = m.needFace && state.faceDetected && state.faceNormBox;
 
       let gyroPass = true;
       let faceMovePass = true;
@@ -2125,18 +1940,88 @@
       } else {
         state.isStable = false;
         state.stabilityReason = !gyroPass
-          ? `角速度過高 (${state.smoothGyroMag.toFixed(1)} > ${gyroLimit} deg/s)`
+          ? `移動／晃動中 (${state.smoothGyroMag.toFixed(1)} > ${gyroLimit} deg/s)`
           : `畫面位移過快 (${(state.faceMoveSpeed * 100).toFixed(1)}%/s)`;
         el.stStabilityBar.style.background = "#F87171";
-        return "晃動較大";
+        return "移動／晃動中";
       }
     }
 
-    // ---------- 繪製各種情境物件與 AR 面具 ----------
-    function drawScenarioGraphics(c, w, h, isExport) {
-      const sc = getCurrentScenario();
+    // ---------- 繪製 6 大模式專屬視覺畫面（同時用於即時預覽與照片存檔） ----------
+    function drawModeGraphics(c, w, h, isExport) {
+      const m = getCurrentMode();
 
-      if (sc.type === "ar_mask" && state.faceDetected && state.faceNormBox && state.eyesCenterNormPos) {
+      // 1. 鏡中自拍：簡潔淡雅人像參考框（僅預覽顯示，拍照存檔保持純淨照片）
+      if (m.id === "mirror_selfie" && !isExport) {
+        const gw = w * 0.62;
+        const gh = h * 0.64;
+        const gx = (w - gw) / 2;
+        const gy = (h - gh) / 2;
+        c.save();
+        c.lineWidth = state.stage === "HOLDING" ? 4.5 : 3;
+        c.strokeStyle = state.stage === "HOLDING" ? "#4ADE80" : "rgba(255, 255, 255, 0.72)";
+        c.setLineDash(state.stage === "HOLDING" ? [] : [12, 8]);
+        roundRect(c, gx, gy, gw, gh, 30);
+        c.stroke();
+        c.restore();
+      }
+
+      // 2. 自拍相框（螢幕固定裝飾，不需人臉辨識，直接印進照片）
+      if (m.id === "selfie_frame") {
+        c.save();
+        if (CONFIG.frameStyle === "polaroid") {
+          const padX = w * 0.055;
+          const padTop = h * 0.05;
+          const padBot = h * 0.16;
+          c.fillStyle = "#FFFDFA";
+          c.beginPath();
+          c.rect(0, 0, w, h);
+          c.rect(padX, padTop, w - padX * 2, h - padTop - padBot);
+          c.fill("evenodd");
+
+          c.strokeStyle = "#E6DDD3";
+          c.lineWidth = 2;
+          c.strokeRect(padX, padTop, w - padX * 2, h - padTop - padBot);
+
+          c.fillStyle = "#5D4C39";
+          c.font = `bold ${Math.max(14, Math.round(w * 0.036))}px sans-serif`;
+          c.textAlign = "center";
+          const dStr = new Date().toLocaleDateString("zh-TW");
+          c.fillText(`✨ 今日自拍紀錄 · ${dStr}`, w / 2, h - padBot * 0.42);
+        } else if (CONFIG.frameStyle === "warm") {
+          const b = Math.max(10, w * 0.026);
+          c.strokeStyle = "#F59E0B";
+          c.lineWidth = b;
+          roundRect(c, b / 2, b / 2, w - b, h - b, 24);
+          c.stroke();
+
+          c.strokeStyle = "#FEF3C7";
+          c.lineWidth = 3;
+          c.setLineDash([10, 8]);
+          roundRect(c, b + 6, b + 6, w - (b + 6) * 2, h - (b + 6) * 2, 18);
+          c.stroke();
+          c.setLineDash([]);
+
+          c.font = `${Math.max(22, Math.round(w * 0.06))}px sans-serif`;
+          c.textAlign = "left";
+          c.fillText("🌻", b + 10, b + Math.round(w * 0.065));
+          c.textAlign = "right";
+          c.fillText("☀️", w - b - 10, h - b - 10);
+        } else if (CONFIG.frameStyle === "cinema") {
+          const barH = h * 0.12;
+          c.fillStyle = "#111111";
+          c.fillRect(0, 0, w, barH);
+          c.fillRect(0, h - barH, w, barH);
+          c.fillStyle = "#FBBF24";
+          c.font = `bold ${Math.max(12, Math.round(w * 0.03))}px sans-serif`;
+          c.textAlign = "center";
+          c.fillText("★  DAILY REHAB CINEMA  ★", w / 2, h - barH * 0.38);
+        }
+        c.restore();
+      }
+
+      // 3. 隨臉貼圖（人臉辨識跟隨臉部，同時印進照片）
+      if (m.id === "face_sticker" && state.faceDetected && state.faceNormBox && state.eyesCenterNormPos) {
         const b = state.faceNormBox;
         const ex = state.eyesCenterNormPos.x * w;
         const ey = state.eyesCenterNormPos.y * h;
@@ -2212,13 +2097,60 @@
         c.restore();
       }
 
-      if (sc.type === "hud_item" || sc.type === "gyro_item") {
+      // 4. 定點對焦（螢幕固定對焦框與構圖線，僅預覽顯示）
+      if (m.id === "rear_focus" && !isExport) {
+        c.save();
+        if (CONFIG.focusPos === "rule3") {
+          c.strokeStyle = "rgba(255, 255, 255, 0.55)";
+          c.lineWidth = 1.5;
+          [1 / 3, 2 / 3].forEach(r => {
+            c.beginPath();
+            c.moveTo(w * r, 0);
+            c.lineTo(w * r, h);
+            c.stroke();
+            c.beginPath();
+            c.moveTo(0, h * r);
+            c.lineTo(w, h * r);
+            c.stroke();
+          });
+        }
+        const fx = w * 0.5;
+        const fy = CONFIG.focusPos === "top" ? h * 0.34 : h * 0.5;
+        const fw = Math.min(w, h) * 0.48;
+        c.strokeStyle = state.isStable ? "#4ADE80" : "#FBBF24";
+        c.lineWidth = 3;
+        roundRect(c, fx - fw / 2, fy - fw / 2, fw, fw, 16);
+        c.stroke();
+
+        c.beginPath();
+        c.moveTo(fx - 14, fy);
+        c.lineTo(fx + 14, fy);
+        c.moveTo(fx, fy - 14);
+        c.lineTo(fx, fy + 14);
+        c.stroke();
+        c.restore();
+      }
+
+      // 5. 空間尋寶（陀螺儀尋找空間寶藏，若在畫面內則一起拍進照片）
+      if (m.id === "space_treasure") {
         const tx = state.targetNormPos.x * w;
         const ty = state.targetNormPos.y * h;
         const r = Math.min(w, h) * 0.095;
 
         if (tx >= -r && tx <= w + r && ty >= -r && ty <= h + r) {
-          drawItemSticker(c, sc.itemKind, tx, ty, r);
+          c.save();
+          c.translate(tx, ty);
+          c.fillStyle = "rgba(255, 255, 255, 0.32)";
+          c.beginPath();
+          c.arc(0, 0, r * 1.25, 0, Math.PI * 2);
+          c.fill();
+
+          const emojiMap = { bird: "🐦", star: "🌠", balloon: "🎈" };
+          c.font = `${Math.round(r * 1.65)}px sans-serif`;
+          c.textAlign = "center";
+          c.textBaseline = "middle";
+          c.fillText(emojiMap[CONFIG.treasureItem] || "🐦", 0, 4);
+          c.restore();
         } else if (!isExport) {
           const clampedX = Math.max(28, Math.min(w - 28, tx));
           const clampedY = Math.max(28, Math.min(h - 28, ty));
@@ -2236,92 +2168,6 @@
           c.restore();
         }
       }
-
-      if (sc.id === "stargaze") {
-        c.save();
-        c.fillStyle = "rgba(10, 15, 30, 0.45)";
-        c.beginPath();
-        c.rect(0, 0, w, h);
-        c.arc(w / 2, h / 2, Math.min(w, h) * 0.42, 0, Math.PI * 2, true);
-        c.fill();
-        c.strokeStyle = "rgba(251, 191, 36, 0.7)";
-        c.lineWidth = 3;
-        c.beginPath();
-        c.arc(w / 2, h / 2, Math.min(w, h) * 0.42, 0, Math.PI * 2);
-        c.stroke();
-        c.restore();
-      }
-
-      if (sc.id === "brush_teeth") {
-        c.save();
-        c.strokeStyle = "rgba(255, 255, 255, 0.75)";
-        c.lineWidth = Math.max(6, w * 0.015);
-        roundRect(c, w * 0.06, h * 0.05, w * 0.88, h * 0.90, 28);
-        c.stroke();
-        c.restore();
-      }
-
-      if (sc.id === "family_photo") {
-        c.save();
-        c.strokeStyle = "rgba(255, 255, 255, 0.75)";
-        c.lineWidth = 2.5;
-        const cw = w * 0.76;
-        const ch = h * 0.68;
-        const cx = (w - cw) / 2;
-        const cy = (h - ch) / 2;
-        roundRect(c, cx, cy, cw, ch, 16);
-        c.stroke();
-
-        // 中央十字準星
-        c.beginPath();
-        c.moveTo(w / 2 - 18, h / 2);
-        c.lineTo(w / 2 + 18, h / 2);
-        c.moveTo(w / 2, h / 2 - 18);
-        c.lineTo(w / 2, h / 2 + 18);
-        c.stroke();
-        c.restore();
-      }
-    }
-
-    function drawItemSticker(c, kind, cx, cy, radius) {
-      c.save();
-      c.translate(cx, cy);
-
-      // 柔和白色光暈底圈
-      c.fillStyle = "rgba(255, 255, 255, 0.32)";
-      c.beginPath();
-      c.arc(0, 0, radius * 1.25, 0, Math.PI * 2);
-      c.fill();
-
-      if (kind === "apple") {
-        c.fillStyle = "#EF4444";
-        c.beginPath();
-        c.arc(-radius * 0.22, radius * 0.08, radius * 0.72, 0, Math.PI * 2);
-        c.arc(radius * 0.22, radius * 0.08, radius * 0.72, 0, Math.PI * 2);
-        c.fill();
-        c.strokeStyle = "#78350F";
-        c.lineWidth = Math.max(3, radius * 0.12);
-        c.beginPath();
-        c.moveTo(0, -radius * 0.45);
-        c.quadraticCurveTo(radius * 0.1, -radius * 0.85, radius * 0.25, -radius * 0.92);
-        c.stroke();
-        c.fillStyle = "#22C55E";
-        c.beginPath();
-        c.ellipse(radius * 0.28, -radius * 0.68, radius * 0.32, radius * 0.16, -0.35, 0, Math.PI * 2);
-        c.fill();
-      } else {
-        const emojiMap = {
-          toothbrush: "🪥",
-          tea: "🧋",
-          bird: "🐦",
-          star: "🌠"
-        };
-        c.font = `${Math.round(radius * 1.65)}px sans-serif`;
-        c.textAlign = "center";
-        c.textBaseline = "middle";
-        c.fillText(emojiMap[kind] || "🍎", 0, 4);
-      }
-      c.restore();
     }
 
     // ---------- 拍照並同步儲存該次三軸表現數據 ----------
@@ -2342,12 +2188,10 @@
       cCtx.drawImage(el.video, 0, 0, vidW, vidH);
       cCtx.restore();
 
-      // 把情境 AR 面具或貼圖一起拍進照片裡
-      drawScenarioGraphics(cCtx, vidW, vidH, true);
+      // 把相框、隨臉貼圖或尋寶目標一起印進照片裡
+      drawModeGraphics(cCtx, vidW, vidH, true);
 
       const targetPitch = getTargetPitchDeg();
-      const targetYaw = getTargetYawDeg();
-
       const snapPitch = state.pitchDeg !== null ? Math.round(state.smoothPitchDeg) : null;
       const snapYaw = Math.round(state.relYawDeg);
       const snapRoll = state.rollDeg !== null ? Math.round(state.smoothRollDeg) : null;
@@ -2360,12 +2204,11 @@
         axes: {
           pitch: snapPitch,
           targetPitch,
-          pitchOk: snapPitch !== null && Math.abs(snapPitch - targetPitch) <= 12,
+          pitchOk: snapPitch !== null && Math.abs(snapPitch - targetPitch) <= 15,
           yaw: snapYaw,
-          targetYaw,
-          yawOk: Math.abs(snapYaw - targetYaw) <= 10,
+          yawOk: Math.abs(snapYaw) <= 12,
           roll: snapRoll,
-          rollOk: snapRoll !== null && Math.abs(snapRoll) <= 10
+          rollOk: snapRoll !== null && Math.abs(snapRoll) <= 12
         }
       });
 
@@ -2374,18 +2217,16 @@
       setTimeout(() => { el.flash.style.opacity = "0"; }, 140);
     }
 
-    // ---------- 三邊緣獨立三軸參考線（僅視覺參考，不卡關） ----------
+    // ---------- 三邊緣獨立三軸參考線（僅視覺參考，絕不卡關） ----------
     function drawThreeAxisGuides(c, boxW, boxH, topY, rightX, bottomY) {
       const targetPitch = getTargetPitchDeg();
-      const targetYaw = getTargetYawDeg();
 
       // 【軸 1：正上方水平滑塊】左右轉（Yaw）
       const trackCenterX = boxW / 2;
       const trackHalfW = Math.min(95, boxW * 0.28);
       const maxYaw = 45;
-      const targetYawX = trackCenterX + Math.max(-1, Math.min(1, targetYaw / maxYaw)) * trackHalfW;
       const curYawX = trackCenterX + Math.max(-1, Math.min(1, state.relYawDeg / maxYaw)) * trackHalfW;
-      const isYawAligned = Math.abs(state.relYawDeg - targetYaw) <= 10;
+      const isYawAligned = Math.abs(state.relYawDeg) <= 12;
 
       c.save();
       c.strokeStyle = "rgba(255, 255, 255, 0.45)";
@@ -2399,8 +2240,8 @@
       c.strokeStyle = "rgba(255, 255, 255, 0.95)";
       c.lineWidth = 3;
       c.beginPath();
-      c.moveTo(targetYawX, topY - 7);
-      c.lineTo(targetYawX, topY + 7);
+      c.moveTo(trackCenterX, topY - 7);
+      c.lineTo(trackCenterX, topY + 7);
       c.stroke();
 
       c.fillStyle = isYawAligned ? "#4ADE80" : "#F97316";
@@ -2416,7 +2257,7 @@
         const maxPitch = 45;
         const targetPitchY = trackCenterY - Math.max(-1, Math.min(1, targetPitch / maxPitch)) * trackHalfH;
         const curPitchY = trackCenterY - Math.max(-1, Math.min(1, state.smoothPitchDeg / maxPitch)) * trackHalfH;
-        const isPitchAligned = Math.abs(state.smoothPitchDeg - targetPitch) <= 12;
+        const isPitchAligned = Math.abs(state.smoothPitchDeg - targetPitch) <= 15;
 
         c.save();
         c.strokeStyle = "rgba(255, 255, 255, 0.45)";
@@ -2446,7 +2287,7 @@
       // 【軸 3：正下方旋轉水平線】左右倒（Roll）
       if (state.rollDeg !== null) {
         const rollCenterX = boxW / 2;
-        const isRollLevel = Math.abs(state.smoothRollDeg) <= 10;
+        const isRollLevel = Math.abs(state.smoothRollDeg) <= 12;
 
         c.save();
         c.fillStyle = "rgba(255, 255, 255, 0.88)";
@@ -2475,27 +2316,8 @@
       }
       ctx.clearRect(0, 0, boxW, boxH);
 
-      const sc = getCurrentScenario();
-
-      if (sc.type === "frame" || sc.type === "ar_mask") {
-        const guideW = boxW * 0.62;
-        const guideH = boxH * 0.64;
-        const guideX = (boxW - guideW) / 2;
-        const guideY = (boxH - guideH) / 2;
-
-        ctx.save();
-        ctx.lineWidth = state.stage === "HOLDING" ? 4.5 : 3;
-        ctx.strokeStyle = state.stage === "HOLDING"
-          ? (state.isStable ? "#4ADE80" : "#FBBF24")
-          : "rgba(255, 255, 255, 0.72)";
-        ctx.setLineDash(state.stage === "HOLDING" ? [] : [12, 8]);
-        roundRect(ctx, guideX, guideY, guideW, guideH, 30);
-        ctx.stroke();
-        ctx.restore();
-      }
-
-      if (state.stage !== "RESTING" && state.stage !== "CALIBRATING") {
-        drawScenarioGraphics(ctx, boxW, boxH, false);
+      if (state.stage !== "RESTING") {
+        drawModeGraphics(ctx, boxW, boxH, false);
       }
 
       const bottomGuideY = state.stage === "HOLDING" ? boxH - 36 : boxH - 18;
@@ -2572,9 +2394,9 @@
       if (now - state.lastStripTime > 400) {
         state.lastStripTime = now;
 
-        if (state.alignResult.shortLabel !== state.cachedStAlign) {
-          setStatusText(el.stAlign, state.alignResult.shortLabel, state.alignResult.passed ? "val-ok" : "val-warn");
-          state.cachedStAlign = state.alignResult.shortLabel;
+        if (state.guideLabel !== state.cachedStAlign) {
+          setStatusText(el.stAlign, state.guideLabel, "val-ok");
+          state.cachedStAlign = state.guideLabel;
         }
 
         if (angleLabel !== state.cachedStAngle) {
@@ -2599,9 +2421,10 @@
       const boxH = el.video.clientHeight || 420;
       const vidW = el.video.videoWidth || 640;
       const vidH = el.video.videoHeight || 480;
-      const isFront = CONFIG.cameraFacing === "user";
+      const m = getCurrentMode();
 
-      if (isFront && state.mpReady && el.video.readyState >= 2 && el.video.videoWidth > 0 && el.video.currentTime !== state.lastVideoTime) {
+      // 僅「隨臉貼圖」模式啟動人臉偵測
+      if (m.needFace && state.mpReady && el.video.readyState >= 2 && el.video.videoWidth > 0 && el.video.currentTime !== state.lastVideoTime) {
         state.lastVideoTime = el.video.currentTime;
         try {
           const res = state.mpDetector.detectForVideo(el.video, now);
@@ -2609,32 +2432,29 @@
             const mapped = mapDetectionDirect(res.detections[0], vidW, vidH, true);
             state.faceDetected = true;
             state.faceNormBox = mapped.box;
-            state.mouthNormPos = mapped.mouth;
             state.eyesCenterNormPos = mapped.eyes;
           } else {
             state.faceDetected = false;
             state.faceNormBox = null;
-            state.mouthNormPos = null;
             state.eyesCenterNormPos = null;
           }
         } catch (e) {}
-      } else if (!isFront) {
+      } else if (!m.needFace) {
         state.faceDetected = false;
         state.faceNormBox = null;
-        state.mouthNormPos = null;
         state.eyesCenterNormPos = null;
       }
 
-      state.alignResult = evaluateTargetAlignment(state.stage === "HOLDING");
+      updateVisualGuidance();
       const stabilityLabel = evaluateStability(now);
       const targetPitch = getTargetPitchDeg();
 
       let angleLabel = "無感測";
       let angleOk = true;
       if (state.rollDeg !== null && state.pitchDeg !== null) {
-        const rollOk = Math.abs(state.smoothRollDeg) <= 10;
+        const rollOk = Math.abs(state.smoothRollDeg) <= 12;
         const pitchDiff = state.smoothPitchDeg - targetPitch;
-        const pitchOk = Math.abs(pitchDiff) <= 12;
+        const pitchOk = Math.abs(pitchDiff) <= 15;
         if (rollOk && pitchOk) {
           angleLabel = `正 ${Math.round(state.smoothPitchDeg)}°`;
           angleOk = true;
@@ -2657,68 +2477,33 @@
         forceImmediate: false
       };
 
-      if (state.stage === "CALIBRATING") {
-        state.calibRemainSec -= dt;
-        const ceilSec = Math.max(1, Math.ceil(state.calibRemainSec));
-        el.calibOverlay.classList.add("active");
-        el.calibBigNum.textContent = ceilSec;
-
-        if (ceilSec !== state.lastCalibInt && state.calibRemainSec > 0) {
-          state.lastCalibInt = ceilSec;
-          playBeep(520, 0.08);
-        }
-
-        nextUi.cardClass = "train-bottom-card state-resting";
-        nextUi.stageTag = "準備校準中（尚未開始計時）";
-        nextUi.mainInst = "請拿正手機面對正前方，即將鎖定方向...";
-        nextUi.timerShow = false;
-        state.blockerReason = "正前方基準倒數鎖定中";
-
-        if (state.calibRemainSec <= 0) {
-          el.calibOverlay.classList.remove("active");
-          state.baseAlpha = state.rawAlpha ?? 0;
-          state.relYawDeg = 0;
-          state.stage = "LIFTING";
-          nextUi.forceImmediate = true;
-          playBeep(880, 0.16);
-          speak("開始！請舉起手機並保持穩定", true);
-        }
-      } else if (state.stage === "LIFTING") {
-        el.calibOverlay.classList.remove("active");
+      if (state.stage === "LIFTING") {
         state.roundElapsedSec += dt;
 
-        // 只要通過（預設只要穩定就通過），立即進入讀秒！
-        if (state.alignResult.passed && state.isStable) {
+        // 舉到位且手停下來穩住的瞬間，直接進入連續讀秒
+        if (state.isStable) {
           state.stage = "HOLDING";
           state.holdAccumSec = 0;
           state.unstableHoldSec = 0;
           state.blockerReason = "已進入穩定計時";
           nextUi.cardClass = "train-bottom-card state-holding";
           nextUi.stageTag = `第 ${state.round} 次 • 穩定保持中`;
-          nextUi.mainInst = "很好！雙手保持穩定不要動";
+          nextUi.mainInst = "穩住了！雙手保持不動不要晃";
           nextUi.timerShow = true;
           nextUi.timerText = `0.0 / ${CONFIG.holdTargetSec.toFixed(1)} 秒`;
           nextUi.forceImmediate = true;
           speak("穩住了！保持不動", true);
         } else {
           nextUi.stageTag = `第 ${state.round} 次 • 舉高穩住`;
-          nextUi.mainInst = !state.alignResult.passed ? state.alignResult.fullHint : "請雙手握穩手機不要晃動，穩住即開始讀秒";
-          state.blockerReason = !state.alignResult.passed ? state.alignResult.fullHint : `等待穩定：${state.stabilityReason}`;
+          nextUi.mainInst = state.guideHint;
+          state.blockerReason = `等待穩定：${state.stabilityReason}`;
         }
       } else if (state.stage === "HOLDING") {
         state.roundElapsedSec += dt;
         nextUi.cardClass = "train-bottom-card state-holding";
         nextUi.timerShow = true;
 
-        if (!state.alignResult.passed) {
-          state.stage = "LIFTING";
-          state.holdAccumSec = Math.max(0, state.holdAccumSec - 0.5);
-          nextUi.cardClass = "train-bottom-card";
-          nextUi.stageTag = `第 ${state.round} 次 • 調整位置`;
-          nextUi.mainInst = state.alignResult.fullHint;
-          nextUi.timerShow = false;
-          nextUi.forceImmediate = true;
-        } else if (!state.isStable) {
+        if (!state.isStable) {
           state.unstableHoldSec += dt;
           if (state.unstableHoldSec > 0.45) {
             nextUi.stageTag = `第 ${state.round} 次 • 暫停計時`;
@@ -2727,7 +2512,7 @@
             nextUi.timerText = `${state.holdAccumSec.toFixed(1)} / ${CONFIG.holdTargetSec.toFixed(1)} 秒（已暫停）`;
           } else {
             nextUi.stageTag = `第 ${state.round} 次 • 穩定保持中`;
-            nextUi.mainInst = "很好！雙手保持穩定不要動";
+            nextUi.mainInst = "穩住了！雙手保持不動不要晃";
             nextUi.timerColor = "#2E8B57";
             nextUi.timerText = `${state.holdAccumSec.toFixed(1)} / ${CONFIG.holdTargetSec.toFixed(1)} 秒`;
           }
@@ -2739,7 +2524,7 @@
           nextUi.mainInst = "非常穩定！繼續保持，即將自動拍照";
           nextUi.timerColor = "#2E8B57";
           nextUi.timerText = `${Math.min(CONFIG.holdTargetSec, state.holdAccumSec).toFixed(1)} / ${CONFIG.holdTargetSec.toFixed(1)} 秒`;
-          state.blockerReason = "✅ 穩定度合格，計時累積中";
+          state.blockerReason = "✅ 穩定度合格，連續計時累積中";
 
           if (state.holdAccumSec >= CONFIG.holdTargetSec) {
             capturePhoto();
@@ -2774,7 +2559,7 @@
 
         const pitchDiff = (state.restStartPitch !== null && state.pitchDeg !== null)
           ? Math.abs(state.smoothPitchDeg - state.restStartPitch) : 0;
-        if (!state.faceDetected || pitchDiff > 22 || (state.smoothGyroMag !== null && state.smoothGyroMag > 30)) {
+        if (pitchDiff > 20 || (state.smoothGyroMag !== null && state.smoothGyroMag > 28)) {
           state.restMovedEnough = true;
         }
 
@@ -2818,18 +2603,20 @@
 
     function updateDebugPanel(now, vidW, vidH, boxW, boxH) {
       if (!state.debugOpen) return;
-      const sc = getCurrentScenario();
+      const m = getCurrentMode();
       const sensorAlive = (now - state.sensorLastTimestamp) < 1200 && state.smoothGyroMag !== null;
       const targetPitch = getTargetPitchDeg();
 
-      el.dbgMode.textContent = `${sc.title} ｜ 嚴格門檻:${CONFIG.strictAlign ? "開" : "關"}`;
+      el.dbgMode.textContent = `${m.title} ｜ 門檻:純穩定度`;
       el.dbgRes.textContent = `相機 ${vidW}x${vidH} ｜ 視窗 ${boxW}x${boxH}`;
-      el.dbgFacePos.textContent = state.mouthNormPos
-        ? `嘴 X=${state.mouthNormPos.x.toFixed(2)}, Y=${state.mouthNormPos.y.toFixed(2)}`
+      el.dbgFacePos.textContent = state.eyesCenterNormPos
+        ? `雙眼 X=${state.eyesCenterNormPos.x.toFixed(2)}, Y=${state.eyesCenterNormPos.y.toFixed(2)}`
         : "無資料";
-      el.dbgApplePos.textContent = `X=${state.targetNormPos.x.toFixed(2)}, Y=${state.targetNormPos.y.toFixed(2)}`;
+      el.dbgApplePos.textContent = m.id === "space_treasure"
+        ? `X=${state.targetNormPos.x.toFixed(2)}, Y=${state.targetNormPos.y.toFixed(2)}`
+        : "不適用";
       el.dbgAngles.textContent = (state.rollDeg !== null)
-        ? `仰俯 ${state.smoothPitchDeg.toFixed(1)}°(目標${targetPitch}°) ｜ 左右轉 ${state.relYawDeg.toFixed(1)}° ｜ 左右倒 ${state.smoothRollDeg.toFixed(1)}°`
+        ? `仰俯 ${state.smoothPitchDeg.toFixed(1)}°(參考${targetPitch}°) ｜ 左右轉 ${state.relYawDeg.toFixed(1)}° ｜ 左右倒 ${state.smoothRollDeg.toFixed(1)}°`
         : "無資料";
       el.dbgGyroStatus.textContent = sensorAlive ? `✅ 接收中 (${state.sensorHz} Hz)` : `無資料 (${state.sensorPermitted})`;
       el.dbgGyroVal.textContent = state.smoothGyroMag !== null
@@ -2845,8 +2632,9 @@
       el.screens[name].classList.add("active");
     }
 
+    // 按下開始拍照：直接進相機畫面，自動抓當下方向為正前方，絕不跳黑底 3 秒倒數嚇人
     async function handleStartTraining() {
-      const sc = getCurrentScenario();
+      const m = getCurrentMode();
       switchScreen("train");
       await requestWakeLock();
       await requestAndBindSensors();
@@ -2854,6 +2642,7 @@
       if (!camOk) return;
 
       state.isRunning = true;
+      state.stage = "LIFTING";
       state.round = 1;
       state.holdAccumSec = 0;
       state.roundElapsedSec = 0;
@@ -2863,34 +2652,25 @@
       state.cachedCardClass = "";
       state.cachedStageTag = "";
       state.cachedMainInst = "";
-      el.roundPill.textContent = `第 1 次 / 共 ${CONFIG.totalRounds} 次`;
-      setStatusText(el.stScenario, sc.title, "val-info");
 
-      if (CONFIG.cameraFacing === "user" && !state.mpReady && !state.mpError) {
+      // 若當下已有羅盤數值則直接鎖定為正前方，否則由 handleDeviceOrientation 第一筆自動鎖定
+      state.baseAlpha = state.rawAlpha;
+      state.relYawDeg = 0;
+
+      el.roundPill.textContent = `第 1 次 / 共 ${CONFIG.totalRounds} 次`;
+      setStatusText(el.stScenario, m.title, "val-info");
+
+      if (m.needFace && !state.mpReady && !state.mpError) {
         initMediaPipe();
       }
 
-      if (sc.type === "gyro_item") {
-        state.stage = "CALIBRATING";
-        state.calibRemainSec = 3.0;
-        state.lastCalibInt = 4;
-        el.calibOverlay.classList.add("active");
-        el.calibBigNum.textContent = "3";
-        speak("請拿正手機面對正前方，三、二、一，鎖定基準", true);
-      } else {
-        state.stage = "LIFTING";
-        state.baseAlpha = state.rawAlpha ?? 0;
-        state.relYawDeg = 0;
-        el.calibOverlay.classList.remove("active");
-        speak(`開始${sc.title}練習，請舉高手機並保持穩定`, true);
-      }
-
+      speak(`開始${m.title}練習，請慢慢舉高手機並穩住不動`, true);
       requestAnimationFrame(mainLoop);
     }
     el.btnStart.addEventListener("click", handleStartTraining);
 
     el.btnRecenter.addEventListener("click", () => {
-      state.baseAlpha = state.rawAlpha ?? 0;
+      state.baseAlpha = state.rawAlpha;
       state.relYawDeg = 0;
       playBeep(880, 0.12);
       speak("已重新鎖定正前方基準", true);
@@ -2909,7 +2689,6 @@
 
     function stopCameraAndLoop() {
       state.isRunning = false;
-      el.calibOverlay.classList.remove("active");
       if (el.video.srcObject) {
         el.video.srcObject.getTracks().forEach(t => t.stop());
         el.video.srcObject = null;
@@ -2927,8 +2706,8 @@
 
     function finishTraining() {
       stopCameraAndLoop();
-      const sc = getCurrentScenario();
-      document.getElementById("result-scenario-badge").textContent = `${sc.emoji} ${sc.title}完成！已記錄三軸數據`;
+      const m = getCurrentMode();
+      document.getElementById("result-scenario-badge").textContent = `${m.emoji} ${m.title}完成！已記錄三軸數據`;
 
       const carousel = document.getElementById("result-photos-carousel");
       const dotsBox = document.getElementById("carousel-dots");
@@ -2942,7 +2721,7 @@
         slide.className = "photo-slide";
         slide.innerHTML = `
           <div class="photo-card-head">
-            <span>第 ${p.round} 次 · ${sc.title}</span>
+            <span>第 ${p.round} 次 · ${m.title}</span>
             <span style="font-size:13px; color:var(--text-sub);">耗時 ${p.elapsedSec} 秒</span>
           </div>
           <img src="${p.dataUrl}" alt="第 ${p.round} 次拍照" />
@@ -2987,7 +2766,7 @@
 
     document.getElementById("btn-export-collage").addEventListener("click", async () => {
       if (state.photos.length === 0) return;
-      const sc = getCurrentScenario();
+      const m = getCurrentMode();
       const imgs = await Promise.all(state.photos.map(p => new Promise(resolve => {
         const im = new Image();
         im.onload = () => resolve(im);
@@ -3006,7 +2785,7 @@
 
       g.fillStyle = "#2F2A25";
       g.font = "bold 36px sans-serif";
-      g.fillText(`舉高手機訓練｜${sc.title}三連拍與三軸紀錄`, 44, 66);
+      g.fillText(`舉高手機訓練｜${m.title}三連拍與三軸紀錄`, 44, 66);
 
       g.fillStyle = "#6E655D";
       g.font = "23px sans-serif";
@@ -3044,7 +2823,7 @@
 
       const a = document.createElement("a");
       a.href = finalUrl;
-      a.download = `舉高手機_${sc.title}_${dateStr.replace(/\//g, "-")}.jpg`;
+      a.download = `舉高手機_${m.title}_${dateStr.replace(/\//g, "-")}.jpg`;
       a.click();
     });
 
